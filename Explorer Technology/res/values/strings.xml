@@ -14,5 +14,7 @@
     <string name="sent">Sent</string>
     <string name="drafts">Drafts</string>
     <string name="compose">Compose</string>
+    <string name="group">Group</string>
+    <string name="autoreply">Auto Reply</string>
 
 </resources>

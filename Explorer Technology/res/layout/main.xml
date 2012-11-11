@@ -96,5 +96,48 @@
 		        android:layout_width="wrap_content"
 		        android:text="@string/drafts"/>
 		</LinearLayout>
+		<LinearLayout android:id="@+id/layout_Group"
+		    android:layout_height="100dp"
+		    android:layout_width="100dp"
+		    android:layout_margin="10dp"
+		    android:gravity="center_horizontal"
+		    android:layout_below="@+id/layout_sent"
+		    android:background="@drawable/menu_layout"
+		    android:orientation="vertical">
+
+		    <ImageView
+		        android:layout_width="64dp"
+		        android:layout_height="64dp"
+		        android:contentDescription="@string/sent"
+		        android:src="@drawable/groupsms" />
+
+		    <TextView android:id="@+id/txt_group"
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:text="@string/group"/>
+		</LinearLayout>
+		<LinearLayout android:id="@+id/layout_autoReply"
+		    android:layout_height="100dp"
+		    android:layout_width="100dp"
+		    android:layout_margin="10dp"
+		    android:gravity="center_horizontal"
+		    android:layout_below="@+id/layout_draft"
+		    android:layout_toRightOf="@+id/layout_Group"
+		    android:background="@drawable/menu_layout"
+		    android:orientation="vertical">
+
+		    <ImageView
+		        android:layout_width="64dp"
+		        android:layout_height="64dp"
+		        android:contentDescription="@string/drafts"
+		        android:src="@drawable/autoreply" />
+
+		    <TextView
+		        android:id="@+id/txt_draft"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/autoreply" />
+
+		</LinearLayout>
     </RelativeLayout>
 </RelativeLayout>
