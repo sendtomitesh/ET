@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="header_background">#6082AD</color>
+    <color name="main_background">#FFFFFF</color>
+    <color name="title_text">#FFFFFF</color>
+    <color name="Grey">#DDDDDD</color>
+	<color name="floating_background">#98000000</color>
+</resources>

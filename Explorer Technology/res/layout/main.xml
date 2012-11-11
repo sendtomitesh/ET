@@ -1,0 +1,100 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_background" >
+
+     <LinearLayout style="@style/TitleBar">
+         <ImageView android:src="@drawable/home"
+		        android:layout_height="30dp"
+		        android:layout_width="30dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_gravity="center_vertical"
+		        android:contentDescription="@string/app_name"/>
+        <TextView
+            style="@style/TitleBarText"
+            android:text="@string/dashboard" />
+        
+    </LinearLayout>
+        <RelativeLayout
+        android:layout_marginTop="40dp"
+        android:layout_height="match_parent" 
+        android:layout_width="match_parent"
+        android:background="#ffffff"
+        android:gravity="center">
+		
+		<LinearLayout android:id="@+id/layout_inbox"
+		    android:layout_height="100dp"
+		    android:layout_width="100dp"
+		    android:gravity="center_horizontal"
+		    android:background="@drawable/menu_layout"
+		    android:layout_margin="10dp"
+		    android:onClick="gotoInbox"
+		    android:orientation="vertical">
+		    <ImageView android:src="@drawable/inbox"
+		        android:layout_height="64dp"
+		        android:layout_width="64dp"
+		        android:contentDescription="@string/inbox"/>
+		    <TextView android:id="@+id/txt_inbox"
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:text="@string/inbox"/>
+		</LinearLayout>
+		
+		<LinearLayout android:id="@+id/layout_compose"
+		    android:layout_height="100dp"
+		    android:layout_width="100dp"
+		    android:layout_margin="10dp"
+		    android:gravity="center_horizontal"
+		    android:layout_toRightOf="@+id/layout_inbox"
+		    android:background="@drawable/menu_layout"
+		    android:orientation="vertical">
+		    <ImageView android:src="@drawable/compose"
+		        android:layout_height="64dp"
+		        android:layout_width="64dp"
+		        android:contentDescription="@string/compose"/>
+		    <TextView android:id="@+id/txt_compose"
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:text="@string/compose"/>
+		</LinearLayout>
+		
+		
+		<LinearLayout android:id="@+id/layout_sent"
+		    android:layout_height="100dp"
+		    android:layout_width="100dp"
+		    android:layout_margin="10dp"
+		    android:gravity="center_horizontal"
+		    android:layout_below="@+id/layout_inbox"
+		    android:background="@drawable/menu_layout"
+		    android:orientation="vertical">
+		    <ImageView android:src="@drawable/sent"
+		        android:layout_height="64dp"
+		        android:layout_width="64dp"
+		        android:contentDescription="@string/sent"/>
+		    <TextView android:id="@+id/txt_sent"
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:text="@string/sent"/>
+		</LinearLayout>
+		
+		<LinearLayout android:id="@+id/layout_draft"
+		    android:layout_height="100dp"
+		    android:layout_width="100dp"
+		    android:layout_margin="10dp"
+		    android:gravity="center_horizontal"
+		    android:layout_below="@+id/layout_compose"
+		    android:layout_toRightOf="@+id/layout_sent"
+		    android:background="@drawable/menu_layout"
+		    android:orientation="vertical">
+		    <ImageView android:src="@drawable/draft"
+		        android:layout_height="64dp"
+		        android:layout_width="64dp"
+		        android:contentDescription="@string/drafts"/>
+		    <TextView android:id="@+id/txt_draft"
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:text="@string/drafts"/>
+		</LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

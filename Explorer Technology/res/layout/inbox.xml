@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_background" >
+
+     <LinearLayout style="@style/TitleBar">
+         <ImageView android:src="@drawable/inbox"
+		        android:layout_height="30dp"
+		        android:layout_width="30dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_gravity="center_vertical"
+		        android:contentDescription="@string/inbox"/>
+        <TextView
+            style="@style/TitleBarText"
+            android:text="@string/inbox" />
+        
+    </LinearLayout>
+        <RelativeLayout
+        android:layout_marginTop="40dp"
+        android:layout_height="match_parent" 
+        android:layout_width="match_parent"
+        android:background="#ffffff"
+        android:gravity="center">
+		
+            
+		<ListView
+            android:id="@+id/listview_inbox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#DDDDDD"
+            android:dividerHeight="1dp"
+            tools:listitem="@layout/inbox_item" />
+    </RelativeLayout>
+</RelativeLayout>

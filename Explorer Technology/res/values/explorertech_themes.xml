@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="ExplorerTech" parent="android:Theme.Light">
+
+    <item name="android:editTextStyle">@style/EditTextExplorerTech</item>
+
+    <item name="android:checkboxStyle">@style/CheckBoxExplorerTech</item>
+
+    <item name="android:radioButtonStyle">@style/RadioButtonExplorerTech</item>
+
+    <item name="android:buttonStyle">@style/ButtonExplorerTech</item>
+
+    <item name="android:imageButtonStyle">@style/ImageButtonExplorerTech</item>
+
+    <item name="android:spinnerStyle">@style/SpinnerExplorerTech</item>
+
+    <item name="android:dropDownSpinnerStyle">@style/SpinnerExplorerTech.DropDown</item>
+
+    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemExplorerTech</item>
+
+    <item name="android:listViewStyle">@style/ListViewExplorerTech</item>
+
+    <item name="android:listViewWhiteStyle">@style/ListViewExplorerTech.White</item>
+
+    <item name="android:spinnerItemStyle">@style/SpinnerItemExplorerTech</item>
+
+  </style>
+
+</resources>
