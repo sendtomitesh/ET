@@ -25,4 +25,10 @@ public class Main extends Activity {
     	Intent inboxIntent = new Intent(getApplicationContext(),Inbox.class);
     	startActivity(inboxIntent);
     }
+    
+    public void gotoSent(View v)
+    {
+    	Intent sentIntent = new Intent(getApplicationContext(),Sent.class);
+    	startActivity(sentIntent);
+    }
 }
