@@ -26,7 +26,7 @@ public static void storeCredentialsInSharedPref(SharedPreferences sp,String unam
 	editor.putString("pass", pass);
 	editor.commit();
 }
-public static void getSharedPrefValues(SharedPreferences sp) {
+public static boolean getSharedPrefValues(SharedPreferences sp) {
 	// TODO Auto-generated method stub
 	
 	String sp_username = sp.getString("username", "");
@@ -35,8 +35,10 @@ public static void getSharedPrefValues(SharedPreferences sp) {
 	{
 		username=sp_username;
 		password=sp_pass;
+		return true;
 		
 	}
+	return false;
 }
 
 

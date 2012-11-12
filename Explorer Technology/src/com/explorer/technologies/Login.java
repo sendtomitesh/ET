@@ -21,8 +21,7 @@ public class Login extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 		getLayoutObjects();
-		sp=getPreferences(MODE_PRIVATE);
-		Utility.getSharedPrefValues(sp);
+		
 	}
 	
 
@@ -76,7 +75,7 @@ public class Login extends Activity {
 		@Override
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			apiresult=APICalls.userLogin(uname ,pass );
+			apiresult=APICalls.userLogin(uname,pass);
 			return null;
 		}
 		@Override
@@ -85,6 +84,7 @@ public class Login extends Activity {
 			pd.dismiss();
 			if(apiresult==0)
 			{
+				sp= getSharedPreferences("credentials", MODE_WORLD_WRITEABLE);
 				Utility.storeCredentialsInSharedPref(sp,uname, pass);
 				movetoDashboard();
 			}
