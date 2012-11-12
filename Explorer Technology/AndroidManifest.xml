@@ -17,7 +17,8 @@
         android:theme="@style/ExplorerTech" >
         <activity
             android:name=".Main"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main"
+            android:theme="@style/NoTitleExplorerTech" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,6 +33,9 @@
             android:theme="@style/NoTitleExplorerTech" />
         <activity
             android:name=".Sent"
+            android:theme="@style/NoTitleExplorerTech" />
+        <activity
+            android:name=".Draft"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
             android:name=".SplashScreen"

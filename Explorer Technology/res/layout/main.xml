@@ -111,6 +111,7 @@
                 android:layout_toRightOf="@+id/layout_sent"
                 android:background="@drawable/menu_layout"
                 android:gravity="center_horizontal"
+                android:onClick="gotoDraft"
                 android:orientation="vertical" >
 
                 <ImageView

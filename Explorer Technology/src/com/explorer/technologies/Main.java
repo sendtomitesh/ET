@@ -31,4 +31,9 @@ public class Main extends Activity {
     	Intent sentIntent = new Intent(getApplicationContext(),Sent.class);
     	startActivity(sentIntent);
     }
+    public void gotoDraft(View v)
+    {
+    	Intent draftIntent = new Intent(getApplicationContext(),Draft.class);
+    	startActivity(draftIntent);
+    }
 }
