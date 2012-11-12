@@ -1,10 +1,10 @@
 package com.explorer.technologies;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -21,7 +21,7 @@ public class Login extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 		getLayoutObjects();
-		checkForSharedPrefValues();
+		
 	}
 	
 
@@ -33,20 +33,7 @@ public class Login extends Activity {
 	}
 
 
-	private void checkForSharedPrefValues() {
-		// TODO Auto-generated method stub
-		sp = getPreferences(MODE_PRIVATE);
-		String sp_username = sp.getString("username", "");
-		String sp_pass = sp.getString("pass", "");
-		if(!sp_username.equals("") && !sp_pass.equals(""))
-		{
-			uname=sp_username;
-			pass=sp_pass;
-			new loginAPI().execute();
-		}
-	}
-
-
+	
 	public void loginUser(View v) {
 
 		
@@ -56,6 +43,12 @@ public class Login extends Activity {
 		new loginAPI().execute();
 		
 	
+	}
+	public void register(View V)
+	{
+		Intent dashboardIntent = new Intent(getApplicationContext(), Register.class);
+		startActivity(dashboardIntent);
+		finish();
 	}
 	public void movetoDashboard()
 	{
@@ -82,20 +75,23 @@ public class Login extends Activity {
 		@Override
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			apiresult=APICalls.userLogin(uname ,pass );
+			apiresult=APICalls.userLogin(uname,pass);
 			return null;
 		}
+		@SuppressLint("WorldWriteableFiles")
 		@Override
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			pd.dismiss();
 			if(apiresult==0)
 			{
-				Editor editor = sp.edit();
-				editor.putString("username", uname);
-				editor.putString("pass", pass);
-				editor.commit();
+				sp= getSharedPreferences("credentials", MODE_WORLD_WRITEABLE);
+				Utility.storeCredentialsInSharedPref(sp,uname, pass);
 				movetoDashboard();
+			}
+			else if(apiresult==1)
+			{
+				Toast.makeText(getApplicationContext(), "Username or Password Incorrect", Toast.LENGTH_LONG).show();
 			}
 			else
 				Toast.makeText(getApplicationContext(), "error occured", Toast.LENGTH_LONG).show();

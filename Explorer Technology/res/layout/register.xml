@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_background">
+
+    <LinearLayout style="@style/TitleBar">
+        <TextView
+            style="@style/TitleBarText"
+            android:text="@string/register" />
+        
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:textColor="#ffffff"
+            android:text="@string/register" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="40dp"
+        android:layout_height="match_parent" 
+        android:layout_width="match_parent"
+        android:background="#ffffff"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:gravity="center"  >
+        
+        
+    </RelativeLayout>
+</RelativeLayout>

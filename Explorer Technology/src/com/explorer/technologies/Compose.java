@@ -1,42 +1,104 @@
 package com.explorer.technologies;
 
-
 import android.app.Activity;
+import android.content.ContentValues;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 public class Compose extends Activity {
 
 	Spinner spinnerLevel;
+	EditText textSender, textTo, textMessage;
+	Button btnSendMessage;
+	int level;
 
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.compose);
-        loadLevel();
-    }
-    
-    public void sendMessage(View v)
-    {
-    	Toast.makeText(getApplicationContext(), "Send Clicked",Toast.LENGTH_LONG).show();
-    }
-    
-    public void globalInitialize()
-    {
-    	spinnerLevel = (Spinner)findViewById(R.id.spinner_level);
-    }
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.compose);
+		globalInitialize();
+		loadLevel();
+	}
+
+	public void sendMessage(View v) {
+		String lev = Integer.toString(level);
+		SendMessage message = new SendMessage();
+		message.execute(Utility.username, Utility.password, textSender
+				.getText().toString(), textTo.getText().toString(), textMessage
+				.getText().toString(), lev);
+	}
+
+	public void globalInitialize() {
+		spinnerLevel = (Spinner) findViewById(R.id.spinner_level);
+		textSender = (EditText) findViewById(R.id.txt_sender);
+		textTo = (EditText) findViewById(R.id.txt_to);
+		textMessage = (EditText) findViewById(R.id.txt_message);
+		btnSendMessage = (Button) findViewById(R.id.btn_send_message);
+
+	}
+
+	public void insertSentMessage() {
+		ContentValues values = new ContentValues();
+		values.put("address", textTo.getText().toString());
+		values.put("body", textMessage.getText().toString());
+
+		getApplicationContext().getContentResolver().insert(
+				Uri.parse("content://sms/sent"), values);
+
+	}
+
+	public class SendMessage extends AsyncTask<String, Void, Integer> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			btnSendMessage.setText("Sending...");
+		}
+
+		@Override
+		protected Integer doInBackground(String... args) {
+
+			int status;
+			// status = APICalls.
+			status = APICalls.sendMsg(args[0], args[1], args[2], args[3],
+					args[4], args[5]);
+			return status;
+
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+
+			super.onPostExecute(result);
+			btnSendMessage.setText(getString(R.string.send_message));
+			if (result == 0) {
+				insertSentMessage();
+				Toast.makeText(getApplicationContext(), "Message sent!",
+						Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"Error sending message", Toast.LENGTH_LONG).show();
+			}
+
+		}
+
+	}
+
 	public void loadLevel() {
 
-		spinnerLevel = (Spinner)findViewById(R.id.spinner_level);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-				this, R.array.level_array,
-				android.R.layout.simple_spinner_item);
+		spinnerLevel = (Spinner) findViewById(R.id.spinner_level);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter
+				.createFromResource(this, R.array.level_array,
+						android.R.layout.simple_spinner_item);
 
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -45,15 +107,13 @@ public class Compose extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> parentView,
 					View selectedItemView, int position, long id) {
-				Log.d("Selected Item", "Position : " + position);
-			
-				Toast.makeText(getApplicationContext(), "Level : " + position,Toast.LENGTH_LONG).show();
+				level = position;
 
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parentView) {
-				// your code here
+				level = 0;
 			}
 
 		});
