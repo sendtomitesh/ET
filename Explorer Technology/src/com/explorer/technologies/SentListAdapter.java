@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-public class InboxListAdapter extends SimpleCursorAdapter {
+public class SentListAdapter extends SimpleCursorAdapter {
 
 	private Cursor dataCursor;
 	
@@ -20,7 +20,7 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 	
 	
 	@SuppressWarnings("deprecation")
-	public InboxListAdapter(Context context, int layout, Cursor dataCursor, String[] from,
+	public SentListAdapter(Context context, int layout, Cursor dataCursor, String[] from,
 	        int[] to) {
 	    super(context, layout, dataCursor, from, to);
 	        this.dataCursor = dataCursor;
@@ -38,7 +38,7 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 	        convertView = mInflater.inflate(R.layout.inbox_item, null);
 
 	        holder = new ViewHolder();
-	        holder.txt_from = (TextView) convertView.findViewById(R.id.txt_from);
+	        holder.txt_to = (TextView) convertView.findViewById(R.id.txt_from);
 	        holder.txt_message = (TextView) convertView.findViewById(R.id.txt_message);
 	        holder.txt_date = (TextView) convertView.findViewById(R.id.txt_date);
 	        
@@ -50,7 +50,7 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 
 	    dataCursor.moveToPosition(position);
 	    int from_index = dataCursor.getColumnIndex("address"); 
-	    String label_from = dataCursor.getString(from_index);
+	    String label_to = dataCursor.getString(from_index);
 	    
 	    int message_index = dataCursor.getColumnIndex("body"); 
 	    String label_message = dataCursor.getString(message_index);
@@ -61,7 +61,7 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 	    
 	    Date date = ConvertToDate(label_date);
 	    
-	    holder.txt_from.setText("From : " + label_from);
+	    holder.txt_to.setText("To : " + label_to);
 	    holder.txt_message.setText(label_message);
 	    holder.txt_date.setText(date.toString());
 	    
@@ -82,7 +82,7 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 	}
 	public class ViewHolder {
 	
-		TextView txt_from,txt_message,txt_date;
+		TextView txt_to,txt_message,txt_date;
 	   
 	}
 }

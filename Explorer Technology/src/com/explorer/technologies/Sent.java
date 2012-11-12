@@ -8,16 +8,24 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class Inbox extends Activity {
+public class Sent extends Activity {
 
-	InboxListAdapter inboxAdapter;
+	SentListAdapter sentAdapter;
+	ImageView imgTitle;
+	TextView txtTitle;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inbox);
+        imgTitle = (ImageView)findViewById(R.id.image_title);
+        txtTitle = (TextView)findViewById(R.id.txt_title);
+        imgTitle.setImageResource(R.drawable.sent);
+        txtTitle.setText(getResources().getString(R.string.sent));
         loadInbox();
     }
     
@@ -26,7 +34,7 @@ public class Inbox extends Activity {
 	    	final ListView listview = (ListView) findViewById(R.id.listview_inbox);
 	    	
     	
-	    	Uri uriSMSURI = Uri.parse("content://sms/inbox");
+	    	Uri uriSMSURI = Uri.parse("content://sms/sent");
 	        final Cursor cursor = getContentResolver().query(uriSMSURI, null, null, null,null);
 	        
 	        startManagingCursor(cursor);
@@ -34,8 +42,8 @@ public class Inbox extends Activity {
 	        String[] from = new String[]{"address","body","date"};
 	        int[] to = new int[]{R.id.txt_from,R.id.txt_message,R.id.txt_date};
 	        
-	        inboxAdapter = new InboxListAdapter(this, R.layout.inbox_item, cursor, from, to);		
-	        listview.setAdapter(inboxAdapter);
+	        sentAdapter = new SentListAdapter(this, R.layout.inbox_item, cursor, from, to);		
+	        listview.setAdapter(sentAdapter);
 	        listview.setClickable(true);
 	    	listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
