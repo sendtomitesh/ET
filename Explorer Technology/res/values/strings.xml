@@ -16,5 +16,6 @@
     <string name="compose">Compose</string>
     <string name="group">Group</string>
     <string name="autoreply">Auto Reply</string>
+    <string name="title_activity_register">Register</string>
 
 </resources>

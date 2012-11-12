@@ -21,7 +21,8 @@ public class Login extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 		getLayoutObjects();
-		checkForSharedPrefValues();
+		sp=getPreferences(MODE_PRIVATE);
+		Utility.getSharedPrefValues(sp);
 	}
 	
 
@@ -33,20 +34,7 @@ public class Login extends Activity {
 	}
 
 
-	private void checkForSharedPrefValues() {
-		// TODO Auto-generated method stub
-		sp = getPreferences(MODE_PRIVATE);
-		String sp_username = sp.getString("username", "");
-		String sp_pass = sp.getString("pass", "");
-		if(!sp_username.equals("") && !sp_pass.equals(""))
-		{
-			uname=sp_username;
-			pass=sp_pass;
-			new loginAPI().execute();
-		}
-	}
-
-
+	
 	public void loginUser(View v) {
 
 		
@@ -56,6 +44,12 @@ public class Login extends Activity {
 		new loginAPI().execute();
 		
 	
+	}
+	public void register(View V)
+	{
+		Intent dashboardIntent = new Intent(getApplicationContext(), Register.class);
+		startActivity(dashboardIntent);
+		finish();
 	}
 	public void movetoDashboard()
 	{
@@ -91,11 +85,12 @@ public class Login extends Activity {
 			pd.dismiss();
 			if(apiresult==0)
 			{
-				Editor editor = sp.edit();
-				editor.putString("username", uname);
-				editor.putString("pass", pass);
-				editor.commit();
+				Utility.storeCredentialsInSharedPref(sp,uname, pass);
 				movetoDashboard();
+			}
+			else if(apiresult==1)
+			{
+				Toast.makeText(getApplicationContext(), "Username or Password Incorrect", Toast.LENGTH_LONG).show();
 			}
 			else
 				Toast.makeText(getApplicationContext(), "error occured", Toast.LENGTH_LONG).show();

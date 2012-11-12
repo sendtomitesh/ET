@@ -8,10 +8,37 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.explorer.technologies.Login.loginAPI;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 public class Utility {
 public static String ServerPath="http://smsc.xwireless.net/API/WebSMS/Http/v2.0/index.php";
+public static String username;
+public static String password;
+
+public static void storeCredentialsInSharedPref(SharedPreferences sp,String uname,String pass)
+{
+	Editor editor = sp.edit();
+	editor.putString("username", uname);
+	editor.putString("pass", pass);
+	editor.commit();
+}
+public static void getSharedPrefValues(SharedPreferences sp) {
+	// TODO Auto-generated method stub
+	
+	String sp_username = sp.getString("username", "");
+	String sp_pass = sp.getString("pass", "");
+	if(!sp_username.equals("") && !sp_pass.equals(""))
+	{
+		username=sp_username;
+		password=sp_pass;
+		
+	}
+}
 
 
 public static JSONObject getjsonFromInputStream(InputStream is)
