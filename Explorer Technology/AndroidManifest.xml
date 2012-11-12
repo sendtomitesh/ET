@@ -38,6 +38,9 @@
             android:name=".Draft"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
+            android:name=".Compose"
+            android:theme="@style/NoTitleExplorerTech" />
+        <activity
             android:name=".SplashScreen"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >

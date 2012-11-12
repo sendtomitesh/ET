@@ -16,5 +16,14 @@
     <string name="compose">Compose</string>
     <string name="group">Group</string>
     <string name="autoreply">Auto Reply</string>
+    <string name="level">Level</string>
+    <string name="sender_name">Sender name</string>
+    <string name="to">To</string>
+    <string name="message">Message</string>
+    <string name="send_message">Send Message</string>
+    <string-array name="level_array">
+        <item>National</item>
+        <item>International</item>
+    </string-array>
 
 </resources>
