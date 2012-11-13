@@ -26,6 +26,11 @@ public class Main extends Activity {
     	startActivity(inboxIntent);
     }
     
+    public void gotoCompose(View v)
+    {
+    	Intent composeIntent = new Intent(getApplicationContext(),Compose.class);
+    	startActivity(composeIntent);
+    }
     public void gotoSent(View v)
     {
     	Intent sentIntent = new Intent(getApplicationContext(),Sent.class);

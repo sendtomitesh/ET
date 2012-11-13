@@ -110,7 +110,7 @@ public class APICalls {
 		}
 
 	//returns 0 for success, 1 for error in registration1, 2 for protocol error, 3 for IO error and 4 for JSon parsing error
-	public static int sendMsg(String username, String password, String fullname,String address,String mobile) 
+	public static int sendMsg(String username, String password, String sender,String to,String message,String level) 
 			{
 				
 				// Create a new HttpClient and Post Header
@@ -122,13 +122,15 @@ public class APICalls {
 					
 					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 					
-					nameValuePairs.add(new BasicNameValuePair("method", "register"));
-					nameValuePairs.add(new BasicNameValuePair("format", "json"));
-					nameValuePairs.add(new BasicNameValuePair("login", username));
+					nameValuePairs.add(new BasicNameValuePair("method", "compose"));
+					
+					nameValuePairs.add(new BasicNameValuePair("username", username));
 					nameValuePairs.add(new BasicNameValuePair("password", password));
-					nameValuePairs.add(new BasicNameValuePair("name", fullname));
-					nameValuePairs.add(new BasicNameValuePair("address", address));
-					nameValuePairs.add(new BasicNameValuePair("mobile", mobile));
+					nameValuePairs.add(new BasicNameValuePair("sender", sender));
+					nameValuePairs.add(new BasicNameValuePair("to", to));
+					nameValuePairs.add(new BasicNameValuePair("message", message));
+					nameValuePairs.add(new BasicNameValuePair("international",level ));
+					nameValuePairs.add(new BasicNameValuePair("format", "json"));
 					
 					
 					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));

@@ -1,10 +1,10 @@
 package com.explorer.technologies;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -78,6 +78,7 @@ public class Login extends Activity {
 			apiresult=APICalls.userLogin(uname,pass);
 			return null;
 		}
+		@SuppressLint("WorldWriteableFiles")
 		@Override
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub

@@ -1,15 +1,13 @@
 package com.explorer.technologies;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 public class SplashScreen extends Activity {
 
@@ -17,6 +15,7 @@ public class SplashScreen extends Activity {
 	 SharedPreferences sp;
 	
 	/** Called when the activity is first created. */
+	@SuppressLint("WorldReadableFiles")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
@@ -24,14 +23,6 @@ public class SplashScreen extends Activity {
 		 getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	    setContentView(R.layout.splash_screen);
         
-	    SMSBroadcastReceiver kk = new SMSBroadcastReceiver()
-	    {
-	    	public void onReceive(android.content.Context context, Intent intent) 
-	    	{
-	    		Toast.makeText(getApplicationContext(), "sms recieved", Toast.LENGTH_LONG).show();
-	    	};
-	    };
-	    
 	    sp=getSharedPreferences("credentials", MODE_WORLD_READABLE);
         if(Utility.getSharedPrefValues(sp))
         {

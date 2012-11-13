@@ -7,9 +7,6 @@ import java.io.InputStreamReader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.explorer.technologies.Login.loginAPI;
-
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
@@ -40,7 +37,6 @@ public static boolean getSharedPrefValues(SharedPreferences sp) {
 	}
 	return false;
 }
-
 
 public static JSONObject getjsonFromInputStream(InputStream is)
 {
