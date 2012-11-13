@@ -2,6 +2,7 @@ package com.explorer.technologies;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -23,6 +24,14 @@ public class SplashScreen extends Activity {
 		 getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	    setContentView(R.layout.splash_screen);
         
+	    SMSBroadcastReceiver kk = new SMSBroadcastReceiver()
+	    {
+	    	public void onReceive(android.content.Context context, Intent intent) 
+	    	{
+	    		Toast.makeText(getApplicationContext(), "sms recieved", Toast.LENGTH_LONG).show();
+	    	};
+	    };
+	    
 	    sp=getSharedPreferences("credentials", MODE_WORLD_READABLE);
         if(Utility.getSharedPrefValues(sp))
         {

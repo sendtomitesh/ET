@@ -24,6 +24,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+         <receiver android:name=".SMSBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"></action>
+            </intent-filter>
+        </receiver>
         <activity
             android:name=".Login"
             android:theme="@style/NoTitleExplorerTech" />
@@ -50,6 +55,7 @@
             android:name=".Register"
             android:label="@string/title_activity_register" >
          </activity>
+         
     </application>
 
 </manifest>
