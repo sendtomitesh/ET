@@ -37,18 +37,11 @@
             android:paddingRight="15dp"
             android:paddingTop="30dp" >
 
-            <Spinner
-                android:id="@+id/spinner_level"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:prompt="@string/level" />
-
             <EditText
                 android:id="@+id/txt_sender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spinner_level"
-                android:hint="@string/sender_name"
+                android:hint="@string/sender_id"
                 android:inputType="text" />
 
             <EditText
@@ -59,11 +52,42 @@
                 android:hint="@string/to"
                 android:inputType="number" />
 
-            <EditText
-                android:id="@+id/txt_message"
-                android:layout_width="match_parent"
+            
+            <Button
+                android:id="@+id/btn_contacts"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txt_to"
+                android:onClick="getContacts"
+                android:text="@string/contacts" />
+            
+            <Button
+                android:id="@+id/btn_call_log"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_to"
+                android:layout_toRightOf="@+id/btn_contacts"
+                android:onClick="getCallLog"
+                android:text="@string/call_log" />
+   
+            
+            <Button
+                android:id="@+id/btn_groups"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_to"
+                android:layout_toRightOf="@+id/btn_call_log"
+                android:onClick="getGroups"
+                android:text="@string/groups" />
+            
+            <EditText
+                android:id="@+id/txt_message"
+                android:layout_margin="3dp"
+                android:padding="8dp"
+                android:background="@drawable/textarea_bordered"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_contacts"
                 android:gravity="top|left"
                 android:hint="@string/message"
                 android:lines="8"
@@ -88,7 +112,7 @@
                 android:layout_alignBottom="@+id/btn_send_message"
                 android:layout_marginLeft="18dp"
                 android:layout_toRightOf="@+id/btn_send_message"
-                android:text="Counter" />
+                android:text="@string/counter" />
 
             <TextView
                 android:id="@+id/txtCounter"

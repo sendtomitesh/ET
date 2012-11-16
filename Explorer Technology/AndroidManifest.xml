@@ -30,6 +30,9 @@
             android:name=".Login"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
+            android:name=".Register"
+            android:theme="@style/NoTitleExplorerTech" />
+        <activity
             android:name=".Inbox"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
