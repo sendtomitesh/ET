@@ -2,31 +2,103 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background">
+    android:background="@color/main_background" >
 
-    <LinearLayout style="@style/TitleBar">
+    <LinearLayout style="@style/TitleBar" >
+
         <TextView
             style="@style/TitleBarText"
             android:text="@string/register" />
-        
+
         <Button
-            android:id="@+id/btn_register"
+            android:id="@+id/btn_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:textColor="#ffffff"
-            android:text="@string/register" />
+            android:onClick="gotoLogin"
+            android:text="@string/login"
+            android:textColor="#ffffff" />
     </LinearLayout>
 
-    <RelativeLayout
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_marginTop="40dp"
-        android:layout_height="match_parent" 
-        android:layout_width="match_parent"
-        android:background="#ffffff"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:gravity="center"  >
-        
-        
-    </RelativeLayout>
+        android:fadingEdge="none"
+        android:fillViewport="true" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:gravity="center_horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="30dp" >
+
+            <EditText
+                android:id="@+id/txt_fullname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/fullname"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/txt_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_fullname"
+                android:hint="@string/username"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/txt_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_username"
+                android:hint="@string/password"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/txt_retype_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_password"
+                android:hint="@string/retype_password"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/txt_mobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_retype_password"
+                android:hint="@string/mobile"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/txt_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_mobile"
+                android:layout_margin="3dp"
+                android:background="@drawable/textarea_bordered"
+                android:gravity="top|left"
+                android:hint="@string/address"
+                android:lines="8"
+                android:maxLines="10"
+                android:minLines="6"
+                android:padding="8dp"
+                android:scrollbars="vertical"
+                android:singleLine="false" />
+
+            <Button
+                android:id="@+id/btn_get_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_address"
+                android:onClick="getRegister"
+                android:text="@string/register" />
+        </RelativeLayout>
+    </ScrollView>
+
 </RelativeLayout>

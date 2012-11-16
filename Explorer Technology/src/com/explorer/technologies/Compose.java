@@ -8,22 +8,18 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class Compose extends Activity {
 
-	Spinner spinnerLevel;
+	//Spinner spinnerLevel;
 	EditText textSender, textTo, textMessage;
 	TextView txtViewCounter;
 	Button btnSendMessage;
-	int level;
+	//int level;
 	int textCounter=0;
 
 	@Override
@@ -31,11 +27,12 @@ public class Compose extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.compose);
 		globalInitialize();
-		loadLevel();
+		//loadLevel();
 	}
 
 	public void sendMessage(View v) {
-		String lev = Integer.toString(level);
+		//String lev = Integer.toString(level);
+		String lev = Integer.toString(0);
 		SendMessage message = new SendMessage();
 		message.execute(Utility.username, Utility.password, textSender
 				.getText().toString(), textTo.getText().toString(), textMessage
@@ -43,7 +40,7 @@ public class Compose extends Activity {
 	}
 
 	public void globalInitialize() {
-		spinnerLevel = (Spinner) findViewById(R.id.spinner_level);
+		//spinnerLevel = (Spinner) findViewById(R.id.spinner_level);
 		textSender = (EditText) findViewById(R.id.txt_sender);
 		textTo = (EditText) findViewById(R.id.txt_to);
 		textMessage = (EditText) findViewById(R.id.txt_message);
@@ -115,7 +112,21 @@ public class Compose extends Activity {
 
 	}
 
-	public void loadLevel() {
+	public void getContacts(View v)
+	{
+		Toast.makeText(getApplicationContext(),"Get Contacts", Toast.LENGTH_LONG).show();
+	}
+	
+	public void getCallLog(View v)
+	{
+		Toast.makeText(getApplicationContext(),"Get Call Log", Toast.LENGTH_LONG).show();
+	}
+	
+	public void getGroups(View v)
+	{
+		Toast.makeText(getApplicationContext(),"Get Groups", Toast.LENGTH_LONG).show();
+	}
+	/**public void loadLevel() {
 
 		spinnerLevel = (Spinner) findViewById(R.id.spinner_level);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter
@@ -140,5 +151,5 @@ public class Compose extends Activity {
 
 		});
 
-	}
+	}**/
 }
