@@ -12,7 +12,7 @@ import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 public class Utility {
-public static String ServerPath="http://smsc.xwireless.net/API/WebSMS/Http/v2.0/index.php";
+public static String ServerPath="http://smsc.xwireless.net/API/WebSMS/Http/v2.0/?";
 public static String username;
 public static String password;
 

@@ -129,7 +129,7 @@ public class APICalls {
 					nameValuePairs.add(new BasicNameValuePair("sender", sender));
 					nameValuePairs.add(new BasicNameValuePair("to", to));
 					nameValuePairs.add(new BasicNameValuePair("message", message));
-					nameValuePairs.add(new BasicNameValuePair("international",level ));
+					nameValuePairs.add(new BasicNameValuePair("international","1" ));
 					nameValuePairs.add(new BasicNameValuePair("format", "json"));
 					
 					
