@@ -12,8 +12,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class Login extends Activity {
-	EditText et_Uname,et_Password;
-	String uname,pass;
+	EditText et_Uname,et_Password,et_sender_id;
+	String uname,pass,sender_id;
 	
 	SharedPreferences sp;
 	@Override
@@ -29,6 +29,7 @@ public class Login extends Activity {
 		// TODO Auto-generated method stub
 		et_Uname = (EditText)findViewById(R.id.textbox_username);
 		et_Password = (EditText)findViewById(R.id.textbox_password);
+		et_sender_id =(EditText)findViewById(R.id.textbox_sender);
 		
 	}
 
@@ -39,7 +40,7 @@ public class Login extends Activity {
 		
 		uname=et_Uname.getText().toString();
 		pass=et_Password.getText().toString();
-		
+		sender_id= et_sender_id.getText().toString();
 		new loginAPI().execute();
 		
 	
@@ -86,7 +87,8 @@ public class Login extends Activity {
 			if(apiresult==0)
 			{
 				sp= getSharedPreferences("credentials", MODE_WORLD_WRITEABLE);
-				Utility.storeCredentialsInSharedPref(sp,uname, pass);
+				Utility.storeCredentialsInSharedPref(sp,uname, pass,sender_id);
+				Toast.makeText(getApplicationContext(), sender_id, Toast.LENGTH_LONG).show();
 				movetoDashboard();
 			}
 			else if(apiresult==1)

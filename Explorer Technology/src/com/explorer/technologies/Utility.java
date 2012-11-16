@@ -12,15 +12,17 @@ import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 public class Utility {
-public static String ServerPath="http://smsc.xwireless.net/API/WebSMS/Http/v2.0/index.php";
+public static String ServerPath="http://smsc.xwireless.net/API/WebSMS/Http/v2.0/?";
 public static String username;
 public static String password;
+public static String sender_id;
 
-public static void storeCredentialsInSharedPref(SharedPreferences sp,String uname,String pass)
+public static void storeCredentialsInSharedPref(SharedPreferences sp,String uname,String pass,String sender_id)
 {
 	Editor editor = sp.edit();
 	editor.putString("username", uname);
 	editor.putString("pass", pass);
+	editor.putString("sender_id", sender_id);
 	editor.commit();
 }
 public static boolean getSharedPrefValues(SharedPreferences sp) {
@@ -28,10 +30,12 @@ public static boolean getSharedPrefValues(SharedPreferences sp) {
 	
 	String sp_username = sp.getString("username", "");
 	String sp_pass = sp.getString("pass", "");
+	String sp_sender_id=sp.getString("sender_id","");
 	if(!sp_username.equals("") && !sp_pass.equals(""))
 	{
 		username=sp_username;
 		password=sp_pass;
+		sender_id=sp_sender_id;
 		return true;
 		
 	}

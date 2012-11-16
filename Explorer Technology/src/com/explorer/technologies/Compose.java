@@ -1,7 +1,9 @@
 package com.explorer.technologies;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,26 +23,27 @@ public class Compose extends Activity {
 	Button btnSendMessage;
 	//int level;
 	int textCounter=0;
-
+	ProgressDialog pd;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.compose);
 		globalInitialize();
-		//loadLevel();
+		
 	}
 
 	public void sendMessage(View v) {
 		//String lev = Integer.toString(level);
-		String lev = Integer.toString(0);
+		//String lev = Integer.toString(0);
 		SendMessage message = new SendMessage();
 		message.execute(Utility.username, Utility.password, textSender
 				.getText().toString(), textTo.getText().toString(), textMessage
-				.getText().toString(), lev);
+				.getText().toString());
 	}
 
 	public void globalInitialize() {
 		//spinnerLevel = (Spinner) findViewById(R.id.spinner_level);
+		
 		textSender = (EditText) findViewById(R.id.txt_sender);
 		textTo = (EditText) findViewById(R.id.txt_to);
 		textMessage = (EditText) findViewById(R.id.txt_message);
@@ -62,7 +65,7 @@ public class Compose extends Activity {
 	          }
 	       });
 		btnSendMessage = (Button) findViewById(R.id.btn_send_message);
-
+		textSender.setText(Utility.sender_id);
 	}
 
 	public void insertSentMessage() {
@@ -80,6 +83,9 @@ public class Compose extends Activity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			pd = new ProgressDialog(Compose.this);
+			pd.setTitle("Sending Message...");
+			pd.show();
 			btnSendMessage.setText("Sending...");
 		}
 
@@ -89,7 +95,7 @@ public class Compose extends Activity {
 			int status;
 			// status = APICalls.
 			status = APICalls.sendMsg(args[0], args[1], args[2], args[3],
-					args[4], args[5]);
+					args[4]);
 			return status;
 
 		}
@@ -98,11 +104,17 @@ public class Compose extends Activity {
 		protected void onPostExecute(Integer result) {
 
 			super.onPostExecute(result);
+			try
+			{
+			pd.dismiss();
+			}catch(Exception e)
+			{}
 			btnSendMessage.setText(getString(R.string.send_message));
 			if (result == 0) {
 				insertSentMessage();
-				Toast.makeText(getApplicationContext(), "Message sent!",
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(),
+						"Message Sent Successfully!", Toast.LENGTH_LONG).show();
+				
 			} else {
 				Toast.makeText(getApplicationContext(),
 						"Error sending message", Toast.LENGTH_LONG).show();
@@ -126,30 +138,4 @@ public class Compose extends Activity {
 	{
 		Toast.makeText(getApplicationContext(),"Get Groups", Toast.LENGTH_LONG).show();
 	}
-	/**public void loadLevel() {
-
-		spinnerLevel = (Spinner) findViewById(R.id.spinner_level);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter
-				.createFromResource(this, R.array.level_array,
-						android.R.layout.simple_spinner_item);
-
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-		spinnerLevel.setAdapter(adapter);
-		spinnerLevel.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parentView,
-					View selectedItemView, int position, long id) {
-				level = position;
-
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parentView) {
-				level = 0;
-			}
-
-		});
-
-	}**/
-}
+	}
