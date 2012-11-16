@@ -88,7 +88,7 @@ public class Login extends Activity {
 			{
 				sp= getSharedPreferences("credentials", MODE_WORLD_WRITEABLE);
 				Utility.storeCredentialsInSharedPref(sp,uname, pass,sender_id);
-				Toast.makeText(getApplicationContext(), sender_id, Toast.LENGTH_LONG).show();
+				//Toast.makeText(getApplicationContext(), sender_id, Toast.LENGTH_LONG).show();
 				movetoDashboard();
 			}
 			else if(apiresult==1)
