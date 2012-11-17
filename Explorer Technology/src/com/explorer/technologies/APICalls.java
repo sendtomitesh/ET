@@ -19,6 +19,8 @@ import android.util.Log;
 
 
 //Comment by antarix 
+//Comment by antarix 
+//added some more line
 public class APICalls {
 
 	
@@ -35,7 +37,7 @@ public class APICalls {
 			
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 			
-			nameValuePairs.add(new BasicNameValuePair("method", "credit_check"));
+			nameValuePairs.add(new BasicNameValuePair("method", "credit_check"));//here is change
 			nameValuePairs.add(new BasicNameValuePair("username", username));
 			nameValuePairs.add(new BasicNameValuePair("password", password));
 			nameValuePairs.add(new BasicNameValuePair("format", "json"));
@@ -62,7 +64,7 @@ public class APICalls {
 			
 		}
 
-	}
+	}//finally here
 	//returns 0 for success, 1 for error in registration1, 2 for protocol error, 3 for IO error and 4 for JSon parsing error
 	public static int userRegistration(String username, String password, String fullname,String address,String mobile) 
 		{
