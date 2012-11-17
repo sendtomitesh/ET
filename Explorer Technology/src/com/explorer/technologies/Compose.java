@@ -2,8 +2,10 @@ package com.explorer.technologies;
 
 import java.util.ArrayList;
 
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.AlertDialog.Builder;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -19,8 +21,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -131,39 +137,101 @@ public class Compose extends Activity {
 		Toast.makeText(getApplicationContext(),"Get Contacts", Toast.LENGTH_LONG).show();
 	}
 	
+	
+	public void test()
+	{
+
+	    	
+	    	///as;dkl;
+	    	
+			String[] strFields = { android.provider.CallLog.Calls._ID,android.provider.CallLog.Calls.NUMBER,
+	                android.provider.CallLog.Calls.CACHED_NAME, };
+			
+	        String strOrder = android.provider.CallLog.Calls.DATE + " DESC";
+	        final Cursor cursorCall = getContentResolver().query(
+	                android.provider.CallLog.Calls.CONTENT_URI, strFields,
+	                null, null, strOrder);
+
+	        AlertDialog.Builder builder = new AlertDialog.Builder(
+	                Compose.this);
+	        builder.setTitle("Select recent contact");
+	        android.content.DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialogInterface,
+	                    int item) {
+	                cursorCall.moveToPosition(item);
+	                Toast.makeText(
+	                		Compose.this,
+	                        cursorCall.getString(cursorCall
+	                                .getColumnIndex(android.provider.CallLog.Calls.NUMBER)),
+	                        Toast.LENGTH_LONG).show();
+	                cursorCall.close();
+	                return;
+	            }
+	        };
+	      
+	        builder.setCursor(cursorCall, listener,
+	                android.provider.CallLog.Calls.CACHED_NAME);
+	        builder.create().show();
+	    	
+	}
 	public void getCallLog(View v)
 	{
-		String[] strFields = { android.provider.CallLog.Calls._ID,android.provider.CallLog.Calls.NUMBER,
-                android.provider.CallLog.Calls.CACHED_NAME, };
-        String strOrder = android.provider.CallLog.Calls.DATE + " DESC";
-        final Cursor cursorCall = getContentResolver().query(
-                android.provider.CallLog.Calls.CONTENT_URI, strFields,
-                null, null, strOrder);
+		
+		final Dialog selectContactDialog = new Dialog(Compose.this);
+		selectContactDialog.setTitle("Select recent contact");
+		selectContactDialog.setContentView(R.layout.call_log_dialog);
+			    
+			    final CallLogAdaptor cursorAdapter;
+			    String[] from = { android.provider.CallLog.Calls._ID,android.provider.CallLog.Calls.NUMBER,
+		                android.provider.CallLog.Calls.CACHED_NAME, };
+				int[] to = new int[]{R.id.contact_id,R.id.contact_number,R.id.contact_name};
+				ListView listview = (ListView) selectContactDialog.findViewById(R.id.list_call_log);
+				
+		        String order = android.provider.CallLog.Calls.DATE + " DESC";
+		        final Cursor tempCursor = getContentResolver().query(android.provider.CallLog.Calls.CONTENT_URI, from,
+		                null, null, order);
+				
+			
+		            
+			        
+			        cursorAdapter = new CallLogAdaptor(this, R.layout.call_log_item, tempCursor, from, to);
+			        
+			        listview.setAdapter(cursorAdapter);
+			    	listview.setItemsCanFocus(false);
+			    	listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(
-                Compose.this);
-        builder.setTitle("Select recent contact");
-        android.content.DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogInterface,
-                    int item) {
-                cursorCall.moveToPosition(item);
-                Toast.makeText(
-                		Compose.this,
-                        cursorCall.getString(cursorCall
-                                .getColumnIndex(android.provider.CallLog.Calls.NUMBER)),
-                        Toast.LENGTH_LONG).show();
-                cursorCall.close();
-                return;
-            }
-        };
-        builder.setCursor(cursorCall, listener,
-                android.provider.CallLog.Calls.CACHED_NAME);
-        builder.create().show();
+						@Override
+						public void onItemClick(AdapterView<?> parent, View view,	int position, long id) {
+							tempCursor.moveToPosition(position);
+							String number =tempCursor.getString(tempCursor.getColumnIndex(android.provider.CallLog.Calls.NUMBER)); 
+			                Toast.makeText(Compose.this,number,Toast.LENGTH_LONG).show();
+			                setToNumber(number);
+			                tempCursor.close();
+			                
+			                selectContactDialog.dismiss();
+						}
+			    		
+					});
+			    	selectContactDialog.show();
+
 	}
 	
 	public void getGroups(View v)
 	{
 		Toast.makeText(getApplicationContext(),"Get Groups", Toast.LENGTH_LONG).show();
+	}
+	
+	public void setToNumber(String number)
+	{
+		if(textTo.getText().length() < 0)
+   	 {
+   		 textTo.setText(number + ",");
+   	 }
+   	 else
+   	 {
+   		 String beforeContacts = textTo.getText().toString();
+   		 textTo.setText(beforeContacts + number+",");
+   	 }
 	}
 	/**public void loadLevel() {
 
@@ -232,15 +300,8 @@ public class Compose extends Activity {
                                  this,"This contact does not contain any number",
                                  Toast.LENGTH_LONG).show();
                      } else if (phonesList.size() == 1) {
-                    	 if(textTo.getText().length() < 0)
-                    	 {
-                    		 textTo.setText(phonesList.get(0) + ",");
-                    	 }
-                    	 else
-                    	 {
-                    		 String beforeContacts = textTo.getText().toString();
-                    		 textTo.setText(beforeContacts + phonesList.get(0)+",");
-                    	 }
+                    	
+                    	 setToNumber(phonesList.get(0));
                     	 
                      } else {
 
@@ -258,7 +319,7 @@ public class Compose extends Activity {
                                              DialogInterface dialog,
                                              int which) {
                                          String selectedEmail = phonesArr[which];
-                                         textTo.setText(selectedEmail + ",");
+                                         setToNumber(selectedEmail);
                                      }
                                  }).create();
                          dialog.show();
