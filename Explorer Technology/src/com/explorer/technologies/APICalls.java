@@ -17,8 +17,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-
-//this is by miteshasdf
+//Comment by antarix 
 public class APICalls {
 
 	
