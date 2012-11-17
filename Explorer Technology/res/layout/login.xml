@@ -46,14 +46,15 @@
             android:inputType="textPassword"          
             />
         
-        <EditText 
+        <EditText
             android:id="@+id/textbox_sender"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/textbox_password"
+            android:layout_marginTop="20dp"
             android:hint="@string/sender_id"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:maxLength="11" />
         
         <Button android:id="@+id/btn_login"
             android:layout_height="wrap_content"
