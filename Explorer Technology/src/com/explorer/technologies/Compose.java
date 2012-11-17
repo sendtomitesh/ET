@@ -176,6 +176,7 @@ public class Compose extends Activity {
 	}
 	public void getCallLog(View v)
 	{
+
 		
 		final Dialog selectContactDialog = new Dialog(Compose.this);
 		selectContactDialog.setTitle("Select recent contact");
@@ -213,6 +214,34 @@ public class Compose extends Activity {
 			    		
 					});
 			    	selectContactDialog.show();
+
+
+		String[] strFields = { android.provider.CallLog.Calls._ID,android.provider.CallLog.Calls.NUMBER,
+                android.provider.CallLog.Calls.CACHED_NAME, };
+        String strOrder = android.provider.CallLog.Calls.DATE + " DESC";
+        final Cursor cursorCall = getContentResolver().query(
+                android.provider.CallLog.Calls.CONTENT_URI, strFields,
+                null, null, strOrder);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(
+                Compose.this);
+        builder.setTitle("Select recent contact");
+        android.content.DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogInterface,
+                    int item) {
+                cursorCall.moveToPosition(item);
+                Toast.makeText(
+                		Compose.this,
+                        cursorCall.getString(cursorCall
+                                .getColumnIndex(android.provider.CallLog.Calls.NUMBER)),
+                        Toast.LENGTH_LONG).show();
+                cursorCall.close();
+                return;
+            }
+        };
+        builder.setCursor(cursorCall, listener,
+                android.provider.CallLog.Calls.CACHED_NAME);
+        builder.create().show();
 
 	}
 	
