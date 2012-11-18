@@ -7,7 +7,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.AlertDialog.Builder;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,6 +19,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,28 +36,41 @@ import android.widget.Toast;
 public class Compose extends Activity {
 
 	private static final int CONTACT_PICKER_RESULT = 1001;
-	//Spinner spinnerLevel;
+	
 	EditText textSender, textTo, textMessage;
 	TextView txtViewCounter;
 	Button btnSendMessage;
-	//int level;
+	ProgressDialog pd;
 	int textCounter=0;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.compose);
 		globalInitialize();
-		//loadLevel();
+		
 	}
 
+	
 	public void sendMessage(View v) {
-		//String lev = Integer.toString(level);
-		String lev = Integer.toString(0);
-		SendMessage message = new SendMessage();
-		message.execute(Utility.username, Utility.password, textSender
-				.getText().toString(), textTo.getText().toString(), textMessage
-				.getText().toString(), lev);
+		String repairedNumbers="";
+		String arr[]= textTo.getText().toString().split(",");
+		
+		for(int i=0;i<arr.length;i++)
+		{
+			arr[i]=repairPhoneNumber(arr[i]);
+			
+			if(i== arr.length-1)
+				repairedNumbers=repairedNumbers+","+arr[i];
+			else
+				repairedNumbers= repairedNumbers+","+arr[i]+",";
+		}
+		
+		new SendMessage().execute(Utility.username, Utility.password, textSender
+				.getText().toString(), repairedNumbers, textMessage
+				.getText().toString());
+		  
 	}
 
 	public void globalInitialize() {
@@ -95,10 +111,14 @@ public class Compose extends Activity {
 
 	public class SendMessage extends AsyncTask<String, Void, Integer> {
 
+		
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			btnSendMessage.setText("Sending...");
+			pd = new ProgressDialog(Compose.this);
+			pd.setTitle("Sending sms..");
+			pd.show();
+			
 		}
 
 		@Override
@@ -106,6 +126,8 @@ public class Compose extends Activity {
 
 			int status;
 			// status = APICalls.
+			
+			
 			status = APICalls.sendMsg(args[0], args[1], args[2], args[3],
 					args[4]);
 			return status;
@@ -116,15 +138,22 @@ public class Compose extends Activity {
 		protected void onPostExecute(Integer result) {
 
 			super.onPostExecute(result);
-			btnSendMessage.setText(getString(R.string.send_message));
+			
+			
 			if (result == 0) {
 				insertSentMessage();
-				Toast.makeText(getApplicationContext(), "Message sent!",
+				Toast.makeText(getApplicationContext(), "Message sent successfully ",
 						Toast.LENGTH_LONG).show();
 			} else {
 				Toast.makeText(getApplicationContext(),
-						"Error sending message", Toast.LENGTH_LONG).show();
+						"Error sending message ", Toast.LENGTH_LONG).show();
 			}
+			
+			try
+			{
+				pd.dismiss();
+			}catch(Exception e){}
+			
 
 		}
 
@@ -134,46 +163,11 @@ public class Compose extends Activity {
 	{
 		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,Contacts.CONTENT_URI);  
 	    startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
-		Toast.makeText(getApplicationContext(),"Get Contacts", Toast.LENGTH_LONG).show();
+		//Toast.makeText(getApplicationContext(),"Get Contacts", Toast.LENGTH_LONG).show();
 	}
 	
 	
-	public void test()
-	{
-
-	    	
-	    	///as;dkl;
-	    	
-			String[] strFields = { android.provider.CallLog.Calls._ID,android.provider.CallLog.Calls.NUMBER,
-	                android.provider.CallLog.Calls.CACHED_NAME, };
-			
-	        String strOrder = android.provider.CallLog.Calls.DATE + " DESC";
-	        final Cursor cursorCall = getContentResolver().query(
-	                android.provider.CallLog.Calls.CONTENT_URI, strFields,
-	                null, null, strOrder);
-
-	        AlertDialog.Builder builder = new AlertDialog.Builder(
-	                Compose.this);
-	        builder.setTitle("Select recent contact");
-	        android.content.DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-	            public void onClick(DialogInterface dialogInterface,
-	                    int item) {
-	                cursorCall.moveToPosition(item);
-	                Toast.makeText(
-	                		Compose.this,
-	                        cursorCall.getString(cursorCall
-	                                .getColumnIndex(android.provider.CallLog.Calls.NUMBER)),
-	                        Toast.LENGTH_LONG).show();
-	                cursorCall.close();
-	                return;
-	            }
-	        };
-	      
-	        builder.setCursor(cursorCall, listener,
-	                android.provider.CallLog.Calls.CACHED_NAME);
-	        builder.create().show();
-	    	
-	}
+	
 	public void getCallLog(View v)
 	{
 
@@ -205,7 +199,7 @@ public class Compose extends Activity {
 						public void onItemClick(AdapterView<?> parent, View view,	int position, long id) {
 							tempCursor.moveToPosition(position);
 							String number =tempCursor.getString(tempCursor.getColumnIndex(android.provider.CallLog.Calls.NUMBER)); 
-			                Toast.makeText(Compose.this,number,Toast.LENGTH_LONG).show();
+			              //  Toast.makeText(Compose.this,number,Toast.LENGTH_LONG).show();
 			                setToNumber(number);
 			                tempCursor.close();
 			                
@@ -216,7 +210,7 @@ public class Compose extends Activity {
 			    	selectContactDialog.show();
 
 
-		String[] strFields = { android.provider.CallLog.Calls._ID,android.provider.CallLog.Calls.NUMBER,
+	/*	String[] strFields = { android.provider.CallLog.Calls._ID,android.provider.CallLog.Calls.NUMBER,
                 android.provider.CallLog.Calls.CACHED_NAME, };
         String strOrder = android.provider.CallLog.Calls.DATE + " DESC";
         final Cursor cursorCall = getContentResolver().query(
@@ -241,7 +235,7 @@ public class Compose extends Activity {
         };
         builder.setCursor(cursorCall, listener,
                 android.provider.CallLog.Calls.CACHED_NAME);
-        builder.create().show();
+        builder.create().show(); */
 
 	}
 	
@@ -262,33 +256,7 @@ public class Compose extends Activity {
    		 textTo.setText(beforeContacts + number+",");
    	 }
 	}
-	/**public void loadLevel() {
-
-		spinnerLevel = (Spinner) findViewById(R.id.spinner_level);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter
-				.createFromResource(this, R.array.level_array,
-						android.R.layout.simple_spinner_item);
-
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-		spinnerLevel.setAdapter(adapter);
-		spinnerLevel.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parentView,
-					View selectedItemView, int position, long id) {
-				level = position;
-
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parentView) {
-				level = 0;
-			}
-
-		});
-
-	}**/
-	@Override
+		@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode == RESULT_OK)
         { 
@@ -360,4 +328,39 @@ public class Compose extends Activity {
 
         }  		
 	}
+		public String repairPhoneNumber(String num)
+		{
+			String repairedNumber=num;
+			
+			//get country code
+			TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+			String countryCode = tm.getNetworkCountryIso();
+			
+			//get phone code from country code
+			countryCode=Iso2Phone.getPhone(countryCode);
+			
+			
+			//remove 0 if its a first digit
+			if(num.startsWith("0"))
+				num=num.substring(1);
+			
+			
+			
+			else if(num.length()==10)  //valid number in india
+			{
+				repairedNumber=countryCode+num;
+			}
+			else if(num.length()==11)  //valid number in nigeria
+			{
+				repairedNumber=countryCode+num;
+			}
+			
+			//if number starts from + means it has code attached, nothing to do
+			if(repairedNumber.startsWith("+"))
+			{
+				repairedNumber=repairedNumber.substring(1);
+				
+			}
+			return repairedNumber;
+		}
 }

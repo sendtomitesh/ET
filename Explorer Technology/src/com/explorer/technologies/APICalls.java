@@ -64,7 +64,51 @@ public class APICalls {
 			
 		}
 
-	}//finally here
+	}
+	
+	
+		public static JSONObject getGroups(String username, String password) 
+		{
+			
+			JSONObject jo=null;
+			// Create a new HttpClient and Post Header
+			HttpClient httpclient = new DefaultHttpClient();
+
+			HttpPost httppost = new HttpPost(Utility.ServerPath);
+
+			try {
+				
+				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+				
+				nameValuePairs.add(new BasicNameValuePair("method", "show_groups"));//here is change
+				nameValuePairs.add(new BasicNameValuePair("username", username));
+				nameValuePairs.add(new BasicNameValuePair("password", password));
+				nameValuePairs.add(new BasicNameValuePair("format", "json"));
+				
+				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+				
+				// Execute HTTP Post Request
+			
+				HttpResponse response = httpclient.execute(httppost);
+				jo=Utility.getjsonFromInputStream(response.getEntity().getContent());
+			//	if(jo.getString("error").equals("0"))return jo;
+			//	else return 1;
+			} catch (ClientProtocolException e) {
+			
+				Log.e("Client error", e.toString());
+				//return 2;
+			} catch (IOException e) {
+				
+				Log.e("IO Error", e.toString());
+				//return 3;
+			}
+			return jo;
+
+		}
+
+	
+	
+	
 	//returns 0 for success, 1 for error in registration1, 2 for protocol error, 3 for IO error and 4 for JSon parsing error
 	public static int userRegistration(String username, String password, String fullname,String address,String mobile) 
 		{
@@ -116,8 +160,6 @@ public class APICalls {
 			{
 				
 				
-		
-		
 				// Create a new HttpClient and Post Header
 				HttpClient httpclient = new DefaultHttpClient();
 
