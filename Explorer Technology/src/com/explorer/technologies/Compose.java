@@ -24,12 +24,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +47,7 @@ public class Compose extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.compose);
 		globalInitialize();
-		
+		textSender.setText(Utility.sender_id);
 	}
 
 	
@@ -210,33 +208,7 @@ public class Compose extends Activity {
 			    	selectContactDialog.show();
 
 
-	/*	String[] strFields = { android.provider.CallLog.Calls._ID,android.provider.CallLog.Calls.NUMBER,
-                android.provider.CallLog.Calls.CACHED_NAME, };
-        String strOrder = android.provider.CallLog.Calls.DATE + " DESC";
-        final Cursor cursorCall = getContentResolver().query(
-                android.provider.CallLog.Calls.CONTENT_URI, strFields,
-                null, null, strOrder);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(
-                Compose.this);
-        builder.setTitle("Select recent contact");
-        android.content.DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogInterface,
-                    int item) {
-                cursorCall.moveToPosition(item);
-                Toast.makeText(
-                		Compose.this,
-                        cursorCall.getString(cursorCall
-                                .getColumnIndex(android.provider.CallLog.Calls.NUMBER)),
-                        Toast.LENGTH_LONG).show();
-                cursorCall.close();
-                return;
-            }
-        };
-        builder.setCursor(cursorCall, listener,
-                android.provider.CallLog.Calls.CACHED_NAME);
-        builder.create().show(); */
-
+	
 	}
 	
 	public void getGroups(View v)
