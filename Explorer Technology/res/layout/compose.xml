@@ -42,8 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/sender_id"
-                android:inputType="text"
-                android:maxLength="11" />
+                android:inputType="text" />
 
             <EditText
                 android:id="@+id/txt_to"
@@ -51,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txt_sender"
                 android:hint="@string/to"
-                android:inputType="phone|text" />
+                android:inputType="number" />
 
             
             <Button
