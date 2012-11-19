@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Toast;
 
 public class Main extends Activity {
 
@@ -42,5 +41,10 @@ public class Main extends Activity {
     {
     	Intent draftIntent = new Intent(getApplicationContext(),Draft.class);
     	startActivity(draftIntent);
+    }
+    public void gotoGroups(View v)
+    {
+    	Intent groupsIntent = new Intent(getApplicationContext(),Groups.class);
+    	startActivity(groupsIntent);
     }
 }

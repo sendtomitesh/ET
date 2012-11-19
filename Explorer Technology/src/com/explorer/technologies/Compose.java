@@ -3,15 +3,10 @@ package com.explorer.technologies;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -30,6 +25,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
@@ -37,7 +33,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 
 
@@ -439,8 +434,13 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 		String[] from = new String[] {"id","name"};
 		int[] to = new int[] { R.id.contact_id,R.id.contact_name };
 		final ListView listview = (ListView) groupsDialog.findViewById(R.id.list_call_log);
+
 					
 		ListAdapter adapter = new SimpleAdapter(this, groupList,R.layout.call_log_item, from, to);
+
+		
+				
+		
 		listview.setAdapter(adapter);
 	
 		listview.setTextFilterEnabled(true);
@@ -561,8 +561,6 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 			//remove 0 if its a first digit
 			if(num.startsWith("0"))
 				num=num.substring(1);
-			
-			
 			
 			else if(num.length()==10)  //valid number in india
 			{
