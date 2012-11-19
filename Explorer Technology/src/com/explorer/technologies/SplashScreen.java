@@ -76,17 +76,6 @@ public class SplashScreen extends Activity {
 		startActivity(dashboardIntent);
 		finish();
 	}
-	@Override
-    public boolean onTouchEvent(MotionEvent evt)
-    {
-        if(evt.getAction() == MotionEvent.ACTION_DOWN)
-        {
-            synchronized(mSplashThread){
-                mSplashThread.notifyAll();
-            }
-        }
-        return true;
-    }    
 	
 	
 	public class loginAPI extends AsyncTask<String, Integer, String>

@@ -67,6 +67,7 @@ public class APICalls {
 	}
 	
 	
+
 		public static ArrayList<HashMap<String, String>> getGroups(String username, String password) 
 		{
 			ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
@@ -78,6 +79,9 @@ public class APICalls {
 			HttpPost httppost = new HttpPost(Utility.ServerPath);
 
 			try {
+				
+				
+			
 				
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 				
@@ -118,12 +122,7 @@ public class APICalls {
 			}
 			
 			return mylist;
-
-		}
-
-	
-	
-	
+}	
 	//returns 0 for success, 1 for error in registration1, 2 for protocol error, 3 for IO error and 4 for JSon parsing error
 	public static int userRegistration(String username, String password, String fullname,String address,String mobile) 
 		{

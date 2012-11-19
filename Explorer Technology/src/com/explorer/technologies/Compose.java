@@ -161,6 +161,7 @@ public class Compose extends Activity {
 			}catch(Exception e){}
 			
 
+
 		}
 
 	}
@@ -174,7 +175,7 @@ public class Compose extends Activity {
 			super.onPreExecute();
 			pd = new ProgressDialog(Compose.this);
 			pd.setTitle("Groups");
-			pd.setMessage("Loadin Groups..");
+			pd.setMessage("Loading Groups..");
 			pd.show();
 			
 		}
@@ -199,8 +200,6 @@ public class Compose extends Activity {
 			{
 				pd.dismiss();
 			}catch(Exception e){}
-			
-
 		}
 
 	}
