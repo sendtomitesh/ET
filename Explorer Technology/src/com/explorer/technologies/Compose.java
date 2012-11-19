@@ -86,7 +86,6 @@ public class Compose extends Activity {
 	            break;
 	        }
 	    }
-
 		
 	};
 	private void saveMsgToDrafts() {

@@ -45,21 +45,16 @@ public class DatabaseFunctions {
 	}
 	
 	//Return drafts cursor
-	public static Cursor getDraftCursor(Context context)
+	public static Cursor getDraftCursor(Context context,SQLiteDatabase sqlDb)
 	{
 		Cursor cursor = null;
 		try {
-			dbHelper = new DbHelper(context);
-			db = dbHelper.getReadableDatabase();
-			cursor = db.rawQuery("SELECT * FROM drafts", null);
+			
+			cursor = sqlDb.rawQuery("SELECT  id AS _id,sms_to,message FROM drafts", null);
 			
 		} catch (Exception e) {
 			Log.e("DRAFT SELECT", "error : " + e.toString());
 			return null;
-		}finally{
-			// Close the Database
-			db.close();
-			dbHelper.close();
 		}
 		
 		return cursor;
