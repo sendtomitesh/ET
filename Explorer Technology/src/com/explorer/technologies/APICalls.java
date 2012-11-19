@@ -2,6 +2,7 @@ package com.explorer.technologies;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -12,6 +13,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -65,9 +67,11 @@ public class APICalls {
 	}
 	
 	
-		public static JSONObject getGroups(String username, String password) 
+
+		public static ArrayList<HashMap<String, String>> getGroups(String username, String password) 
 		{
-			
+			ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
+
 			JSONObject jo=null;
 			// Create a new HttpClient and Post Header
 			HttpClient httpclient = new DefaultHttpClient();
@@ -75,6 +79,9 @@ public class APICalls {
 			HttpPost httppost = new HttpPost(Utility.ServerPath);
 
 			try {
+				
+				
+			
 				
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 				
@@ -89,6 +96,16 @@ public class APICalls {
 			
 				HttpResponse response = httpclient.execute(httppost);
 				jo=Utility.getjsonFromInputStream(response.getEntity().getContent());
+				
+				JSONArray GroupsList = jo.getJSONArray("data");
+				for (int i = 0; i < GroupsList.length(); i++) {
+					HashMap<String, String> map = new HashMap<String, String>();
+					JSONObject Groups = GroupsList.getJSONObject(i);
+					map.put("id", Groups.getString("id"));
+					map.put("name", Groups.getString("name"));
+					mylist.add(map);
+
+				}
 			//	if(jo.getString("error").equals("0"))return jo;
 			//	else return 1;
 			} catch (ClientProtocolException e) {
@@ -99,14 +116,13 @@ public class APICalls {
 				
 				Log.e("IO Error", e.toString());
 				//return 3;
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			return jo;
-
-		}
-
-	
-	
-	
+			
+			return mylist;
+}	
 	//returns 0 for success, 1 for error in registration1, 2 for protocol error, 3 for IO error and 4 for JSon parsing error
 	public static int userRegistration(String username, String password, String fullname,String address,String mobile) 
 		{

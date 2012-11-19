@@ -1,6 +1,11 @@
 package com.explorer.technologies;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 import android.app.Activity;
@@ -27,9 +32,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class Compose extends Activity {
 
@@ -305,6 +313,45 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 			
 			
 
+
+		}
+
+	}
+	
+	public class ShowGroups extends AsyncTask<String, Void, ArrayList<HashMap<String, String>>> {
+
+		
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			pd = new ProgressDialog(Compose.this);
+			pd.setTitle("Groups");
+			pd.setMessage("Loading Groups..");
+			pd.show();
+			
+		}
+
+		@Override
+		protected ArrayList<HashMap<String, String>> doInBackground(String... args) {
+			return APICalls.getGroups(args[0],args[1]);
+			
+
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<HashMap<String, String>> mylist) {
+
+			showinList(mylist);
+			
+			super.onPostExecute(mylist);
+			
+			
+			
+			try
+			{
+				pd.dismiss();
+			}catch(Exception e){}
 		}
 
 	}
@@ -365,9 +412,46 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 	
 	public void getGroups(View v)
 	{
-		Toast.makeText(getApplicationContext(),"Get Groups", Toast.LENGTH_LONG).show();
+		new ShowGroups().execute("mobiled", "1234");
+		
 	}
 	
+	public void showinList(ArrayList<HashMap<String, String>> mylist)
+	{
+		final Dialog groupsDialog = new Dialog(Compose.this);
+		groupsDialog.setTitle("Select Group");
+		groupsDialog.setContentView(R.layout.call_log_dialog);
+		
+		String[] from = new String[] {"id","name"};
+		int[] to = new int[] { R.id.contact_id,R.id.contact_name };
+		final ListView listview = (ListView) groupsDialog.findViewById(R.id.list_call_log);
+		
+		
+        
+		
+		
+
+				
+		ListAdapter adapter = new SimpleAdapter(this, mylist,R.layout.call_log_item, from, to);
+		listview.setAdapter(adapter);
+	
+		listview.setTextFilterEnabled(true);
+		listview.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				@SuppressWarnings("unchecked")
+				HashMap<String, String> o = (HashMap<String, String>) listview.getItemAtPosition(position);
+
+				String name = o.get("name")+"("+o.get("id")+")";
+			
+				setToNumber(name);
+				groupsDialog.dismiss();
+
+			}
+		});
+		groupsDialog.show();
+
+	}
 	public void setToNumber(String number)
 	{
 		if(textTo.getText().length() < 0)
