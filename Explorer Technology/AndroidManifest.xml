@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.explorer.technologies"
     android:versionCode="1"
@@ -7,20 +8,19 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="16" />
 
-    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.WRITE_SMS" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    
 
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/ExplorerTech" >
         <activity
-            android:name=".Main"
+            android:name="com.explorer.technologies.Main"
             android:label="@string/title_activity_main"
             android:theme="@style/NoTitleExplorerTech" >
             <intent-filter>
@@ -30,28 +30,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Login"
+            android:name="com.explorer.technologies.Login"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
-            android:name=".Register"
+            android:name="com.explorer.technologies.Register"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
-            android:name=".Inbox"
+            android:name="com.explorer.technologies.Inbox"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
-            android:name=".Sent"
+            android:name="com.explorer.technologies.Sent"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
-            android:name=".Draft"
+            android:name="com.explorer.technologies.Draft"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
-            android:name=".Compose"
+            android:name="com.explorer.technologies.Compose"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
-            android:name=".Groups"
+            android:name="com.explorer.technologies.Groups"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
-            android:name=".SplashScreen"
+            android:name="com.explorer.technologies.SplashScreen"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
             <intent-filter>
@@ -60,11 +60,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".SMSBroadcastReceiver">
+
+        <receiver android:name="com.explorer.technologies.SMSBroadcastReceiver" >
             <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"></action>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" >
+                </action>
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name="com.explorer.technologies.Layouts"
+            android:label="@string/title_activity_layouts" >
+        </activity>
     </application>
 
 </manifest>

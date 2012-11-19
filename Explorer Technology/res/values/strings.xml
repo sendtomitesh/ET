@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Explorer Technologies</string>
@@ -31,9 +32,12 @@
     <string name="groups">Groups</string>
     <string name="call_log">Call Log</string>
     <string name="unknown">Unknown</string>
+
     <string-array name="level_array">
         <item>National</item>
         <item>International</item>
     </string-array>
+
+    <string name="title_activity_layouts">Layouts</string>
 
 </resources>
