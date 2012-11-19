@@ -48,6 +48,9 @@
             android:name=".Compose"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
+            android:name=".Groups"
+            android:theme="@style/NoTitleExplorerTech" />
+        <activity
             android:name=".SplashScreen"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >

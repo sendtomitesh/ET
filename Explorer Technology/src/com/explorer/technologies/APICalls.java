@@ -79,9 +79,7 @@ public class APICalls {
 			HttpPost httppost = new HttpPost(Utility.ServerPath);
 
 			try {
-				
-				
-			
+					
 				
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 				

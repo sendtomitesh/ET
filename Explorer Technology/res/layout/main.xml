@@ -136,6 +136,7 @@
                 android:layout_margin="10dp"
                 android:background="@drawable/menu_layout"
                 android:gravity="center_horizontal"
+                android:onClick="gotoGroups"
                 android:orientation="vertical" >
 
                 <ImageView
