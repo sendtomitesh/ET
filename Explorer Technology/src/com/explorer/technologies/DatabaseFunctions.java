@@ -12,7 +12,7 @@ public class DatabaseFunctions {
 	private static DbHelper dbHelper; 
 	private static SQLiteDatabase db ;
 	//private static final String ROW_ID = "id";
-	private static final String TO = "to";
+	private static final String TO = "sms_to";
 	private static final String MESSAGE = "message";
 
 	

@@ -90,13 +90,16 @@ public class Compose extends Activity {
 		
 	};
 	private void saveMsgToDrafts() {
-		Toast.makeText(getApplicationContext(), "Saving to Drafts", Toast.LENGTH_LONG).show();
+		//Toast.makeText(getApplicationContext(), "Saving to Drafts", Toast.LENGTH_LONG).show();
+		
+		DatabaseFunctions.saveToDrafts(getApplicationContext(), textTo.getText().toString(), textMessage.getText().toString());
 		
 	}
 	public void moveToDashboard()
 	{
 		Intent dashboardIntent = new Intent(getApplicationContext(), Main.class);
 		startActivity(dashboardIntent);
+		finish();
 		
 	}
 	public void sendMessage(View v) {
