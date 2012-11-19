@@ -39,6 +39,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
+
+
 public class Compose extends Activity {
 
 	private static final int CONTACT_PICKER_RESULT = 1001;
@@ -49,7 +51,8 @@ public class Compose extends Activity {
 	ProgressDialog pd;
 	int textCounter=0;
 	String  groupIds="";
-
+	ArrayList<HashMap<String, String>> groupList;
+	Boolean isGroupListLoaded=false;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -131,11 +134,16 @@ public class Compose extends Activity {
 		groupIds=manageComma(groupIds);
 		
 		
-		
-	//	Toast.makeText(getApplicationContext(), repairedNumbers, Toast.LENGTH_LONG).show();
-	//	Toast.makeText(getApplicationContext(), groupIds, Toast.LENGTH_LONG).show();
-		
-		new SendMessage().execute(Utility.username, Utility.password, textSender
+       if(repairedNumbers.equals("") && !groupIds.equals(""))
+       {
+    	  
+    	   Toast.makeText(getApplicationContext(), groupIds, Toast.LENGTH_LONG).show();
+    	 /*  new SendMessageToGroup().execute(Utility.username, Utility.password, textSender
+					.getText().toString(), groupIds, textMessage
+					.getText().toString());  */
+       }
+       else if(!repairedNumbers.equals(""))
+    	   new SendMessage().execute(Utility.username, Utility.password, textSender
 				.getText().toString(), repairedNumbers, textMessage
 				.getText().toString());
 		
@@ -144,17 +152,19 @@ public class Compose extends Activity {
 	}
 	public String manageComma(String s)
 	{
-		s= s.replaceAll(",,",",");
-		
-		
-		//removes last ,
-		if(s.charAt(s.length()-1)==',')
-			s= s.substring(0,s.length()-1);
-		
-		//remove first ,
-		if(s.charAt(0)==',')
-			s= s.substring(1,s.length()-1);
-		
+		if(s.length()>0)
+		{
+			s= s.replaceAll(",,",",");
+			
+			
+			//removes last ,
+			if(s.charAt(s.length()-1)==',')
+				s= s.substring(0,s.length()-1);
+			
+			//remove first ,
+			if(s.charAt(0)==',')
+				s= s.substring(1,s.length());
+		}
 		return s;
 	}
 	
@@ -256,7 +266,7 @@ public class Compose extends Activity {
 			//if groups exists
 			if(groupIds!="")
 			{
-				new SendMessage().execute(Utility.username, Utility.password, textSender
+				new SendMessageToGroup().execute(Utility.username, Utility.password, textSender
 						.getText().toString(), groupIds, textMessage
 						.getText().toString());
 				
@@ -285,7 +295,7 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 			// status = APICalls.
 			
 			
-			status = APICalls.sendMsg(args[0], args[1], args[2], args[3],
+			status = APICalls.sendToGroup(args[0], args[1], args[2], args[3],
 					args[4]);
 			return status;
 
@@ -306,6 +316,7 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 						"Error sending message ", Toast.LENGTH_LONG).show();
 			}
 			
+			groupIds="";
 			try
 			{
 				pd.dismiss();
@@ -342,11 +353,10 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 		@Override
 		protected void onPostExecute(ArrayList<HashMap<String, String>> mylist) {
 
-			showinList(mylist);
-			
+			groupList=mylist;
+			isGroupListLoaded=true;
+			showinList();
 			super.onPostExecute(mylist);
-			
-			
 			
 			try
 			{
@@ -360,7 +370,7 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 	{
 		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,Contacts.CONTENT_URI);  
 	    startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
-		//Toast.makeText(getApplicationContext(),"Get Contacts", Toast.LENGTH_LONG).show();
+		
 	}
 	
 	
@@ -412,11 +422,15 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 	
 	public void getGroups(View v)
 	{
-		new ShowGroups().execute("mobiled", "1234");
+		if(!isGroupListLoaded)
+			new ShowGroups().execute("mobiled", "1234");
+		else
+			showinList();
+			
 		
 	}
 	
-	public void showinList(ArrayList<HashMap<String, String>> mylist)
+	public void showinList()
 	{
 		final Dialog groupsDialog = new Dialog(Compose.this);
 		groupsDialog.setTitle("Select Group");
@@ -425,14 +439,8 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 		String[] from = new String[] {"id","name"};
 		int[] to = new int[] { R.id.contact_id,R.id.contact_name };
 		final ListView listview = (ListView) groupsDialog.findViewById(R.id.list_call_log);
-		
-		
-        
-		
-		
-
-				
-		ListAdapter adapter = new SimpleAdapter(this, mylist,R.layout.call_log_item, from, to);
+					
+		ListAdapter adapter = new SimpleAdapter(this, groupList,R.layout.call_log_item, from, to);
 		listview.setAdapter(adapter);
 	
 		listview.setTextFilterEnabled(true);
