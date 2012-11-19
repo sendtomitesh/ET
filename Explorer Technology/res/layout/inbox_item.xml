@@ -3,32 +3,35 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="#ffffff"
-    android:minHeight="40dp"
-    android:padding="8dp"
     android:gravity="center_vertical"
-    android:orientation="vertical" >
+    android:minHeight="40dp"
+    android:orientation="vertical"
+    android:padding="8dp" >
 
     <TextView
         android:id="@+id/txt_from"
-        android:layout_width="wrap_content"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
+        android:singleLine="true"
         android:textColor="#57719D"
-        android:textSize="16dp" />
+        android:ellipsize="marquee"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/txt_message"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/txt_from"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_from"
         android:textColor="#272727"
-        android:textSize="14dp" />
-    
-    <TextView android:id="@+id/txt_date"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/txt_date"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_height="wrap_content"
         android:textColor="#DDDDDD"
-        android:textSize="13dp" />
+        android:textSize="13sp" />
 
 </RelativeLayout>
