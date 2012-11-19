@@ -40,7 +40,7 @@ public class Compose extends Activity {
 	Button btnSendMessage;
 	ProgressDialog pd;
 	int textCounter=0;
-	
+	String  groupIds="";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,13 +50,66 @@ public class Compose extends Activity {
 		textSender.setText(Utility.sender_id);
 	}
 
-	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		//Toast.makeText(getApplicationContext(), textMessage.getText().toString(), Toast.LENGTH_LONG).show();
+		if (!textTo.getText().toString().equals("") || !textMessage.getText().toString().equals(""))
+		{
+			AlertDialog.Builder ab = new AlertDialog.Builder(Compose.this);
+	        ab.setMessage("Save it to drafts?").setPositiveButton("Yes", dialogClickListener)
+	        .setNegativeButton("No", dialogClickListener).show();
+		}
+		else
+			super.onBackPressed();
+	}
+	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+	    @Override
+	    public void onClick(DialogInterface dialog, int which) {
+	        switch (which){
+	        case DialogInterface.BUTTON_POSITIVE:
+	            //Yes button clicked
+	        	
+	        	saveMsgToDrafts();
+	        	moveToDashboard();
+	            break;
+
+	        case DialogInterface.BUTTON_NEGATIVE:
+	            //No button clicked
+	        	moveToDashboard();
+	            break;
+	        }
+	    }
+
+		
+	};
+	private void saveMsgToDrafts() {
+		Toast.makeText(getApplicationContext(), "Saving to Drafts", Toast.LENGTH_LONG).show();
+		
+	}
+	public void moveToDashboard()
+	{
+		Intent dashboardIntent = new Intent(getApplicationContext(), Main.class);
+		startActivity(dashboardIntent);
+		
+	}
 	public void sendMessage(View v) {
+	
+		//Toast.makeText(getApplicationContext(), extractGroupId("my group(1234),sdfomthing"), Toast.LENGTH_LONG).show();
+		
 		String repairedNumbers="";
 		String arr[]= textTo.getText().toString().split(",");
 		
 		for(int i=0;i<arr.length;i++)
 		{
+			
+			
+			if(Utility.isLatinLetter(arr[i].charAt(0)))
+			{
+			   groupIds=groupIds+","+extractGroupId(arr[i])+",";
+			   continue;
+			}
+			
 			arr[i]=repairPhoneNumber(arr[i]);
 			
 			if(i== arr.length-1)
@@ -65,10 +118,50 @@ public class Compose extends Activity {
 				repairedNumbers= repairedNumbers+","+arr[i]+",";
 		}
 		
+		//replaces ,, to , if exists
+		repairedNumbers=manageComma(repairedNumbers);
+		groupIds=manageComma(groupIds);
+		
+		
+		
+	//	Toast.makeText(getApplicationContext(), repairedNumbers, Toast.LENGTH_LONG).show();
+	//	Toast.makeText(getApplicationContext(), groupIds, Toast.LENGTH_LONG).show();
+		
 		new SendMessage().execute(Utility.username, Utility.password, textSender
 				.getText().toString(), repairedNumbers, textMessage
 				.getText().toString());
+		
+		
 		  
+	}
+	public String manageComma(String s)
+	{
+		s= s.replaceAll(",,",",");
+		
+		
+		//removes last ,
+		if(s.charAt(s.length()-1)==',')
+			s= s.substring(0,s.length()-1);
+		
+		//remove first ,
+		if(s.charAt(0)==',')
+			s= s.substring(1,s.length()-1);
+		
+		return s;
+	}
+	
+	
+	public String extractGroupId(String combinedString)
+	{
+		String gId="";
+		
+		int start= combinedString.indexOf("(");
+		int end=combinedString.indexOf(")");
+		
+		gId=combinedString.substring(start+1, end);
+		
+		return gId;
+		
 	}
 
 	public void globalInitialize() {
@@ -151,6 +244,65 @@ public class Compose extends Activity {
 			{
 				pd.dismiss();
 			}catch(Exception e){}
+			
+			//if groups exists
+			if(groupIds!="")
+			{
+				new SendMessage().execute(Utility.username, Utility.password, textSender
+						.getText().toString(), groupIds, textMessage
+						.getText().toString());
+				
+			}
+
+		}
+
+	}
+
+public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
+
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			pd = new ProgressDialog(Compose.this);
+			pd.setTitle("Sending sms to group..");
+			pd.show();
+			
+		}
+
+		@Override
+		protected Integer doInBackground(String... args) {
+
+			int status;
+			// status = APICalls.
+			
+			
+			status = APICalls.sendMsg(args[0], args[1], args[2], args[3],
+					args[4]);
+			return status;
+
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+
+			super.onPostExecute(result);
+			
+			
+			if (result == 0) {
+				insertSentMessage();
+				Toast.makeText(getApplicationContext(), "Message sent successfully ",
+						Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"Error sending message ", Toast.LENGTH_LONG).show();
+			}
+			
+			try
+			{
+				pd.dismiss();
+			}catch(Exception e){}
+			
 			
 
 		}
@@ -300,6 +452,8 @@ public class Compose extends Activity {
 
         }  		
 	}
+		
+		
 		public String repairPhoneNumber(String num)
 		{
 			String repairedNumber=num;

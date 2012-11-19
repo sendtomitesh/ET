@@ -25,6 +25,9 @@ public static void storeCredentialsInSharedPref(SharedPreferences sp,String unam
 	editor.putString("sender_id", sender_id);
 	editor.commit();
 }
+public static boolean isLatinLetter(char c) {
+    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+}
 public static boolean getSharedPrefValues(SharedPreferences sp) {
 	// TODO Auto-generated method stub
 	

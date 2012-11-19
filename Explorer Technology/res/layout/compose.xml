@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txt_sender"
                 android:hint="@string/to"
-                android:inputType="number" />
+                android:inputType="text" />
 
             
             <Button
