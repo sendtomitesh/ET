@@ -59,6 +59,7 @@ public class Compose extends Activity {
 		
 		textSender.setText(Utility.sender_id);
 		checkIfComesFromDrafts();
+		checkIfComesFromGroups();
 	}
 
 	private void checkIfComesFromDrafts() {
@@ -71,10 +72,25 @@ public class Compose extends Activity {
 		}
 		
 		if(intent.hasExtra("to"))
-			textTo.setText(intent.getStringExtra("to"));
+		{
+			//textTo.setText(intent.getStringExtra("to"));
+			setToNumber(intent.getStringExtra("to"));
+		}
 		if(intent.hasExtra("msg"))
+		{
 			textMessage.setText(intent.getStringExtra("msg"));
+		}	
 		
+	}
+	private void checkIfComesFromGroups()
+	{
+		Intent intent= getIntent();
+		if(intent.hasExtra("groupName"))
+		{
+			String groupName = intent.getStringExtra("groupName");
+			setToNumber(groupName);
+		}
+			
 	}
 
 	@Override
@@ -92,8 +108,9 @@ public class Compose extends Activity {
 			else
 				super.onBackPressed();
 		}
-		else
+		else{
 			super.onBackPressed();
+		}
 	}
 	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 	    @Override
@@ -123,8 +140,8 @@ public class Compose extends Activity {
 	public void moveToDashboard()
 	{
 		isDraft=false;
-		Intent dashboardIntent = new Intent(getApplicationContext(), Main.class);
-		startActivity(dashboardIntent);
+		//Intent dashboardIntent = new Intent(getApplicationContext(), Main.class);
+		//startActivity(dashboardIntent);
 		finish();
 		
 	}
