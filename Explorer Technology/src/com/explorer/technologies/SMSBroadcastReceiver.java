@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import android.widget.Toast;
 
 public class SMSBroadcastReceiver extends BroadcastReceiver {
 
@@ -29,7 +30,9 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
                             messages[i] = SmsMessage.createFromPdu((byte[])pdus[i]);
                         }
                         if (messages.length > -1) {
+                        	
                             Log.i(TAG, "Message recieved: " + messages[0].getMessageBody());
+                            Toast.makeText(context, "Message recieved from: " + messages[0].getOriginatingAddress(), Toast.LENGTH_LONG).show();
                         }
                     }
                 }

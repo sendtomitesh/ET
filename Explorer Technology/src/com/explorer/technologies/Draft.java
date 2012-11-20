@@ -2,7 +2,10 @@ package com.explorer.technologies;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
@@ -86,21 +89,52 @@ public class Draft extends Activity {
     		public void onItemClick(AdapterView<?> parent, View view,
     				int position, long id) {
     			
-    			Cursor cur = ((SimpleCursorAdapter)listview.getAdapter()).getCursor();
-    			cur.moveToPosition(position);
-    			String to = cur.getString(1).toString();
-    			String msg = cur.getString(2).toString();
-    			
-    			moveToCompose(id,to,msg);    			
+    		//	Toast.makeText(getApplicationContext(), cursor.getString(2), Toast.LENGTH_LONG).show();
     			
     			
+    			cursor.moveToPosition(position);
+    			
+    			
+    			
+    			AlertDialog multichoice;
+	    		multichoice=new AlertDialog.Builder(Draft.this)
+	    			
+	               .setTitle( "SMS Options" )
+	               .setItems(new String[]{"Send Now","Discard"}, new OnClickListener() {
+
+	                   @Override
+	                   public void onClick(DialogInterface dialog, int which) {
+	                	if(which==0)
+	                	{
+	                		String msg_Id = cursor.getString(0);
+	            			String to = cursor.getString(1);
+	            			String msg = cursor.getString(2);
+	                		moveToCompose(msg_Id,to,msg);
+	                	}
+	                	else
+	                	{
+	                		discardCurrent(cursor.getString(0));
+	                	}
+	                   }
+	               })
+	               
+	             
+	               .create();
+	    			
+	    		multichoice.show();
+ 			
     		}
 
 			
     	});
     	
     }
-    private void moveToCompose(long id,String to,String msg) {
+    private void discardCurrent(String msgId)
+    {
+    	DatabaseFunctions.deleteDraftMessage(getApplicationContext(), msgId);
+    	showDrafts();
+    }
+    private void moveToCompose(String id,String to,String msg) {
 		// TODO Auto-generated method stub
     	Intent dashboardIntent = new Intent(getApplicationContext(), Compose.class);
     	dashboardIntent.putExtra("id", id);
@@ -111,6 +145,10 @@ public class Draft extends Activity {
     	
 	}
     
+    private void deleteAllDrafts()
+    {
+    	DatabaseFunctions.deleteAllDraftMessage(getApplicationContext());
+    }
 	  @SuppressWarnings("deprecation")
 	  @Override
 	    public void startManagingCursor(Cursor c) {

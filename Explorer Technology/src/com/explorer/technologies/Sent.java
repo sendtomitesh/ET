@@ -73,6 +73,24 @@ public class Sent extends Activity {
 	  
 	 }
     
+    private int deleteAllmsg()
+    {
+    	Uri sentUri = Uri.parse("content://sms/sent");
+    	int count = 0;
+    	Cursor c = getContentResolver().query(sentUri , null, null, null, null);
+    	while (c.moveToNext()) {
+    	    try {
+    	        // Delete the SMS
+    	        String pid = c.getString(0); // Get id;
+    	        String uri = "content://sms/" + pid;
+    	        count = getContentResolver().delete(Uri.parse(uri),
+    	                null, null);
+    	    } catch (Exception e) {
+    	    }
+    	}
+    	return count;
+    }
+    
     @SuppressWarnings("deprecation")
 	@Override
     public void startManagingCursor(Cursor c) {

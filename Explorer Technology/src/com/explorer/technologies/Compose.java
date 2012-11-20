@@ -12,6 +12,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -55,6 +56,7 @@ public class Compose extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.compose);
 		globalInitialize();
+		
 		textSender.setText(Utility.sender_id);
 		checkIfComesFromDrafts();
 		checkIfComesFromGroups();
@@ -68,6 +70,7 @@ public class Compose extends Activity {
 			msgId=intent.getStringExtra("id");
 			isDraft=true;
 		}
+		
 		if(intent.hasExtra("to"))
 		{
 			//textTo.setText(intent.getStringExtra("to"));
@@ -102,6 +105,8 @@ public class Compose extends Activity {
 		        ab.setMessage("Save it to drafts?").setPositiveButton("Yes", dialogClickListener)
 		        .setNegativeButton("No", dialogClickListener).show();
 			}
+			else
+				super.onBackPressed();
 		}
 		else{
 			super.onBackPressed();
@@ -134,8 +139,9 @@ public class Compose extends Activity {
 	}
 	public void moveToDashboard()
 	{
-		Intent dashboardIntent = new Intent(getApplicationContext(), Main.class);
-		startActivity(dashboardIntent);
+		isDraft=false;
+		//Intent dashboardIntent = new Intent(getApplicationContext(), Main.class);
+		//startActivity(dashboardIntent);
 		finish();
 		
 	}
@@ -167,15 +173,15 @@ public class Compose extends Activity {
 		//replaces ,, to , if exists
 		repairedNumbers=manageComma(repairedNumbers);
 		groupIds=manageComma(groupIds);
-		
+	//	Toast.makeText(getApplicationContext(), repairedNumbers, Toast.LENGTH_LONG).show();
 		
        if(repairedNumbers.equals("") && !groupIds.equals(""))
        {
     	  
-    	   Toast.makeText(getApplicationContext(), groupIds, Toast.LENGTH_LONG).show();
-    	 /*  new SendMessageToGroup().execute(Utility.username, Utility.password, textSender
+    	//   Toast.makeText(getApplicationContext(), groupIds, Toast.LENGTH_LONG).show();
+    	   new SendMessageToGroup().execute(Utility.username, Utility.password, textSender
 					.getText().toString(), groupIds, textMessage
-					.getText().toString());  */
+					.getText().toString());  
        }
        else if(!repairedNumbers.equals(""))
     	   new SendMessage().execute(Utility.username, Utility.password, textSender
@@ -306,10 +312,12 @@ public class Compose extends Activity {
 						.getText().toString());
 				
 			}
-			else if(isDraft)
+			else
+				moveToDashboard();
+			if(isDraft)
 			{
 				new deleteDraft().execute(getApplicationContext());
-				isDraft=false;
+				//isDraft=false;
 			}
 
 		}
@@ -351,6 +359,7 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 				insertSentMessage();
 				Toast.makeText(getApplicationContext(), "Message sent successfully ",
 						Toast.LENGTH_LONG).show();
+				moveToDashboard();
 			} else {
 				Toast.makeText(getApplicationContext(),
 						"Error sending message ", Toast.LENGTH_LONG).show();
@@ -624,25 +633,30 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 			countryCode=Iso2Phone.getPhone(countryCode);
 			
 			
-			//remove 0 if its a first digit
-			if(num.startsWith("0"))
-				num=num.substring(1);
-			
-			else if(num.length()==10)  //valid number in india
-			{
-				repairedNumber=countryCode+num;
-			}
-			else if(num.length()==11)  //valid number in nigeria
-			{
-				repairedNumber=countryCode+num;
-			}
-			
 			//if number starts from + means it has code attached, nothing to do
 			if(repairedNumber.startsWith("+"))
 			{
-				repairedNumber=repairedNumber.substring(1);
+				
+				repairedNumber=repairedNumber.substring(1, repairedNumber.length());
+				return repairedNumber;
+			}
+			
+			//remove 0 if its a first digit
+			if(repairedNumber.startsWith("0"))
+			{
+				repairedNumber=repairedNumber.substring(1, repairedNumber.length());
 				
 			}
+			if(repairedNumber.length()==10)  //valid number in india
+			{
+				repairedNumber=countryCode+repairedNumber;
+			}
+			else if(repairedNumber.length()==11)  //valid number in nigeria
+			{
+				repairedNumber=countryCode+repairedNumber;
+			}
+			
+			
 			return repairedNumber;
 		}
 }
