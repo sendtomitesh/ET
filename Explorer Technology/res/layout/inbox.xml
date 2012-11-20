@@ -17,6 +17,22 @@
             android:id="@+id/txt_title"
             style="@style/TitleBarText"
             android:text="@string/inbox" />
+        <Button android:id="@+id/btn_new"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/add_new"
+            android:visibility="gone"
+            android:onClick="addNew"
+            android:textColor="#FFFFFF"
+            />
+        <Button android:id="@+id/btn_delete"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/delete_all"
+            android:visibility="gone"
+            android:onClick="deleteAll"
+            android:textColor="#FFFFFF"
+            />
         
     </LinearLayout>
         <RelativeLayout

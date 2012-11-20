@@ -161,6 +161,7 @@
                 android:layout_toRightOf="@+id/layout_group"
                 android:background="@drawable/menu_layout"
                 android:gravity="center_horizontal"
+                android:onClick="gotoAutoReply"
                 android:orientation="vertical" >
 
                 <ImageView

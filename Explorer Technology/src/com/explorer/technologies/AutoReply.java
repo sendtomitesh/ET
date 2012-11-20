@@ -17,23 +17,30 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Draft extends Activity {
+public class AutoReply extends Activity {
 
 	SentListAdapter sentAdapter;
 	ImageView imgTitle;
-	Button btnDelete;
 	TextView txtTitle;
+	Button btnNew,btnDelete;
 	SQLiteDatabase db;
 	DbHelper dbHelper;
-    @Override
+    
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inbox);
         initilizeGlobals();
-        showDrafts();
+    	showAutoReplyList();
         
     }
     
+	@Override
+	protected void onResume() {
+		super.onResume();
+		showAutoReplyList();
+		
+	}
     
     @Override
     protected void onStop() {
@@ -52,21 +59,35 @@ public class Draft extends Activity {
     {
     	imgTitle = (ImageView)findViewById(R.id.image_title);
         txtTitle = (TextView)findViewById(R.id.txt_title);
-        imgTitle.setImageResource(R.drawable.draft);
-        txtTitle.setText(getResources().getString(R.string.drafts));
+        imgTitle.setImageResource(R.drawable.autoreply);
+        txtTitle.setText(getResources().getString(R.string.autoreply));
+        btnNew =(Button)findViewById(R.id.btn_new);
         btnDelete =(Button)findViewById(R.id.btn_delete);
+        btnNew.setVisibility(View.VISIBLE);
         btnDelete.setVisibility(View.VISIBLE);
+    }
+    
+    public void addNew(View v)
+    {
+    	//Toast.makeText(getApplicationContext(), "Add New", Toast.LENGTH_LONG).show();
+    	Intent newReplyIntent = new Intent(getApplicationContext(),AddAutoReply.class);
+    	startActivity(newReplyIntent);
+    	
     }
     
     public void deleteAll(View v)
     {
-    	Toast.makeText(getApplicationContext(), "Delete All", Toast.LENGTH_LONG).show();
+    	
+    	DatabaseFunctions.deleteAllAutoReply(getApplicationContext());
+    	showAutoReplyList();
+    	Toast.makeText(getApplicationContext(), "All Records Deleted", Toast.LENGTH_LONG).show();
     }
     
+    
+    
     @SuppressWarnings("deprecation")
-	public void showDrafts()
+	private void showAutoReplyList()
     {
-    	
     	
     	String[] from = new String[] {"sms_to","message"};
     	int[] to = new int[] { R.id.txt_from,R.id.txt_message };
@@ -74,7 +95,7 @@ public class Draft extends Activity {
     	    	
     	dbHelper = new DbHelper(getApplicationContext());
     	db = dbHelper.getReadableDatabase();
-    	final Cursor cursor = DatabaseFunctions.getDraftCursor(getApplicationContext(),db);
+    	final Cursor cursor = DatabaseFunctions.getAutoReplyCursor(getApplicationContext(),db);
     	startManagingCursor(cursor);
     	
     	SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.inbox_item,cursor, from, to);
@@ -90,8 +111,9 @@ public class Draft extends Activity {
     			cur.moveToPosition(position);
     			String to = cur.getString(1).toString();
     			String msg = cur.getString(2).toString();
+    			Toast.makeText(getApplicationContext(), to + "\n" + msg,Toast.LENGTH_LONG).show();
     			
-    			moveToCompose(id,to,msg);    			
+    			//moveToCompose(id,to,msg);    			
     			
     			
     		}
@@ -111,9 +133,9 @@ public class Draft extends Activity {
     	
 	}
     
-	  @SuppressWarnings("deprecation")
-	  @Override
-	    public void startManagingCursor(Cursor c) {
+	@SuppressWarnings("deprecation")
+	@Override
+	public void startManagingCursor(Cursor c) {
 
 	        // To solve the following error for honeycomb:
 	        // java.lang.RuntimeException: Unable to resume activity 
@@ -121,5 +143,5 @@ public class Draft extends Activity {
 	        if (Build.VERSION.SDK_INT < 11) {
 	            super.startManagingCursor(c);
 	        }
-	    }       
+	}       
 }

@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,19 +18,31 @@ public class Sent extends Activity {
 
 	SentListAdapter sentAdapter;
 	ImageView imgTitle;
+	Button btnDelete;
 	TextView txtTitle;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inbox);
-        imgTitle = (ImageView)findViewById(R.id.image_title);
+        initilizeGlobals();
+        loadSentMessages();
+    }
+    
+    private void initilizeGlobals()
+    {
+    	imgTitle = (ImageView)findViewById(R.id.image_title);
         txtTitle = (TextView)findViewById(R.id.txt_title);
         imgTitle.setImageResource(R.drawable.sent);
         txtTitle.setText(getResources().getString(R.string.sent));
-        loadInbox();
+        btnDelete =(Button)findViewById(R.id.btn_delete);
+        btnDelete.setVisibility(View.VISIBLE);
     }
     
-    public void loadInbox()
+        public void deleteAll(View v)
+    {
+    	Toast.makeText(getApplicationContext(), "Delete All", Toast.LENGTH_LONG).show();
+    }
+    private void loadSentMessages()
 	{
 	    	final ListView listview = (ListView) findViewById(R.id.listview_inbox);
 	    	

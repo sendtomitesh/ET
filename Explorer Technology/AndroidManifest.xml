@@ -51,6 +51,12 @@
             android:name="com.explorer.technologies.Groups"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
+            android:name="com.explorer.technologies.AddAutoReply"
+            android:theme="@style/NoTitleExplorerTech" />
+        <activity
+            android:name="com.explorer.technologies.AutoReply"
+            android:theme="@style/NoTitleExplorerTech" />
+        <activity
             android:name="com.explorer.technologies.SplashScreen"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >

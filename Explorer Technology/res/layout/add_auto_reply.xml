@@ -1,0 +1,84 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_background" >
+
+    <LinearLayout style="@style/TitleBar" >
+
+        <ImageView
+            android:id="@+id/image_title"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:contentDescription="@string/compose"
+            android:src="@drawable/compose" />
+
+        <TextView
+            android:id="@+id/txt_title"
+            style="@style/TitleBarText"
+            android:text="@string/new_reply" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="40dp"
+        android:fadingEdge="none"
+        android:fillViewport="true" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:gravity="center_horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="30dp" >
+
+           
+            <EditText
+                android:id="@+id/txt_to"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/to"
+                android:inputType="text" />
+
+            
+            <Button
+                android:id="@+id/btn_contacts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_to"
+                android:onClick="getContacts"
+                android:text="@string/contacts" />
+                                 
+            <EditText
+                android:id="@+id/txt_message"
+                android:layout_margin="3dp"
+                android:padding="8dp"
+                android:background="@drawable/textarea_bordered"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_contacts"
+                android:gravity="top|left"
+                android:hint="@string/message"
+                android:lines="8"
+                android:maxLines="10"
+                android:minLines="6"
+                android:scrollbars="vertical"
+                android:singleLine="false" />
+
+            <Button
+                android:id="@+id/btn_add_reply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_message"
+                android:onClick="createAutoReply"
+                android:text="@string/create" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -8,19 +8,26 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class Inbox extends Activity {
-
+	Button btnDelete;
 	InboxListAdapter inboxAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inbox);
+        btnDelete =(Button)findViewById(R.id.btn_delete);
+        btnDelete.setVisibility(View.VISIBLE);
         loadInbox();
     }
     
+    public void deleteAll(View v)
+    {
+    	Toast.makeText(getApplicationContext(), "Delete All", Toast.LENGTH_LONG).show();
+    }
     public void loadInbox()
 	{
 	    	final ListView listview = (ListView) findViewById(R.id.listview_inbox);
