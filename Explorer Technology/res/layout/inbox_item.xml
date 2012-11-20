@@ -34,4 +34,26 @@
         android:textColor="#DDDDDD"
         android:textSize="13sp" />
 
+    <Button
+        android:id="@+id/btn_reply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/txt_from"
+        android:onClick="btnReplyClick"
+        android:text="Reply"
+        android:visibility="invisible" >
+
+</Button>
+
+    <Button
+        android:id="@+id/btn_forward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/btn_reply"
+        android:onClick="btnForwardClick"
+        android:text="Forward"
+        android:visibility="invisible" >
+
+</Button>
+
 </RelativeLayout>

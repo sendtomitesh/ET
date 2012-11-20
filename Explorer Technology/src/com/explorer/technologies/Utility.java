@@ -17,13 +17,18 @@ public static String username;
 public static String password;
 public static String sender_id;
 
-public static void storeCredentialsInSharedPref(SharedPreferences sp,String uname,String pass,String sender_id)
+public static void storeCredentialsInSharedPref(SharedPreferences sp,String uname,String pass,String send_id)
 {
 	Editor editor = sp.edit();
 	editor.putString("username", uname);
 	editor.putString("pass", pass);
-	editor.putString("sender_id", sender_id);
+	editor.putString("sender_id", send_id);
 	editor.commit();
+	
+	//set values
+	username=uname;
+	password=pass;
+	sender_id=send_id;  
 }
 public static boolean isLatinLetter(char c) {
     return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
