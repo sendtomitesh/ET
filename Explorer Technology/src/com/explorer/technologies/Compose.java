@@ -67,8 +67,10 @@ public class Compose extends Activity {
 		Intent intent= getIntent();
 		if(intent.hasExtra("id"))
 		{
+			
 			msgId=intent.getStringExtra("id");
 			isDraft=true;
+			//Toast.makeText(getApplicationContext(), msgId, Toast.LENGTH_LONG).show();
 		}
 		
 		if(intent.hasExtra("to"))
@@ -292,6 +294,11 @@ public class Compose extends Activity {
 			
 			if (result == 0) {
 				insertSentMessage();
+				if(isDraft)
+				{
+					new deleteDraft().execute(getApplicationContext());
+					//isDraft=false;
+				}
 				Toast.makeText(getApplicationContext(), "Message sent successfully ",
 						Toast.LENGTH_LONG).show();
 			} else {
@@ -314,12 +321,8 @@ public class Compose extends Activity {
 			}
 			else
 				moveToDashboard();
-			if(isDraft)
-			{
-				new deleteDraft().execute(getApplicationContext());
-				//isDraft=false;
-			}
-
+			
+			
 		}
 
 	}
@@ -359,13 +362,14 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 				insertSentMessage();
 				Toast.makeText(getApplicationContext(), "Message sent successfully ",
 						Toast.LENGTH_LONG).show();
+				if(isDraft)
+					new deleteDraft().execute(getApplicationContext());
 				moveToDashboard();
 			} else {
 				Toast.makeText(getApplicationContext(),
 						"Error sending message ", Toast.LENGTH_LONG).show();
 			}
-			if(isDraft)
-				new deleteDraft().execute(getApplicationContext());
+			
 			
 			groupIds="";
 			try

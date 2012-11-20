@@ -47,4 +47,9 @@ public class Main extends Activity {
     	Intent groupsIntent = new Intent(getApplicationContext(),Groups.class);
     	startActivity(groupsIntent);
     }
+    public void gotoAutoReply(View v)
+    {
+    	Intent autoReplyIntent = new Intent(getApplicationContext(),AutoReply.class);
+    	startActivity(autoReplyIntent);
+    }
 }

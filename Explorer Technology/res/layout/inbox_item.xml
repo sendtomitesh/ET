@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/list_bg"
+    android:background="@drawable/list_selector"
     android:gravity="center_vertical"
     android:minHeight="40dp"
     android:orientation="vertical"
@@ -12,7 +12,7 @@
         android:id="@+id/txt_from"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:ellipsize="marquee"
+        android:ellipsize="end"
         android:singleLine="true"
         android:textColor="#57719D"
         android:textSize="16sp" />
