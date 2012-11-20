@@ -44,7 +44,7 @@ public class Inbox extends Activity {
 	    	    
 	    		  int pos = position+1;
 	    		cursor.moveToPosition(pos);
-	    		Toast.makeText(getApplicationContext(), "You clicked at : " + pos, Toast.LENGTH_LONG).show();
+	    		
 	    		
 	    	  }
 	    	});

@@ -46,25 +46,46 @@ public class Compose extends Activity {
 	ProgressDialog pd;
 	int textCounter=0;
 	String  groupIds="";
+	String msgId;
 	ArrayList<HashMap<String, String>> groupList;
 	Boolean isGroupListLoaded=false;
+	Boolean isDraft=false;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.compose);
 		globalInitialize();
 		textSender.setText(Utility.sender_id);
+		checkIfComesFromDrafts();
+	}
+
+	private void checkIfComesFromDrafts() {
+		// TODO Auto-generated method stub
+		Intent intent= getIntent();
+		if(intent.hasExtra("id"))
+		{
+			msgId=intent.getStringExtra("id");
+			isDraft=true;
+		}
+		if(intent.hasExtra("to"))
+			textTo.setText(intent.getStringExtra("to"));
+		if(intent.hasExtra("msg"))
+			textMessage.setText(intent.getStringExtra("msg"));
+		
 	}
 
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		//Toast.makeText(getApplicationContext(), textMessage.getText().toString(), Toast.LENGTH_LONG).show();
-		if (!textTo.getText().toString().equals("") || !textMessage.getText().toString().equals(""))
+		if(!isDraft)
 		{
-			AlertDialog.Builder ab = new AlertDialog.Builder(Compose.this);
-	        ab.setMessage("Save it to drafts?").setPositiveButton("Yes", dialogClickListener)
-	        .setNegativeButton("No", dialogClickListener).show();
+			if (!textTo.getText().toString().equals("") || !textMessage.getText().toString().equals(""))
+			{
+				AlertDialog.Builder ab = new AlertDialog.Builder(Compose.this);
+		        ab.setMessage("Save it to drafts?").setPositiveButton("Yes", dialogClickListener)
+		        .setNegativeButton("No", dialogClickListener).show();
+			}
 		}
 		else
 			super.onBackPressed();
@@ -268,6 +289,11 @@ public class Compose extends Activity {
 						.getText().toString());
 				
 			}
+			else if(isDraft)
+			{
+				new deleteDraft().execute(getApplicationContext());
+				isDraft=false;
+			}
 
 		}
 
@@ -312,6 +338,8 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 				Toast.makeText(getApplicationContext(),
 						"Error sending message ", Toast.LENGTH_LONG).show();
 			}
+			if(isDraft)
+				new deleteDraft().execute(getApplicationContext());
 			
 			groupIds="";
 			try
@@ -361,6 +389,25 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 			}catch(Exception e){}
 		}
 
+	}
+	public class deleteDraft extends AsyncTask<Context, Integer, String>
+	{
+
+		@Override
+		protected String doInBackground(Context... params) {
+			// TODO Auto-generated method stub
+			DatabaseFunctions.deleteDraftMessage(params[0], msgId);
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+		}
+
+		
+		
 	}
 
 	public void getContacts(View v)

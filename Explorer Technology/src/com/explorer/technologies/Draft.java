@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
@@ -79,13 +80,26 @@ public class Draft extends Activity {
     			cur.moveToPosition(position);
     			String to = cur.getString(1).toString();
     			String msg = cur.getString(2).toString();
-    			    			
-    			Toast.makeText(getApplicationContext(),"To : " + to + "\n Message : " + msg,Toast.LENGTH_LONG).show();
+    			
+    			moveToCompose(id,to,msg);    			
+    			
     			
     		}
+
+			
     	});
     	
     }
+    private void moveToCompose(long id,String to,String msg) {
+		// TODO Auto-generated method stub
+    	Intent dashboardIntent = new Intent(getApplicationContext(), Compose.class);
+    	dashboardIntent.putExtra("id", id);
+    	dashboardIntent.putExtra("to", to);
+    	dashboardIntent.putExtra("msg", msg);
+		startActivity(dashboardIntent);
+		finish();
+    	
+	}
     
 	  @SuppressWarnings("deprecation")
 	  @Override
