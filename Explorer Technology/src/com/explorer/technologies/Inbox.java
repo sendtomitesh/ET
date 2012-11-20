@@ -94,6 +94,23 @@ public class Inbox extends Activity {
         getContentResolver().delete(Uri.parse(uri), null, null);
         loadInbox();
     }
+    private int deleteAllmsg()
+    {
+    	Uri inboxUri = Uri.parse("content://sms/inbox");
+    	int count = 0;
+    	Cursor c = getContentResolver().query(inboxUri , null, null, null, null);
+    	while (c.moveToNext()) {
+    	    try {
+    	        // Delete the SMS
+    	        String pid = c.getString(0); // Get id;
+    	        String uri = "content://sms/" + pid;
+    	        count = getContentResolver().delete(Uri.parse(uri),
+    	                null, null);
+    	    } catch (Exception e) {
+    	    }
+    	}
+    	return count;
+    }
     public void moveToCompose(int which,String to, String msg)
     {
     	

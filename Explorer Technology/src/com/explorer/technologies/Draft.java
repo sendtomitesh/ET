@@ -135,6 +135,10 @@ public class Draft extends Activity {
     	
 	}
     
+    private void deleteAllDrafts()
+    {
+    	DatabaseFunctions.deleteAllDraftMessage(getApplicationContext());
+    }
 	  @SuppressWarnings("deprecation")
 	  @Override
 	    public void startManagingCursor(Cursor c) {

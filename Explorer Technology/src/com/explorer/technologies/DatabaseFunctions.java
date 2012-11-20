@@ -82,6 +82,28 @@ public class DatabaseFunctions {
 		return true;
 	}
 	
+	//Return true if  draft message get deleted
+		public static Boolean deleteAllDraftMessage(Context context)
+		{
+			
+			try {
+				
+				dbHelper = new DbHelper(context);
+				db = dbHelper.getReadableDatabase();
+				db.execSQL("DELETE FROM drafts");
+				Log.d("DRAFT DELETE", "Record deleted!");
+				
+			} catch (Exception e) {
+				Log.e("DRAFT DELETE", "error : " + e.toString());
+				return false;
+			}finally{
+				// Close the Database
+				db.close();
+				dbHelper.close();
+			}
+			return true;
+		}
+	
 	
 
 }
