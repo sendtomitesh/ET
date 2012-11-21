@@ -2,7 +2,6 @@ package com.explorer.technologies;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
