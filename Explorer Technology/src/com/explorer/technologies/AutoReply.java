@@ -2,15 +2,18 @@ package com.explorer.technologies;
 
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -111,10 +114,11 @@ public class AutoReply extends Activity {
     			cur.moveToPosition(position);
     			String to = cur.getString(1).toString();
     			String msg = cur.getString(2).toString();
-    			Toast.makeText(getApplicationContext(), to + "\n" + msg,Toast.LENGTH_LONG).show();
     			
-    			//moveToCompose(id,to,msg);    			
+    			//Toast.makeText(getApplicationContext(), to + msg,Toast.LENGTH_LONG).show();
     			
+    			//moveToCompose(id,to,msg);
+    			openUpdateDialog(to, msg);
     			
     		}
 
@@ -122,16 +126,37 @@ public class AutoReply extends Activity {
     	});
     	
     }
-    private void moveToCompose(long id,String to,String msg) {
-		// TODO Auto-generated method stub
-    	Intent dashboardIntent = new Intent(getApplicationContext(), Compose.class);
-    	dashboardIntent.putExtra("id", id);
-    	dashboardIntent.putExtra("to", to);
-    	dashboardIntent.putExtra("msg", msg);
-		startActivity(dashboardIntent);
-		finish();
-    	
-	}
+    private void openUpdateDialog(String to, String message)
+    {
+    	final Dialog dialog = new Dialog(this,R.style.DialogWindowTitle);
+    	dialog.setContentView(R.layout.update_auto_reply_dialog);
+    	final EditText textTo = (EditText)dialog.findViewById(R.id.txt_to);
+    	final EditText textMessage = (EditText)dialog.findViewById(R.id.txt_message);
+    	final Button btnUpdate = (Button)dialog.findViewById(R.id.btn_update);
+    	textTo.setText(to);
+    	final String smsTo = to;
+    	textMessage.setText(message);
+    	btnUpdate.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String msg  = textMessage.getText().toString();
+				if(msg.length() == 0)
+				{
+					Toast.makeText(getApplicationContext(),"Please set message" + msg,Toast.LENGTH_LONG).show();
+				}
+				else{
+					
+					DatabaseFunctions.updateAutoReply(getApplicationContext(), smsTo, msg);
+					showAutoReplyList();
+					dialog.dismiss();
+				}
+				
+			}
+		});
+	   	dialog.show();
+		
+    }
     
 	@SuppressWarnings("deprecation")
 	@Override

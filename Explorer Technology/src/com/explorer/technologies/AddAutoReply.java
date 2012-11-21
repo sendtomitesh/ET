@@ -61,16 +61,18 @@ public class AddAutoReply extends Activity {
 			Toast.makeText(getApplicationContext(), "Please fill all fields", Toast.LENGTH_LONG).show();
 		}
 		else{
-			Boolean checkAleradyExist; 
+			Boolean checkAleradyExist;
+			
 			checkAleradyExist = DatabaseFunctions.checkAutoReply(AddAutoReply.this,to,db);
-			Toast.makeText(AddAutoReply.this, checkAleradyExist.toString(), Toast.LENGTH_LONG).show();
+			//Toast.makeText(AddAutoReply.this, checkAleradyExist.toString(), Toast.LENGTH_LONG).show();
 			if(!checkAleradyExist)
 			{
-				Toast.makeText(AddAutoReply.this, "in if", Toast.LENGTH_LONG).show();
 				DatabaseFunctions.addAutoReply(getApplicationContext(),to, message);
+				Toast.makeText(AddAutoReply.this, "Auto Reply Created Successfully", Toast.LENGTH_LONG).show();
 				finish();
 			}
 			else{
+				
 				Toast.makeText(AddAutoReply.this, "Auto Reply already set for this number", Toast.LENGTH_LONG).show();
 			}
 			

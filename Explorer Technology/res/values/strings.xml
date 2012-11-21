@@ -34,8 +34,10 @@
     <string name="unknown">Unknown</string>
     <string name="add_new">+ New</string>
     <string name="new_reply">New Auto Reply</string>
+    <string name="update_reply">Update Auto Reply</string>
 	<string name="delete_all">Delete All</string>
 	<string name="create">Create</string>
+	<string name="update">Update</string>
     <string-array name="level_array">
         <item>National</item>
         <item>International</item>

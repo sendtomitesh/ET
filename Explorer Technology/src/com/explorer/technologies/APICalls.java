@@ -68,7 +68,7 @@ public class APICalls {
 	
 	
 
-		public static ArrayList<HashMap<String, String>> getGroups(String username, String password) 
+		public static ArrayList<HashMap<String, String>> getGroups() 
 		{
 			ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
 
@@ -84,8 +84,8 @@ public class APICalls {
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 				
 				nameValuePairs.add(new BasicNameValuePair("method", "show_groups"));//here is change
-				nameValuePairs.add(new BasicNameValuePair("username", username));
-				nameValuePairs.add(new BasicNameValuePair("password", password));
+				nameValuePairs.add(new BasicNameValuePair("username",Utility.username));
+				nameValuePairs.add(new BasicNameValuePair("password", Utility.password));
 				nameValuePairs.add(new BasicNameValuePair("format", "json"));
 				
 				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -168,7 +168,7 @@ public class APICalls {
 		}
 
 	//returns 0 for success, 1 for error in registration1, 2 for protocol error, 3 for IO error and 4 for JSon parsing error
-	public static int sendMsg(String username, String password, String sender,String to,String message) 
+	public static int sendMsg(String sender,String to,String message) 
 			{
 				
 				
@@ -183,8 +183,8 @@ public class APICalls {
 					
 					nameValuePairs.add(new BasicNameValuePair("method", "compose"));
 					
-					nameValuePairs.add(new BasicNameValuePair("username", username));
-					nameValuePairs.add(new BasicNameValuePair("password", password));
+					nameValuePairs.add(new BasicNameValuePair("username",Utility.username));
+					nameValuePairs.add(new BasicNameValuePair("password", Utility.password));
 					nameValuePairs.add(new BasicNameValuePair("sender", sender));
 					nameValuePairs.add(new BasicNameValuePair("to", to));
 					nameValuePairs.add(new BasicNameValuePair("message", message));
@@ -216,7 +216,7 @@ public class APICalls {
 
 			}
 	//returns 0 for success, 1 for error in registration1, 2 for protocol error, 3 for IO error and 4 for JSon parsing error
-		public static int sendToGroup(String username, String password, String sender,String groupIds,String message) 
+		public static int sendToGroup(String sender,String groupIds,String message) 
 				{
 					
 					
@@ -231,8 +231,8 @@ public class APICalls {
 						
 						nameValuePairs.add(new BasicNameValuePair("method", "compose"));
 						
-						nameValuePairs.add(new BasicNameValuePair("username", username));
-						nameValuePairs.add(new BasicNameValuePair("password", password));
+						nameValuePairs.add(new BasicNameValuePair("username",Utility.username));
+						nameValuePairs.add(new BasicNameValuePair("password", Utility.password));
 						nameValuePairs.add(new BasicNameValuePair("sender", sender));
 						nameValuePairs.add(new BasicNameValuePair("source", "group"));
 						nameValuePairs.add(new BasicNameValuePair("groupid", groupIds));

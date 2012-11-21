@@ -12,7 +12,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -280,7 +279,7 @@ public class Compose extends Activity {
 			// status = APICalls.
 			
 			
-			status = APICalls.sendMsg(args[0], args[1], args[2], args[3],
+			status = APICalls.sendMsg(args[2], args[3],
 					args[4]);
 			return status;
 
@@ -314,7 +313,7 @@ public class Compose extends Activity {
 			//if groups exists
 			if(groupIds!="")
 			{
-				new SendMessageToGroup().execute(Utility.username, Utility.password, textSender
+				new SendMessageToGroup().execute(textSender
 						.getText().toString(), groupIds, textMessage
 						.getText().toString());
 				
@@ -346,7 +345,7 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 			// status = APICalls.
 			
 			
-			status = APICalls.sendToGroup(args[0], args[1], args[2], args[3],
+			status = APICalls.sendToGroup(args[2], args[3],
 					args[4]);
 			return status;
 
@@ -400,7 +399,7 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 
 		@Override
 		protected ArrayList<HashMap<String, String>> doInBackground(String... args) {
-			return APICalls.getGroups(args[0],args[1]);
+			return APICalls.getGroups();
 			
 
 		}
@@ -497,7 +496,7 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 	public void getGroups(View v)
 	{
 		if(!isGroupListLoaded)
-			new ShowGroups().execute("mobiled", "1234");
+			new ShowGroups().execute();
 		else
 			showinList();
 			
