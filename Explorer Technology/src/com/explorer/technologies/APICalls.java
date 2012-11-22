@@ -169,7 +169,7 @@ public class APICalls {
 
 	//returns 0 for success, 1 for error in registration1, 2 for protocol error, 3 for IO error and 4 for JSon parsing error
 	public static int sendMsg(String sender,String to,String message) 
-			{
+	{
 				
 				
 				// Create a new HttpClient and Post Header
@@ -264,6 +264,5 @@ public class APICalls {
 					}
 
 				}
-
 	
 }

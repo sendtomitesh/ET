@@ -7,8 +7,12 @@ import java.io.InputStreamReader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.ContactsContract.Contacts;
 import android.util.Log;
 
 public class Utility {
@@ -30,6 +34,36 @@ public static void storeCredentialsInSharedPref(SharedPreferences sp,String unam
 	password=pass;
 	sender_id=send_id;  
 }
+
+//Return contact Name from number
+@SuppressWarnings("deprecation")
+public static String getContactName(final String phoneNumber,Context context) {
+    Uri uri;
+    String[] projection;
+    Uri mBaseUri = Contacts.CONTENT_FILTER_URI;
+    projection = new String[] { android.provider.Contacts.People.NAME };
+    try {
+        Class<?> c = Class
+                .forName("android.provider.ContactsContract$PhoneLookup");
+        mBaseUri = (Uri) c.getField("CONTENT_FILTER_URI").get(mBaseUri);
+        projection = new String[] { "display_name" };
+    } catch (Exception e) {
+    }
+    uri = Uri.withAppendedPath(mBaseUri, Uri.encode(phoneNumber));
+    Cursor cursor = context.getContentResolver().query(uri, projection, null,
+            null, null);
+
+    String contactName = "";
+
+    if (cursor.moveToFirst()) {
+        contactName = cursor.getString(0);
+    }
+    cursor.close();
+    cursor = null;
+    return contactName;
+}
+
+
 public static boolean isLatinLetter(char c) {
     return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
 }

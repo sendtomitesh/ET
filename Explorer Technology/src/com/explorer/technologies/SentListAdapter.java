@@ -15,7 +15,7 @@ import android.widget.TextView;
 public class SentListAdapter extends SimpleCursorAdapter {
 
 	private Cursor dataCursor;
-	
+	private Context contextLocal;
 	private LayoutInflater mInflater;
 	
 	
@@ -25,7 +25,7 @@ public class SentListAdapter extends SimpleCursorAdapter {
 	    super(context, layout, dataCursor, from, to);
 	        this.dataCursor = dataCursor;
 	        mInflater = LayoutInflater.from(context);
-	       
+	        contextLocal = context;
 	        //initial fill
 	       
 	}
@@ -39,6 +39,7 @@ public class SentListAdapter extends SimpleCursorAdapter {
 
 	        holder = new ViewHolder();
 	        holder.txt_to = (TextView) convertView.findViewById(R.id.txt_from);
+	        holder.txt_from_name = (TextView) convertView.findViewById(R.id.txt_from_name);
 	        holder.txt_message = (TextView) convertView.findViewById(R.id.txt_message);
 	        holder.txt_date = (TextView) convertView.findViewById(R.id.txt_date);
 	        
@@ -60,7 +61,14 @@ public class SentListAdapter extends SimpleCursorAdapter {
 	    
 	    
 	    Date date = ConvertToDate(label_date);
-	    
+	   
+	    String contactName = Utility.getContactName(label_to, contextLocal);
+	    if(contactName == ""){
+	    	holder.txt_from_name.setText(label_to); 
+	    }
+	    else{
+	    	holder.txt_from_name.setText(contactName);
+	    }
 	    holder.txt_to.setText("To : " + label_to);
 	    holder.txt_message.setText(label_message);
 	    holder.txt_date.setText(date.toString());
@@ -70,7 +78,7 @@ public class SentListAdapter extends SimpleCursorAdapter {
 
 	
 	private Date ConvertToDate(String dateString){
-	    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("E MM hh:mm a");
 	    Date convertedDate = new Date();
 	    try {
 	        convertedDate = dateFormat.parse(dateString);
@@ -82,7 +90,7 @@ public class SentListAdapter extends SimpleCursorAdapter {
 	}
 	public class ViewHolder {
 	
-		TextView txt_to,txt_message,txt_date;
+		TextView txt_to,txt_message,txt_date,txt_from_name;;
 	   
 	}
 }

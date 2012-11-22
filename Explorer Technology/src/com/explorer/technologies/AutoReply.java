@@ -72,6 +72,7 @@ public class AutoReply extends Activity {
     
     public void addNew(View v)
     {
+    	
     	//Toast.makeText(getApplicationContext(), "Add New", Toast.LENGTH_LONG).show();
     	Intent newReplyIntent = new Intent(getApplicationContext(),AddAutoReply.class);
     	startActivity(newReplyIntent);
