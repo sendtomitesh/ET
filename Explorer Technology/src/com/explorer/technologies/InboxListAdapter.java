@@ -1,7 +1,9 @@
 package com.explorer.technologies;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import android.content.Context;
@@ -15,7 +17,7 @@ import android.widget.TextView;
 public class InboxListAdapter extends SimpleCursorAdapter {
 
 	private Cursor dataCursor;
-	
+	private Context contextLocal;
 	private LayoutInflater mInflater;
 	
 	
@@ -24,6 +26,7 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 	        int[] to) {
 	    super(context, layout, dataCursor, from, to);
 	        this.dataCursor = dataCursor;
+	        contextLocal =  context;
 	        mInflater = LayoutInflater.from(context);
 	       
 	        //initial fill
@@ -39,6 +42,7 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 
 	        holder = new ViewHolder();
 	        holder.txt_from = (TextView) convertView.findViewById(R.id.txt_from);
+	        holder.txt_from_name = (TextView) convertView.findViewById(R.id.txt_from_name);
 	        holder.txt_message = (TextView) convertView.findViewById(R.id.txt_message);
 	        holder.txt_date = (TextView) convertView.findViewById(R.id.txt_date);
 	        
@@ -59,9 +63,17 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 	    String label_date = dataCursor.getString(date_index);
 	    
 	    
-	    Date date = ConvertToDate(label_date);
+	    //Date date = ConvertToDate(label_date);
+	    String date = ConvertToDate(label_date);
 	    
-	    holder.txt_from.setText("From : " + label_from);
+	    String contactName = Utility.getContactName(label_from, contextLocal);
+	    if(contactName == ""){
+	    	holder.txt_from_name.setText(label_from); 
+	    }
+	    else{
+	    	holder.txt_from_name.setText(contactName);
+	    }
+	    holder.txt_from.setText(label_from);
 	    holder.txt_message.setText(label_message);
 	    holder.txt_date.setText(date.toString());
 	    
@@ -69,20 +81,31 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 	}
 
 	
-	private Date ConvertToDate(String dateString){
-	    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+	private String ConvertToDate(String dateString){
+		
+		Long timestamp = Long.parseLong(dateString);    
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(timestamp);
+		Date finaldate = calendar.getTime();
+		String smsDate = finaldate.toString();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("E MM hh:mm a");
 	    Date convertedDate = new Date();
 	    try {
-	        convertedDate = dateFormat.parse(dateString);
+	    	
+	        convertedDate = dateFormat.parse(smsDate);
 	    } catch (ParseException e) {
 	        // TODO Auto-generated catch block
 	        e.printStackTrace();
 	    }
-	    return convertedDate;
+	    
+		DateFormat df = new SimpleDateFormat("E MM hh:mm a");
+	   return  df.format(convertedDate);
+		
 	}
+	
 	public class ViewHolder {
 	
-		TextView txt_from,txt_message,txt_date;
+		TextView txt_from,txt_message,txt_date,txt_from_name;
 	   
 	}
 }

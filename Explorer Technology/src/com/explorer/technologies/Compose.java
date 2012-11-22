@@ -65,7 +65,6 @@ public class Compose extends Activity {
 		Intent intent= getIntent();
 		if(intent.hasExtra("id"))
 		{
-			
 			msgId=intent.getStringExtra("id");
 			isDraft=true;
 			//Toast.makeText(getApplicationContext(), msgId, Toast.LENGTH_LONG).show();

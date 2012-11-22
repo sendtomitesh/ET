@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txt_retype_password"
                 android:hint="@string/mobile"
-                android:inputType="number" />
+                android:inputType="phone" />
 
             <EditText
                 android:id="@+id/txt_address"

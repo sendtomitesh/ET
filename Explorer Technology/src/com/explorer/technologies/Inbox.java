@@ -33,7 +33,7 @@ public class Inbox extends Activity {
     	loadInbox();
     }
     public void loadInbox()
-	{
+    {
 	    	final ListView listview = (ListView) findViewById(R.id.listview_inbox);
 	    	
     	
@@ -86,7 +86,7 @@ public class Inbox extends Activity {
 	    	});
 
 	  
-	 }
+	}
     public boolean checkForValidNumber(String n)
     {
     	if(Utility.isLatinLetter(n.charAt(0)) || n.length()<10)
