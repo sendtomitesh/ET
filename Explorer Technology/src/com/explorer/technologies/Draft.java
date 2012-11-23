@@ -72,7 +72,7 @@ public class Draft extends Activity {
     	
     	
     	String[] from = new String[] {"sms_to","message"};
-    	int[] to = new int[] { R.id.txt_from,R.id.txt_message };
+    	int[] to = new int[] { R.id.txt_from_name,R.id.txt_message };
     	final ListView listview = (ListView) findViewById(R.id.listview_inbox);
     	    	
     	dbHelper = new DbHelper(getApplicationContext());
@@ -104,8 +104,7 @@ public class Draft extends Activity {
 
 	                   @Override
 	                   public void onClick(DialogInterface dialog, int which) {
-	                	if(which==0)
-	                	{
+	                	if(which==0){
 	                		String msg_Id = cursor.getString(0);
 	            			String to = cursor.getString(1);
 	            			String msg = cursor.getString(2);

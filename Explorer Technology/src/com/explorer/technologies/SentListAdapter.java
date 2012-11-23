@@ -1,8 +1,7 @@
 package com.explorer.technologies;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -60,35 +59,34 @@ public class SentListAdapter extends SimpleCursorAdapter {
 	    String label_date = dataCursor.getString(date_index);
 	    
 	    
-	    Date date = ConvertToDate(label_date);
+	    String date = ConvertToDate(label_date);
 	   
-	    String contactName = Utility.getContactName(label_to, contextLocal);
-	    if(contactName == ""){
+	    //String contactName = Utility.getContactName(label_to, contextLocal);
+	    //if(contactName == ""){
 	    	holder.txt_from_name.setText(label_to); 
-	    }
-	    else{
-	    	holder.txt_from_name.setText(contactName);
-	    }
+	    //}
+	    //else{
+	    	//holder.txt_from_name.setText(contactName);
+	    //}
 	    holder.txt_to.setText("To : " + label_to);
 	    holder.txt_message.setText(label_message);
-	    holder.txt_date.setText(date.toString());
+	    holder.txt_date.setText(date);
 	    
 	    return convertView;
 	}
 
 	
-	private Date ConvertToDate(String dateString){
-		SimpleDateFormat dateFormat = new SimpleDateFormat("E MM hh:mm a");
-	    Date convertedDate = new Date();
-	    try {
-	        convertedDate = dateFormat.parse(dateString);
-	    } catch (ParseException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-	    }
-	    return convertedDate;
+	private String ConvertToDate(String dateString){
+		
+		long timestamp = Long.parseLong(dateString);    
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(timestamp);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd hh:mm a");
+		return dateFormat.format(calendar.getTime());
+	
 	}
-	public class ViewHolder {
+	
+		public class ViewHolder {
 	
 		TextView txt_to,txt_message,txt_date,txt_from_name;;
 	   

@@ -1,13 +1,13 @@
 package com.explorer.technologies;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.PhoneLookup;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,16 +63,15 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 	    String label_date = dataCursor.getString(date_index);
 	    
 	    
-	    //Date date = ConvertToDate(label_date);
 	    String date = ConvertToDate(label_date);
 	    
-	    String contactName = Utility.getContactName(label_from, contextLocal);
-	    if(contactName == ""){
+	    //String contactName = Utility.getContactName(label_from, contextLocal);
+	    //if(contactName == ""){
 	    	holder.txt_from_name.setText(label_from); 
-	    }
-	    else{
-	    	holder.txt_from_name.setText(contactName);
-	    }
+	    //}
+	    //else{
+	    	//holder.txt_from_name.setText(contactName);
+	    //}
 	    holder.txt_from.setText(label_from);
 	    holder.txt_message.setText(label_message);
 	    holder.txt_date.setText(date.toString());
@@ -80,27 +79,21 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 	    return convertView;
 	}
 
-	
-	private String ConvertToDate(String dateString){
+	private String getContactNameFromNumber(String phoneNumber)
+	{
+		Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+		//return resolver.query(uri, new String[]{PhoneLookup.DISPLAY_NAME});
+		return "";
 		
-		Long timestamp = Long.parseLong(dateString);    
+	}
+	private String ConvertToDate(String dateString){
+	
+		long timestamp = Long.parseLong(dateString);    
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(timestamp);
-		Date finaldate = calendar.getTime();
-		String smsDate = finaldate.toString();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("E MM hh:mm a");
-	    Date convertedDate = new Date();
-	    try {
-	    	
-	        convertedDate = dateFormat.parse(smsDate);
-	    } catch (ParseException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-	    }
-	    
-		DateFormat df = new SimpleDateFormat("E MM hh:mm a");
-	   return  df.format(convertedDate);
-		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd hh:mm a");
+		return dateFormat.format(calendar.getTime());
+	
 	}
 	
 	public class ViewHolder {

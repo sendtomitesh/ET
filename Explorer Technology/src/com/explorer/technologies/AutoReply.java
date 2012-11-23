@@ -2,7 +2,9 @@ package com.explorer.technologies;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -79,6 +81,11 @@ public class AutoReply extends Activity {
     	
     }
     
+    private void discardCurrent(String msgId)
+    {
+    	DatabaseFunctions.deleteAutoReply(getApplicationContext(), msgId);
+    	showAutoReplyList();
+    }
     public void deleteAll(View v)
     {
     	
@@ -94,7 +101,7 @@ public class AutoReply extends Activity {
     {
     	
     	String[] from = new String[] {"sms_to","message"};
-    	int[] to = new int[] { R.id.txt_from,R.id.txt_message };
+    	int[] to = new int[] { R.id.txt_from_name,R.id.txt_message };
     	final ListView listview = (ListView) findViewById(R.id.listview_inbox);
     	    	
     	dbHelper = new DbHelper(getApplicationContext());
@@ -111,15 +118,27 @@ public class AutoReply extends Activity {
     		public void onItemClick(AdapterView<?> parent, View view,
     				int position, long id) {
     			
-    			Cursor cur = ((SimpleCursorAdapter)listview.getAdapter()).getCursor();
-    			cur.moveToPosition(position);
-    			String to = cur.getString(1).toString();
-    			String msg = cur.getString(2).toString();
-    			
-    			//Toast.makeText(getApplicationContext(), to + msg,Toast.LENGTH_LONG).show();
-    			
-    			//moveToCompose(id,to,msg);
-    			openUpdateDialog(to, msg);
+    			cursor.moveToPosition(position);
+    			String[] items = new String[]{"Update","Delete"};
+    		
+    			AlertDialog.Builder optionBuilder = new AlertDialog.Builder(AutoReply.this);
+    			optionBuilder.setTitle("Options")
+    		           .setItems(items, new DialogInterface.OnClickListener() {
+    		               public void onClick(DialogInterface dialog, int which) {
+    		               if(which == 0){   		               
+
+    		       		    String to = cursor.getString(1);
+    		       			String msg = cursor.getString(2);
+    		       			openUpdateDialog(to, msg);
+    		               }
+    		               else{
+    		            	   discardCurrent(cursor.getString(0));
+    		               }
+    		           }
+    		    });
+    			optionBuilder.create();
+    			optionBuilder.show();
+    		    
     			
     		}
 

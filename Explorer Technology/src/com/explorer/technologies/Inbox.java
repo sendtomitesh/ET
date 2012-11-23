@@ -71,10 +71,18 @@ public class Inbox extends Activity {
 	                   public void onClick(DialogInterface dialog, int which) {
 	                	   if(optionArr.length==1)
 	                	   {
-	                		   deleteMsg(cursor.getString(1));
+	                		   deleteMsg(cursor.getString(0));
 	                	   }
 	                	   else
-	                	       moveToCompose(which,cursor.getString(cursor.getColumnIndex("address")),cursor.getString(cursor.getColumnIndex("body")));
+	                	   {
+	                		   if(which==2){
+	                			   deleteMsg(cursor.getString(0));
+	                		   }
+	                		   else{
+	                			   moveToCompose(which,cursor.getString(cursor.getColumnIndex("address")),cursor.getString(cursor.getColumnIndex("body")));
+	                		   }
+	                	       
+	                	   }
 	                   }
 	               })
 	               
@@ -96,7 +104,7 @@ public class Inbox extends Activity {
     }
     public void deleteMsg(String pid)
     {
-    	String uri = "content://sms/conversations/" + pid;
+    	String uri = "content://sms/" + pid;
         getContentResolver().delete(Uri.parse(uri), null, null);
         loadInbox();
     }
@@ -122,17 +130,11 @@ public class Inbox extends Activity {
     	
     	Intent composeIntent = new Intent(getApplicationContext(), Compose.class);
     	//reply
-    	if(which==0)
-    	{
-    		
-        	
-        	composeIntent.putExtra("to", to);
-        	
-    		
-    	}
+    	if(which==0){
+    		composeIntent.putExtra("to", to);
+        }
     	//forward
-    	else
-    	{
+    	else{
     		composeIntent.putExtra("msg", msg);
     	}
     	startActivity(composeIntent);

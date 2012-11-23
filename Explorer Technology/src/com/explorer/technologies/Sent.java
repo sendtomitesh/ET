@@ -2,6 +2,10 @@ package com.explorer.technologies;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -42,6 +46,28 @@ public class Sent extends Activity {
     	deleteAllmsg();
     	loadSentMessages();
     }
+    
+    public boolean checkForValidNumber(String n)
+    {
+    	if(Utility.isLatinLetter(n.charAt(0)) || n.length()<10)
+    		return false;
+    	else
+    		return true;
+    }
+    public void moveToCompose(int which,String to, String msg)
+    {
+    	Intent composeIntent = new Intent(getApplicationContext(), Compose.class);
+    	//reply
+    	if(which==0){
+    		composeIntent.putExtra("to", to);
+        }
+    	//forward
+    	else{
+    		composeIntent.putExtra("msg", msg);
+    	}
+    	startActivity(composeIntent);
+		finish();
+    }
     private void loadSentMessages()
 	{
 	    	final ListView listview = (ListView) findViewById(R.id.listview_inbox);
@@ -53,7 +79,7 @@ public class Sent extends Activity {
 	        startManagingCursor(cursor);
 	        
 	        String[] from = new String[]{"address","body","date"};
-	        int[] to = new int[]{R.id.txt_from,R.id.txt_message,R.id.txt_date};
+	        int[] to = new int[]{R.id.txt_from_name,R.id.txt_message,R.id.txt_date};
 	        
 	        sentAdapter = new SentListAdapter(this, R.layout.inbox_item, cursor, from, to);		
 	        listview.setAdapter(sentAdapter);
@@ -63,16 +89,44 @@ public class Sent extends Activity {
 	    	  @Override
 	    	  public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 	    	    
-	    		  int pos = position+1;
-	    		cursor.moveToPosition(pos);
+	    		//  int pos = position+1;
+	    		cursor.moveToPosition(position);
+	    		  
+		    	
+		    		
+		    		
+		    		AlertDialog multichoice;
+		    		multichoice=new AlertDialog.Builder(Sent.this)
+		    			
+		               .setTitle( "SMS Options" )
+		               .setItems(new String[]{"Delete"}, new OnClickListener() {
+
+		                   @Override
+		                   public void onClick(DialogInterface dialog, int which) {
+		                	   //if(optionArr.length==1)
+		                	   //{
+		                	//   Toast.makeText(getApplicationContext(), "Deleting at : "  + cursor.getString(1),Toast.LENGTH_LONG).show();
+		                		   deleteMsg(cursor.getString(0));
+		                	   //}
+		                	   
+		                   }
+		               })	             
+		               .create();
+		    			
+		    		multichoice.show();
 	    		//Toast.makeText(getApplicationContext(), "You clicked at : " + pos, Toast.LENGTH_LONG).show();
 	    		
 	    	  }
 	    	});
 
 	  
-	 }
-    
+	}
+    public void deleteMsg(String pid)
+    {
+    	String uri = "content://sms/" + pid;
+        getContentResolver().delete(Uri.parse(uri),null, null);
+    	loadSentMessages();
+    }
     private int deleteAllmsg()
     {
     	Uri sentUri = Uri.parse("content://sms/sent");

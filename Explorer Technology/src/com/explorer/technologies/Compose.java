@@ -104,8 +104,9 @@ public class Compose extends Activity {
 		        ab.setMessage("Save it to drafts?").setPositiveButton("Yes", dialogClickListener)
 		        .setNegativeButton("No", dialogClickListener).show();
 			}
-			else
+			else{
 				super.onBackPressed();
+			}
 		}
 		else{
 			super.onBackPressed();
@@ -131,7 +132,6 @@ public class Compose extends Activity {
 		
 	};
 	private void saveMsgToDrafts() {
-		//Toast.makeText(getApplicationContext(), "Saving to Drafts", Toast.LENGTH_LONG).show();
 		
 		DatabaseFunctions.saveToDrafts(getApplicationContext(), textTo.getText().toString(), textMessage.getText().toString());
 		
@@ -525,7 +525,7 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 					int position, long id) {
 				@SuppressWarnings("unchecked")
 				HashMap<String, String> o = (HashMap<String, String>) listview.getItemAtPosition(position);
-
+			
 				String name = o.get("name")+"("+o.get("id")+")";
 			
 				setToNumber(name);
@@ -656,7 +656,6 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 			{
 				repairedNumber=countryCode+repairedNumber;
 			}
-			
 			
 			return repairedNumber;
 		}

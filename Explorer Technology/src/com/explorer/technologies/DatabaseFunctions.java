@@ -139,6 +139,26 @@ public class DatabaseFunctions {
 
 	}
 
+	// Return true if AutoReply message get deleted
+	public static Boolean deleteAutoReply(Context context, String id) {
+
+		try {
+
+			dbHelper = new DbHelper(context);
+			db = dbHelper.getReadableDatabase();
+			db.execSQL("DELETE FROM autoReply WHERE id =" + id);
+			Log.d("DRAFT AUTO_REPLY", "Record deleted!");
+
+		} catch (Exception e) {
+			Log.e("DRAFT AUTO_REPLY", "error : " + e.toString());
+			return false;
+		} finally {
+			// Close the Database
+			db.close();
+			dbHelper.close();
+		}
+		return true;
+	}
 	// Return true if draft message get deleted
 	public static Boolean deleteAllDraftMessage(Context context) {
 
