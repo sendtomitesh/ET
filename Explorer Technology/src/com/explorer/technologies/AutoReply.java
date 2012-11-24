@@ -30,6 +30,7 @@ public class AutoReply extends Activity {
 	Button btnNew,btnDelete;
 	SQLiteDatabase db;
 	DbHelper dbHelper;
+	Cursor cursor; 
     
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,17 +48,28 @@ public class AutoReply extends Activity {
 		
 	}
     
-    @Override
+	@Override
+    public void onBackPressed() {
+    	super.onBackPressed();
+    	finish();
+    }
+	
+	@Override
     protected void onStop() {
     	super.onStop();
+    	if(cursor != null)
+    	{
+    		cursor.close();
+    	}
     	if(db != null)
     	{
-    		if(db.isOpen())
-    		{
+    		if(db.isOpen()){
     			db.close();
-    			dbHelper.close();
     		}
     	}
+    	if(dbHelper != null){
+			dbHelper.close();
+		}
     }
     
     private void initilizeGlobals()
@@ -106,45 +118,51 @@ public class AutoReply extends Activity {
     	    	
     	dbHelper = new DbHelper(getApplicationContext());
     	db = dbHelper.getReadableDatabase();
-    	final Cursor cursor = DatabaseFunctions.getAutoReplyCursor(getApplicationContext(),db);
-    	startManagingCursor(cursor);
+    	cursor = DatabaseFunctions.getAutoReplyCursor(getApplicationContext(),db);
     	
-    	SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.inbox_item,cursor, from, to);
-        listview.setAdapter(adapter);
-    	
-        listview.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-  		listview.setClickable(true);
-    	listview.setOnItemClickListener(new OnItemClickListener() {
-    		public void onItemClick(AdapterView<?> parent, View view,
-    				int position, long id) {
+    	if(cursor!=null){
+    		startManagingCursor(cursor);
+    		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.inbox_item,cursor, from, to);
+            listview.setAdapter(adapter);
+            
+            listview.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+      		listview.setClickable(true);
+        	listview.setOnItemClickListener(new OnItemClickListener() {
+        		public void onItemClick(AdapterView<?> parent, View view,
+        				int position, long id) {
+        			
+        			cursor.moveToPosition(position);
+        			String[] items = new String[]{"Update","Delete"};
+        		
+        			AlertDialog.Builder optionBuilder = new AlertDialog.Builder(AutoReply.this);
+        			optionBuilder.setTitle("Options")
+        		           .setItems(items, new DialogInterface.OnClickListener() {
+        		               public void onClick(DialogInterface dialog, int which) {
+        		               if(which == 0){   		               
+
+        		       		    String to = cursor.getString(1);
+        		       			String msg = cursor.getString(2);
+        		       			openUpdateDialog(to, msg);
+        		               }
+        		               else{
+        		            	   discardCurrent(cursor.getString(0));
+        		               }
+        		           }
+        		    });
+        			optionBuilder.create();
+        			optionBuilder.show();
+        		    
+        			
+        		}
+
     			
-    			cursor.moveToPosition(position);
-    			String[] items = new String[]{"Update","Delete"};
+        	});
+
+    	}
     		
-    			AlertDialog.Builder optionBuilder = new AlertDialog.Builder(AutoReply.this);
-    			optionBuilder.setTitle("Options")
-    		           .setItems(items, new DialogInterface.OnClickListener() {
-    		               public void onClick(DialogInterface dialog, int which) {
-    		               if(which == 0){   		               
-
-    		       		    String to = cursor.getString(1);
-    		       			String msg = cursor.getString(2);
-    		       			openUpdateDialog(to, msg);
-    		               }
-    		               else{
-    		            	   discardCurrent(cursor.getString(0));
-    		               }
-    		           }
-    		    });
-    			optionBuilder.create();
-    			optionBuilder.show();
-    		    
-    			
-    		}
-
-			
-    	});
     	
+    	
+            	
     }
     private void openUpdateDialog(String to, String message)
     {

@@ -42,12 +42,13 @@ public class AddAutoReply extends Activity {
     	super.onStop();
     	if(db != null)
     	{
-    		if(db.isOpen())
-    		{
+    		if(db.isOpen()){
     			db.close();
-    			dbHelper.close();
     		}
     	}
+    	if(dbHelper != null){
+			dbHelper.close();
+		}
     }
     
 	public void createAutoReply(View v)

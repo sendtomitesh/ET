@@ -66,7 +66,9 @@ public class Groups extends Activity {
 
 			try {
 				pd.dismiss();
-			} catch (Exception e) {
+			} 
+			catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 

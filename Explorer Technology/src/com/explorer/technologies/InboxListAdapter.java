@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,7 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 	    
 	    String date = ConvertToDate(label_date);
 	    
-	    //String contactName = Utility.getContactName(label_from, contextLocal);
+	    //String contactName = getContactNameFromNumber(label_from);
 	    //if(contactName == ""){
 	    	holder.txt_from_name.setText(label_from); 
 	    //}
@@ -81,9 +82,28 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 
 	private String getContactNameFromNumber(String phoneNumber)
 	{
+		String name = "";
 		Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 		//return resolver.query(uri, new String[]{PhoneLookup.DISPLAY_NAME});
-		return "";
+		Cursor cursor = null;
+		try {
+
+			cursor = contextLocal.getContentResolver().query(uri,new String[]{PhoneLookup.DISPLAY_NAME},null,null,null);
+			 name = cursor.getString(1);
+			 if(name.length() > 0){
+				 return name;
+			 }
+			 else{
+				 name = phoneNumber;
+				 return name;
+			 }
+			 
+			
+		} catch (Exception e) {
+			Log.e("CONTACT NAME", "error : " + e.toString());
+			return null;
+		}
+
 		
 	}
 	private String ConvertToDate(String dateString){

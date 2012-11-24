@@ -27,6 +27,7 @@ public class Draft extends Activity {
 	TextView txtTitle;
 	SQLiteDatabase db;
 	DbHelper dbHelper;
+	Cursor cursor;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,14 +41,25 @@ public class Draft extends Activity {
     @Override
     protected void onStop() {
     	super.onStop();
+    	if(cursor != null)
+    	{
+    		cursor.close();
+    	}
     	if(db != null)
     	{
-    		if(db.isOpen())
-    		{
+    		if(db.isOpen()){
     			db.close();
-    			dbHelper.close();
     		}
     	}
+    	if(dbHelper != null){
+			dbHelper.close();
+		}
+    }
+    
+    @Override
+    public void onBackPressed() {
+    	super.onBackPressed();
+    	finish();
     }
     
     private void initilizeGlobals()
@@ -77,56 +89,61 @@ public class Draft extends Activity {
     	    	
     	dbHelper = new DbHelper(getApplicationContext());
     	db = dbHelper.getReadableDatabase();
-    	final Cursor cursor = DatabaseFunctions.getDraftCursor(getApplicationContext(),db);
-    	startManagingCursor(cursor);
+    	cursor = DatabaseFunctions.getDraftCursor(getApplicationContext(),db);
     	
-    	SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.inbox_item,cursor, from, to);
-        listview.setAdapter(adapter);
-    	
-        listview.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-  		listview.setClickable(true);
-    	listview.setOnItemClickListener(new OnItemClickListener() {
-    		public void onItemClick(AdapterView<?> parent, View view,
-    				int position, long id) {
-    			
-    		//	Toast.makeText(getApplicationContext(), cursor.getString(2), Toast.LENGTH_LONG).show();
-    			
-    			
-    			cursor.moveToPosition(position);
-    			
-    			
-    			
-    			AlertDialog multichoice;
-	    		multichoice=new AlertDialog.Builder(Draft.this)
-	    			
-	               .setTitle( "SMS Options" )
-	               .setItems(new String[]{"Send Now","Discard"}, new OnClickListener() {
+    	if(cursor != null){
+    		startManagingCursor(cursor);
+        	
+        	SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.inbox_item,cursor, from, to);
+            listview.setAdapter(adapter);
+        	
+            listview.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+      		listview.setClickable(true);
+        	listview.setOnItemClickListener(new OnItemClickListener() {
+        		public void onItemClick(AdapterView<?> parent, View view,
+        				int position, long id) {
+        			
+        		//	Toast.makeText(getApplicationContext(), cursor.getString(2), Toast.LENGTH_LONG).show();
+        			
+        			
+        			cursor.moveToPosition(position);
+        			
+        			
+        			
+        			AlertDialog multichoice;
+    	    		multichoice=new AlertDialog.Builder(Draft.this)
+    	    			
+    	               .setTitle( "SMS Options" )
+    	               .setItems(new String[]{"Send Now","Discard"}, new OnClickListener() {
 
-	                   @Override
-	                   public void onClick(DialogInterface dialog, int which) {
-	                	if(which==0){
-	                		String msg_Id = cursor.getString(0);
-	            			String to = cursor.getString(1);
-	            			String msg = cursor.getString(2);
-	                		moveToCompose(msg_Id,to,msg);
-	                	}
-	                	else
-	                	{
-	                		discardCurrent(cursor.getString(0));
-	                	}
-	                   }
-	               })
-	               
-	             
-	               .create();
-	    			
-	    		multichoice.show();
- 			
-    		}
+    	                   @Override
+    	                   public void onClick(DialogInterface dialog, int which) {
+    	                	if(which==0){
+    	                		String msg_Id = cursor.getString(0);
+    	            			String to = cursor.getString(1);
+    	            			String msg = cursor.getString(2);
+    	                		moveToCompose(msg_Id,to,msg);
+    	                	}
+    	                	else
+    	                	{
+    	                		discardCurrent(cursor.getString(0));
+    	                	}
+    	                   }
+    	               })
+    	               
+    	             
+    	               .create();
+    	    			
+    	    		multichoice.show();
+     			
+        		}
 
-			
-    	});
-    	
+    			
+        	});
+
+    	}
+    		
+    	    	
     }
     private void discardCurrent(String msgId)
     {

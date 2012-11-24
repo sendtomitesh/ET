@@ -48,8 +48,16 @@ public class APICalls {
 		
 			HttpResponse response = httpclient.execute(httppost);
 			JSONObject jo=Utility.getjsonFromInputStream(response.getEntity().getContent());
-			if(jo.getString("error").equals("0"))return 0;
-			else return 1;
+			if(jo.getString("error").equals("0")){
+				
+				JSONArray jsonArray = jo.getJSONArray("credits");
+				JSONObject objCredits = jsonArray.getJSONObject(0);
+				Utility.smsCredit = String.valueOf(objCredits.getDouble("credit"));
+				return 0;
+			}
+			else{
+				return 1;
+			}
 		} catch (ClientProtocolException e) {
 		
 			Log.e("Client error", e.toString());
@@ -170,8 +178,6 @@ public class APICalls {
 	//returns 0 for success, 1 for error in registration1, 2 for protocol error, 3 for IO error and 4 for JSon parsing error
 	public static int sendMsg(String sender,String to,String message) 
 	{
-				
-				
 				// Create a new HttpClient and Post Header
 				HttpClient httpclient = new DefaultHttpClient();
 
@@ -237,7 +243,7 @@ public class APICalls {
 						nameValuePairs.add(new BasicNameValuePair("source", "group"));
 						nameValuePairs.add(new BasicNameValuePair("groupid", groupIds));
 						nameValuePairs.add(new BasicNameValuePair("message", message));
-						nameValuePairs.add(new BasicNameValuePair("international","1" ));
+						nameValuePairs.add(new BasicNameValuePair("international","0" ));
 						nameValuePairs.add(new BasicNameValuePair("format", "json"));
 						
 						
@@ -264,5 +270,6 @@ public class APICalls {
 					}
 
 				}
+
 	
 }

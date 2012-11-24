@@ -258,6 +258,24 @@ public class Compose extends Activity {
 
 	}
 
+	
+	public class UpdateCredits extends AsyncTask<String, Void, Integer> {
+
+		@Override
+		protected Integer doInBackground(String... args) {
+			return APICalls.userLogin(Utility.username, Utility.password);
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+
+			super.onPostExecute(result);
+	
+		}
+
+	}
+
+	
 	public class SendMessage extends AsyncTask<String, Void, Integer> {
 
 		
@@ -265,7 +283,8 @@ public class Compose extends Activity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			pd = new ProgressDialog(Compose.this);
-			pd.setTitle("Sending sms..");
+			pd.setTitle("SMS Send");
+			pd.setMessage("Sending SMS...");
 			pd.show();
 			
 		}
@@ -291,9 +310,10 @@ public class Compose extends Activity {
 			
 			if (result == 0) {
 				insertSentMessage();
+				new UpdateCredits().execute();
 				if(isDraft)
 				{
-					new deleteDraft().execute(getApplicationContext());
+					new DeleteDraft().execute(getApplicationContext());
 					//isDraft=false;
 				}
 				Toast.makeText(getApplicationContext(), "Message sent successfully ",
@@ -331,7 +351,8 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			pd = new ProgressDialog(Compose.this);
-			pd.setTitle("Sending sms to group..");
+			pd.setTitle("Send Group SMS");
+			pd.setMessage("Sending sms to group..");
 			pd.show();
 			
 		}
@@ -357,11 +378,13 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 			
 			if (result == 0) {
 				insertSentMessage();
+				new UpdateCredits().execute();
 				Toast.makeText(getApplicationContext(), "Message sent successfully ",
 						Toast.LENGTH_LONG).show();
-				if(isDraft)
-					new deleteDraft().execute(getApplicationContext());
-				moveToDashboard();
+				if(isDraft){
+					new DeleteDraft().execute(getApplicationContext());
+					moveToDashboard();
+				}
 			} else {
 				Toast.makeText(getApplicationContext(),
 						"Error sending message ", Toast.LENGTH_LONG).show();
@@ -372,11 +395,10 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 			try
 			{
 				pd.dismiss();
-			}catch(Exception e){}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 			
-			
-
-
 		}
 
 	}
@@ -417,23 +439,18 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 		}
 
 	}
-	public class deleteDraft extends AsyncTask<Context, Integer, String>
+	public class DeleteDraft extends AsyncTask<Context, Integer, String>
 	{
-
 		@Override
 		protected String doInBackground(Context... params) {
-			// TODO Auto-generated method stub
 			DatabaseFunctions.deleteDraftMessage(params[0], msgId);
 			return null;
 		}
 		
 		@Override
 		protected void onPostExecute(String result) {
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 		}
-
-		
 		
 	}
 

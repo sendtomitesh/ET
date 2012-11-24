@@ -2,19 +2,51 @@ package com.explorer.technologies;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.TextView;
 
 public class Main extends Activity {
-
+	SQLiteDatabase db;
+	DbHelper dbHelper;
+	TextView textCredits;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        textCredits = (TextView)findViewById(R.id.txt_credits);
+        if(Utility.smsCredit == null){
+        	textCredits.setText("Credit : 0" + Utility.smsCredit);
+        }
+        else{
+        	textCredits.setText("Credit : " + Utility.smsCredit);
+        }
         
     }
-
+    
+    @Override
+	protected void onResume() {
+		super.onResume();
+		
+        textCredits.setText("Credit : " + Utility.smsCredit);
+        
+	}
+    @Override
+    protected void onStop() {
+    	super.onStop();
+    	if(db != null)
+    	{
+    		if(db.isOpen()){
+    			db.close();
+    		}
+    	}
+    	if(dbHelper != null){
+			dbHelper.close();
+		}
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -52,4 +84,6 @@ public class Main extends Activity {
     	Intent autoReplyIntent = new Intent(getApplicationContext(),AutoReply.class);
     	startActivity(autoReplyIntent);
     }
+    
+  
 }

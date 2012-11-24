@@ -24,7 +24,6 @@ public class Login extends Activity {
 		
 	}
 	
-
 	private void getLayoutObjects() {
 		// TODO Auto-generated method stub
 		et_Uname = (EditText)findViewById(R.id.textbox_username);
@@ -41,7 +40,7 @@ public class Login extends Activity {
 		uname=et_Uname.getText().toString();
 		pass=et_Password.getText().toString();
 		sender_id= et_sender_id.getText().toString();
-		new loginAPI().execute();
+		new LoginApi().execute();
 		
 	
 	}
@@ -58,7 +57,7 @@ public class Login extends Activity {
 		finish();
 	}
 	
-	public class loginAPI extends AsyncTask<String, Integer, String>
+	public class LoginApi extends AsyncTask<String, Integer, String>
 	{
 		ProgressDialog pd;
 		int apiresult;
@@ -95,8 +94,9 @@ public class Login extends Activity {
 			{
 				Toast.makeText(getApplicationContext(), "Username or Password Incorrect", Toast.LENGTH_LONG).show();
 			}
-			else
+			else{
 				Toast.makeText(getApplicationContext(), "error occured", Toast.LENGTH_LONG).show();
+			}
 			super.onPostExecute(result);
 		}
 	}
