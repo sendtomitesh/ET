@@ -23,7 +23,7 @@
         <item name="android:ellipsize">end</item>
     </style>
     
-    <style name="DialogWindowTitle">
+    <style name="DialogWindowTitle" >
         <item name="android:maxLines">1</item>
         <item name="android:scrollHorizontally">true</item>
         <item name="android:textAppearance">@android:style/TextAppearance.DialogWindowTitle</item>
