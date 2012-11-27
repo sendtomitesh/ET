@@ -8,15 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 public class ContactsAdapter extends SimpleCursorAdapter {
 
 	private Cursor dataCursor;
-	private Context contextLocal;
+	//private Context contextLocal;
 	private LayoutInflater mInflater;
 	
 	
@@ -25,7 +23,7 @@ public class ContactsAdapter extends SimpleCursorAdapter {
 	        int[] to) {
 	    super(context, layout, dataCursor, from, to);
 	        this.dataCursor = dataCursor;
-	        contextLocal =  context;
+	    //    contextLocal =  context;
 	        mInflater = LayoutInflater.from(context);
 	       
 	        //initial fill
@@ -34,9 +32,7 @@ public class ContactsAdapter extends SimpleCursorAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		final int POSITION = position;
 		final ViewHolder HOLDER;
-		final boolean[] itemChecked = new boolean[dataCursor.getCount()];
 		
 	    if (convertView == null) {
 	        convertView = mInflater.inflate(R.layout.contact_item, null);
@@ -61,9 +57,7 @@ public class ContactsAdapter extends SimpleCursorAdapter {
 	    
 	    HOLDER.txt_name.setText(label_name);
 	    HOLDER.txt_number.setText(label_number);
-	    
-	    
-	   	    
+
 	    return convertView;
 	}
 

@@ -2,11 +2,13 @@ package com.explorer.technologies;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.explorer.technologies.Compose.contactItem;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.app.DownloadManager.Query;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -28,9 +30,11 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +43,7 @@ import android.widget.Toast;
 
 public class Compose extends Activity {
 
-	private static final int CONTACT_PICKER_RESULT = 1001;
+	//private static final int CONTACT_PICKER_RESULT = 1001;
 	
 	EditText textSender, textTo, textMessage;
 	TextView txtViewCounter;
@@ -455,42 +459,108 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 		}
 		
 	}
-
-	public void getContacts(View v)
+	
+	
+	void test()
 	{
-		//Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,Contacts.CONTENT_URI);  
-	    //startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
 		final Dialog CONTACT_DIALOG = new Dialog(Compose.this,R.style.DialogWindowTitle);
 		CONTACT_DIALOG.setContentView(R.layout.contact_dialog);
-		Button btnOk = (Button)CONTACT_DIALOG.findViewById(R.id.btn_contact_ok);
-		Button btnSelectAll = (Button)CONTACT_DIALOG.findViewById(R.id.btn_contact_select_all);
+		
+		final Button btnOk = (Button)CONTACT_DIALOG.findViewById(R.id.btn_contact_ok);
+		final Button btnSelectAll = (Button)CONTACT_DIALOG.findViewById(R.id.btn_contact_select_all);
+		
 		String[] PROJECTION =new String[] {  Contacts._ID,Contacts.DISPLAY_NAME, Phone.NUMBER };
 		Cursor contactCursor = getContentResolver().query(Phone.CONTENT_URI,PROJECTION, null, null, null);
 		
 		
 		String[] from = new String[] {Contacts.DISPLAY_NAME,Phone.NUMBER};
         int[] to = new int[]  {R.id.contact_name,R.id.contact_number};
-        ListView listview = (ListView) CONTACT_DIALOG.findViewById(R.id.contact_listview);
+        
+        final ListView listview = (ListView) CONTACT_DIALOG.findViewById(R.id.contact_listview);
         ContactsAdapter adapter = new ContactsAdapter(getApplicationContext(),R.layout.contact_dialog, contactCursor, from,to);
         listview.setAdapter(adapter);
-        listview.setOnClickListener(new OnClickListener() {
+        listview.setClickable(true);
+        listview.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE); 
+       
+        listview.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				CheckBox checkContact = (CheckBox)view.findViewById(R.id.checkbox_contact);
+				//checkContact.setFocusable(true);
+				//checkContact.setFocusableInTouchMode(true);
+				
+				if(!checkContact.isChecked()){
+					checkContact.setChecked(true);
+				}
+				else{
+					checkContact.setChecked(false);
+				}
+				// TODO Auto-generated method stub
+				Toast.makeText(Compose.this, "i have been clicked", Toast.LENGTH_LONG).show();
+				//finish();
+			}
+        	
+		}); 
+        
+        
+       btnSelectAll.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(), "TEst", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "Items : " + listview.getChildCount(), Toast.LENGTH_LONG).show();
+				String contact = "";
+				for(int i=0; i < listview.getChildCount(); i++){
+					listview.setItemChecked(i, true);
+				    //RelativeLayout itemLayout = (RelativeLayout)listview.getChildAt(i);
+				    //TextView textNumber = (TextView)itemLayout.findViewById(R.id.txt_contact_number);
+				    //TextView textName = (TextView)itemLayout.findViewById(R.id.txt_contact_name);
+				    //CheckBox checkContact = (CheckBox)itemLayout.findViewById(R.id.checkbox_contact);
+				    //checkContact.setChecked(true);
+				    
+				    //contact += textName.getText() + "<" + textNumber.getText() + ">,";
+				}
+				//setToNumber(contact);
+				//Toast.makeText(getApplicationContext(), contact, Toast.LENGTH_LONG).show();
+				//CONTACT_DIALOG.dismiss();
+				
 			}
 		});
-		
+        
+        btnOk.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
+				CONTACT_DIALOG.dismiss();
+				
+			}
+		});  
 		CONTACT_DIALOG.show();
+
+	}
+	
+	public class contactItem{
+		String contactNumber;
+		String contactName;
+	}
+	public void getContacts(View v)
+	{
+		//Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,Contacts.CONTENT_URI);  
+	    //startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
 		
+		test();
+					
 	}
 	
 	
 	
 	public void getCallLog(View v)
 	{
-
+      
 		
 		final Dialog selectContactDialog = new Dialog(Compose.this);
 		selectContactDialog.setTitle("Select recent contact");

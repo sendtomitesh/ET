@@ -8,6 +8,7 @@
     android:gravity="center" >
 
     <RelativeLayout
+        
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
@@ -34,13 +35,12 @@
             android:id="@+id/contact_listview"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="45dp"
             android:layout_marginTop="40dp"
-            android:choiceMode="multipleChoice"
+            android:clickable="true"
             android:divider="@color/Grey"
             android:dividerHeight="1dp"
-            android:stackFromBottom="false"
-            android:transcriptMode="normal"
+            android:longClickable="true"
             tools:listitem="@layout/contact_item" />
 
         <LinearLayout
