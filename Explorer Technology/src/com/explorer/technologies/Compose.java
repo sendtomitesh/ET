@@ -2,6 +2,7 @@ package com.explorer.technologies;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.explorer.technologies.Compose.contactItem;
 
@@ -25,10 +26,13 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -55,6 +59,7 @@ public class Compose extends Activity {
 	ArrayList<HashMap<String, String>> groupList;
 	Boolean isGroupListLoaded=false;
 	Boolean isDraft=false;
+	private mItems[] itemss;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -547,15 +552,6 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 		String contactNumber;
 		String contactName;
 	}
-	public void getContacts(View v)
-	{
-		//Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,Contacts.CONTENT_URI);  
-	    //startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
-		
-		test();
-					
-	}
-	
 	
 	
 	public void getCallLog(View v)
@@ -770,5 +766,229 @@ public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 			}
 			
 			return repairedNumber;
+		}
+		
+		public void getContacts(View v)
+		{
+			//Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,Contacts.CONTENT_URI);  
+		    //startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
+			final Dialog CONTACT_DIALOG = new Dialog(Compose.this,R.style.DialogWindowTitle);
+			CONTACT_DIALOG.setContentView(R.layout.contact_dialog);
+			
+			final Button btnOk = (Button)CONTACT_DIALOG.findViewById(R.id.btn_contact_ok);
+			final Button btnSelectAll = (Button)CONTACT_DIALOG.findViewById(R.id.btn_contact_select_all);
+			
+			String[] PROJECTION =new String[] {  Contacts._ID,Contacts.DISPLAY_NAME, Phone.NUMBER };
+			Cursor contactCursor = getContentResolver().query(Phone.CONTENT_URI,PROJECTION, null, null, null);
+			// Create and populate planets.
+			itemss = (mItems[]) getLastNonConfigurationInstance();
+			final ArrayList<mItems> mycontacts= new ArrayList<Compose.mItems>();
+			contactCursor.moveToFirst();
+			while(contactCursor.moveToNext())
+			{
+				mycontacts.add(new mItems(contactCursor.getString(contactCursor.getColumnIndex(Phone.NUMBER)), contactCursor.getString(contactCursor.getColumnIndex(Contacts.DISPLAY_NAME))));
+			}
+			
+				
+			final SelectArralAdapter myAdapter = new SelectArralAdapter(Compose.this, mycontacts);
+			
+	        final ListView listview = (ListView) CONTACT_DIALOG.findViewById(R.id.contact_listview);
+	        listview.setAdapter(myAdapter);
+	        listview.setClickable(true);
+	        listview.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parant, View view,
+						int position, long Id) {
+					// TODO Auto-generated method stub
+					mItems planet = myAdapter.getItem(position);
+					planet.toggleChecked();
+					SelectViewHolder viewHolder = (SelectViewHolder) view
+							.getTag();
+					viewHolder.getCheckBox().setChecked(planet.isChecked());
+
+				}
+			});
+	       
+	        btnOk.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					for(int i=0;i<mycontacts.size();i++)
+					{
+						if(mycontacts.get(i).checked)
+							Toast.makeText(Compose.this, ""+mycontacts.get(i).phoneNumber, Toast.LENGTH_SHORT).show();
+						
+					}
+				}
+			});
+	        CONTACT_DIALOG.show();
+						
+		}
+		
+		
+		
+		
+		//for multiselect
+		
+		private static class mItems {
+			private String phoneNumber = "";
+			private String contactName="";
+			private boolean checked = false;
+
+			public mItems() {
+			}
+
+			public mItems(String pN,String cName) {
+				this.phoneNumber = pN;
+				this.contactName=cName;
+			}
+
+			public mItems(String pN,String cName, boolean checked) {
+				this.phoneNumber = pN;
+				this.contactName=cName;
+				this.checked = checked;
+			}
+
+			public String getContactName() {
+				return contactName;
+			}
+			public String getPhoneNumber()
+			{
+				return phoneNumber;
+			}
+
+			public void setContactName(String cName) {
+				this.contactName = cName;
+			}
+			public void setPhoneNumber(String pNo)
+			{
+				this.phoneNumber=pNo;
+			}
+
+			public boolean isChecked() {
+				return checked;
+			}
+
+			public void setChecked(boolean checked) {
+				this.checked = checked;
+			}
+
+		/*	public String toString() {
+				return name;
+			}*/
+
+			public void toggleChecked() {
+				checked = !checked;
+			}
+		}
+		
+		private static class SelectViewHolder {
+			private CheckBox checkBox;
+			private TextView textPhone;
+			private TextView textname;
+
+			public SelectViewHolder() {
+			}
+
+			public SelectViewHolder(TextView tn,TextView tp, CheckBox checkBox) {
+				this.checkBox = checkBox;
+				this.textPhone = tp;
+				this.textname=tn;
+			}
+
+			public CheckBox getCheckBox() {
+				return checkBox;
+			}
+
+			public void setCheckBox(CheckBox checkBox) {
+				this.checkBox = checkBox;
+			}
+
+			public TextView getphoneText() {
+				return textPhone;
+			}
+			public TextView getContactText()
+			{
+				return textname;
+			}
+
+			public void setphoneText(TextView textView) {
+				this.textPhone = textView;
+			}
+			public void setContactText(TextView tv)
+			{
+				this.textname=tv;
+			}
+		}
+		
+		/** Custom adapter for displaying an array of Planet objects. */
+		private static class SelectArralAdapter extends ArrayAdapter<mItems> {
+			private LayoutInflater inflater;
+
+			public SelectArralAdapter(Context context, List<mItems> contactList) {
+				super(context, R.layout.contact_item, contactList);
+				// Cache the LayoutInflate to avoid asking for a new one each time.
+				inflater = LayoutInflater.from(context);
+			}
+
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+				// Planet to display
+				mItems planet = (mItems) this.getItem(position);
+
+				// The child views in each row.
+				CheckBox checkBox;
+				TextView textPhone;
+				TextView textName;
+
+				// Create a new row view
+				if (convertView == null) {
+					convertView = inflater.inflate(R.layout.contact_item, null);
+
+					// Find the child views.
+					textPhone = (TextView) convertView
+							.findViewById(R.id.txt_contact_number);
+					textName = (TextView) convertView
+							.findViewById(R.id.txt_contact_name);
+					checkBox = (CheckBox) convertView.findViewById(R.id.checkbox_contact);
+					// Optimization: Tag the row with it's child views, so we don't
+					// have to
+					// call findViewById() later when we reuse the row.
+					convertView.setTag(new SelectViewHolder(textName,textPhone, checkBox));
+					// If CheckBox is toggled, update the planet it is tagged with.
+					checkBox.setOnClickListener(new View.OnClickListener() {
+						public void onClick(View v) {
+							CheckBox cb = (CheckBox) v;
+							mItems planet = (mItems) cb.getTag();
+							planet.setChecked(cb.isChecked());
+						}
+					});
+				}
+				// Reuse existing row view
+				else {
+					// Because we use a ViewHolder, we avoid having to call
+					// findViewById().
+					SelectViewHolder viewHolder = (SelectViewHolder) convertView
+							.getTag();
+					checkBox = viewHolder.getCheckBox();
+					textName = viewHolder.getContactText();
+					textPhone=viewHolder.getphoneText();
+				}
+
+				// Tag the CheckBox with the Planet it is displaying, so that we can
+				// access the planet in onClick() when the CheckBox is toggled.
+				checkBox.setTag(planet);
+				// Display planet data
+				checkBox.setChecked(planet.isChecked());
+				textPhone.setText(planet.getPhoneNumber());
+				textName.setText(planet.getContactName());
+				return convertView;
+			}
+		}
+		
+		public Object onRetainNonConfigurationInstance() {
+			return itemss;
 		}
 }
