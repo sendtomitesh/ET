@@ -104,25 +104,23 @@
                 android:layout_below="@+id/txt_message"
                 android:onClick="sendMessage"
                 android:text="@string/send_message" />
-
-            <TextView
-                android:id="@+id/textView1"
+			
+            <Button
+                android:id="@+id/btn_schedule_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/btn_send_message"
-                android:layout_alignBottom="@+id/btn_send_message"
-                android:layout_marginLeft="18dp"
+                android:layout_below="@+id/txt_message"
                 android:layout_toRightOf="@+id/btn_send_message"
-                android:text="@string/counter" />
-
+                android:onClick="scheduleMessage"
+                android:text="@string/schedule" />
+            
             <TextView
                 android:id="@+id/txtCounter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/textView1"
-                android:layout_alignBottom="@+id/textView1"
-                android:layout_alignRight="@+id/txt_message"
-                android:text="0" />
+                android:layout_alignBaseline="@+id/btn_schedule_message"
+                android:layout_toRightOf="@+id/btn_schedule_message"
+                android:text="Count : 0" />
 
         </RelativeLayout>
     </ScrollView>

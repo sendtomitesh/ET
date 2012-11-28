@@ -176,7 +176,7 @@ public class APICalls {
 		}
 
 	//returns 0 for success, 1 for error in registration1, 2 for protocol error, 3 for IO error and 4 for JSon parsing error
-	public static int sendMsg(String sender,String to,String message) 
+	public static int sendMsg(String sender,String to,String message,String sheduleDate) 
 	{
 				// Create a new HttpClient and Post Header
 				HttpClient httpclient = new DefaultHttpClient();
@@ -197,7 +197,9 @@ public class APICalls {
 					nameValuePairs.add(new BasicNameValuePair("international","1" ));
 					nameValuePairs.add(new BasicNameValuePair("format", "json"));
 					
-					
+					if(sheduleDate != null){
+						nameValuePairs.add(new BasicNameValuePair("sendondate", sheduleDate));
+					}
 					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 					
 					// Execute HTTP Post Request

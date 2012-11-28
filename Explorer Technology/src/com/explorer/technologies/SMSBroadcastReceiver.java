@@ -59,7 +59,7 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 			@Override
 			protected Integer doInBackground(String... args) {
 	
-				return APICalls.sendMsg(args[0], args[1],args[2]);
+				return APICalls.sendMsg(args[0], args[1],args[2],null);
 	
 			}
 	

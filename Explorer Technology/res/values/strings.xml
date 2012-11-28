@@ -39,6 +39,10 @@
 	<string name="create">Create</string>
 	<string name="update">Update</string>
 	<string name="ok">OK</string>
+	<string name="schedule">Schedule</string>
+	<string name="set_date">Set Date</string>
+	<string name="set_time">Set Time</string>
+	<string name="done">Done</string>
 	<string name="select_all">Select All</string>
     <string-array name="level_array">
         <item>National</item>
