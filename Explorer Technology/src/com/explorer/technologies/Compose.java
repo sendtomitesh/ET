@@ -1,6 +1,8 @@
 package com.explorer.technologies;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,12 +32,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class Compose extends Activity {
@@ -152,6 +156,7 @@ public class Compose extends Activity {
 	public void scheduleMessage(View v)
 	{
 		//Set Scheduled date time to scheduledDataTime
+		
 		final Dialog DATE_PICKER_DIALOG = new Dialog(Compose.this,R.style.DialogWindowTitle);
 		DATE_PICKER_DIALOG.setContentView(R.layout.date_time_dialog);
 
@@ -163,6 +168,11 @@ public class Compose extends Activity {
 				.findViewById(R.id.btn_done);
 		final LinearLayout layoutTime = (LinearLayout)DATE_PICKER_DIALOG.findViewById(R.id.layout_time);
 		final LinearLayout layoutDate = (LinearLayout)DATE_PICKER_DIALOG.findViewById(R.id.layout_date);
+		
+		final DatePicker datePicker = (DatePicker)DATE_PICKER_DIALOG.findViewById(R.id.date_picker);
+		final TimePicker timePicker = (TimePicker)DATE_PICKER_DIALOG.findViewById(R.id.time_picker);
+		
+		
 		
 		btnSetTime.setOnClickListener(new OnClickListener() {
 			
@@ -177,21 +187,29 @@ public class Compose extends Activity {
 		
 		btnSetDate.setOnClickListener(new OnClickListener() {
 			
+			
 			@Override
 			public void onClick(View v) {
 				layoutDate.setVisibility(View.VISIBLE);
 				layoutTime.setVisibility(View.INVISIBLE);
+				
 				
 			}
 		});
 		
 		btnDone.setOnClickListener(new OnClickListener() {
 			
+			@SuppressWarnings("deprecation")
 			@Override
 			public void onClick(View v) {
 				
+				Date date = new Date(datePicker.getYear() - 1900, datePicker.getMonth(), datePicker.getDayOfMonth(),timePicker.getCurrentHour(),timePicker.getCurrentMinute());
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+				String formatedDate = dateFormat.format(date);
+				scheduleDateTime = formatedDate;
+				Toast.makeText(getApplicationContext(), scheduleDateTime, Toast.LENGTH_LONG).show();
 				DATE_PICKER_DIALOG.dismiss();
-				
+								
 			}
 		});
 
