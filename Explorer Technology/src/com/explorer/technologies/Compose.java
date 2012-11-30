@@ -226,6 +226,9 @@ public class Compose extends Activity {
 		String contactsFromToEditBox = removeContactTagFromList(textTo.getText().toString());
 		
 		String mixContacts=combineContact(contactsFromToEditBox);
+		mixContacts=manageComma(mixContacts);
+		
+		
 		
 		String arr[] = mixContacts.split(",");
 
@@ -251,25 +254,24 @@ public class Compose extends Activity {
 
 		// replaces ,, to , if exists
 		repairedNumbers = manageComma(repairedNumbers);
+	
+		
+		
 		groupIds = manageComma(groupIds);
-		// Toast.makeText(getApplicationContext(), repairedNumbers,
-		// Toast.LENGTH_LONG).show();
-
+	
 		if(repairedNumbers.equals("") && !groupIds.equals("")) {
 
-			 Toast.makeText(getApplicationContext(), groupIds,
-			 Toast.LENGTH_LONG).show();
+			 
 			new SendMessageToGroup().execute(Utility.username,
 					Utility.password, textSender.getText().toString(),
 					groupIds, textMessage.getText().toString());
 		}
 		else if (!repairedNumbers.equals("")){
-			Toast.makeText(getApplicationContext(), repairedNumbers,
-					 Toast.LENGTH_LONG).show();
+			
 			new SendMessage().execute(Utility.username, Utility.password,
 					textSender.getText().toString(), repairedNumbers,
 					textMessage.getText().toString(),scheduleDateTime);
-		}
+		}  
 
 	}
 
@@ -576,8 +578,7 @@ public class Compose extends Activity {
 					checkContact.setChecked(false);
 				}
 				// TODO Auto-generated method stub
-				Toast.makeText(Compose.this, "i have been clicked",
-						Toast.LENGTH_LONG).show();
+				
 				// finish();
 			}
 
@@ -588,9 +589,7 @@ public class Compose extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(),
-						"Items : " + listview.getChildCount(),
-						Toast.LENGTH_LONG).show();
+				
 				String contact = "";
 				for (int i = 0; i < listview.getChildCount(); i++) {
 					listview.setItemChecked(i, true);
@@ -620,8 +619,7 @@ public class Compose extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG)
-						.show();
+				
 				CONTACT_DIALOG.dismiss();
 
 			}
@@ -692,9 +690,7 @@ public class Compose extends Activity {
 				String contacts = "";
 				for (int i = 0; i < callLogs.size(); i++) {
 					if (callLogs.get(i).checked) {
-						Toast.makeText(Compose.this,
-								"" + callLogs.get(i).phoneNumber,
-								Toast.LENGTH_SHORT).show();
+						
 						contacts += callLogs.get(i).contactName + "<"
 								+ callLogs.get(i).phoneNumber + ">,";
 						contactList.add(callLogs.get(i).phoneNumber);
@@ -814,7 +810,11 @@ public String removeContactTagFromList(String mixString)
 		contactsWeWant =contactsWeWant +contactArray[i]+",";
 		
 	}
-	contactsWeWant= contactsWeWant.substring(0, contactsWeWant.length()-1);
+	if(contactsWeWant.length()>0)
+	{
+		contactsWeWant= contactsWeWant.substring(0, contactsWeWant.length()-1);
+		contactsWeWant=manageComma(contactsWeWant);
+	}
 	return contactsWeWant;
 }
 	public String repairPhoneNumber(String num) {
@@ -909,9 +909,7 @@ public String removeContactTagFromList(String mixString)
 				String contacts = "";
 				for (int i = 0; i < mycontacts.size(); i++) {
 					if (mycontacts.get(i).checked) {
-						Toast.makeText(Compose.this,
-								"" + mycontacts.get(i).phoneNumber,
-								Toast.LENGTH_SHORT).show();
+						
 						contacts += mycontacts.get(i).contactName + "<"
 								+ mycontacts.get(i).phoneNumber + ">,";
 						contactList.add(mycontacts.get(i).phoneNumber);
