@@ -58,6 +58,9 @@ public class Compose extends Activity {
 	Boolean isDraft = false;
 	String scheduleDateTime = null; // To store scheduled message date and time
 	private mItems[] itemss;
+	List<String> allContacts = new ArrayList<String>();
+	List<String> contactList = new ArrayList<String>();
+	String contactCount ;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -228,13 +231,28 @@ public class Compose extends Activity {
 				groupIds = groupIds + "," + extractGroupId(arr[i]) + ",";
 				continue;
 			}
-
-			arr[i] = repairPhoneNumber(arr[i]);
-
-			if (i == arr.length - 1)
-				repairedNumbers = repairedNumbers + "," + arr[i];
-			else
-				repairedNumbers = repairedNumbers + "," + arr[i] + ",";
+			
+			contactList.add(arr[i]);
+			//arr[i] = repairPhoneNumber(arr[i]);
+			//if (i == arr.length - 1){
+			//repairedNumbers = repairedNumbers + "," + arr[i];
+			
+			//}
+			//else{
+				//repairedNumbers = repairedNumbers + "," + arr[i] + ",";
+			//}
+		}
+		
+		for (int i = 0; i < contactList.size(); i++) {
+		
+			contactList.set(i, repairPhoneNumber(contactList.get(i)));
+			
+			if (i == contactList.size() - 1){
+				repairedNumbers = repairedNumbers + "," + contactList.get(i);
+			}
+			else{
+				repairedNumbers = repairedNumbers + "," + contactList.get(i) + ",";
+			}
 		}
 
 		// replaces ,, to , if exists
@@ -243,17 +261,21 @@ public class Compose extends Activity {
 		// Toast.makeText(getApplicationContext(), repairedNumbers,
 		// Toast.LENGTH_LONG).show();
 
-		if (repairedNumbers.equals("") && !groupIds.equals("")) {
+		if(repairedNumbers.equals("") && !groupIds.equals("")) {
 
-			// Toast.makeText(getApplicationContext(), groupIds,
-			// Toast.LENGTH_LONG).show();
+			 Toast.makeText(getApplicationContext(), groupIds,
+			 Toast.LENGTH_LONG).show();
 			new SendMessageToGroup().execute(Utility.username,
 					Utility.password, textSender.getText().toString(),
 					groupIds, textMessage.getText().toString());
-		} else if (!repairedNumbers.equals(""))
+		}
+		else if (!repairedNumbers.equals("")){
+			Toast.makeText(getApplicationContext(), repairedNumbers,
+					 Toast.LENGTH_LONG).show();
 			new SendMessage().execute(Utility.username, Utility.password,
 					textSender.getText().toString(), repairedNumbers,
 					textMessage.getText().toString(),scheduleDateTime);
+		}
 
 	}
 
@@ -262,12 +284,13 @@ public class Compose extends Activity {
 			s = s.replaceAll(",,", ",");
 
 			// removes last ,
-			if (s.charAt(s.length() - 1) == ',')
+			if (s.charAt(s.length() - 1) == ','){
 				s = s.substring(0, s.length() - 1);
-
+			}
 			// remove first ,
-			if (s.charAt(0) == ',')
+			if (s.charAt(0) == ','){
 				s = s.substring(1, s.length());
+			}
 		}
 		return s;
 	}
@@ -662,10 +685,13 @@ public class Compose extends Activity {
 								Toast.LENGTH_SHORT).show();
 						contacts += callLogs.get(i).contactName + "<"
 								+ callLogs.get(i).phoneNumber + ">,";
+						contactList.add(callLogs.get(i).phoneNumber);
 					}
 
 				}
-				setToNumber(contacts);
+				//int count = logContact.size() + fromContact.size();
+				//setToNumber(contacts);
+				setToNumber("Contact("+ contactList.size() +")");
 				CALL_LOG_DIALOG.dismiss();
 			}
 		});
@@ -681,8 +707,10 @@ public class Compose extends Activity {
 				for (int i = 0; i < callLogs.size(); i++) {
 					contact += callLogs.get(i).contactName + "<"
 							+ callLogs.get(i).phoneNumber + ">,";
+					contactList.add(callLogs.get(i).phoneNumber);
 				}
-				setToNumber(contact);
+				//setToNumber(contact);
+				setToNumber("Contact("+ contactList.size() +"),");
 				// Toast.makeText(getApplicationContext(), contact.length(),
 				// Toast.LENGTH_LONG).show();
 				CALL_LOG_DIALOG.dismiss();
@@ -733,7 +761,7 @@ public class Compose extends Activity {
 
 				String name = o.get("name") + "<" + o.get("id") + ">";
 
-				setToNumber(name);
+				setToNumberforGroup(name);
 				GROUP_DIALOG.dismiss();
 
 			}
@@ -742,12 +770,36 @@ public class Compose extends Activity {
 
 	}
 
+	public void setToNumberforGroup(String number)
+	{
+		textTo.setText(textTo.getText()+","+number);
+		
+	}
 	public void setToNumber(String number) {
+		//if (textTo.getText().length() < 0) {
+			//textTo.setText(number + ",");
+		//} else {
+			//String beforeContacts = textTo.getText().toString();
+			//textTo.setText(beforeContacts + number + ",");
+		//}
+		
 		if (textTo.getText().length() < 0) {
 			textTo.setText(number + ",");
 		} else {
+			
 			String beforeContacts = textTo.getText().toString();
-			textTo.setText(beforeContacts + number + ",");
+			String [] contactArray = beforeContacts.split(",");
+			String contactsWeWant="";
+			for(int i=0;i<contactArray.length;i++)
+			{
+				if(contactArray[i].contains("Contact"))
+					continue;
+				contactsWeWant =contactsWeWant +contactArray[i]+",";
+				
+			}
+			contactsWeWant= contactsWeWant.substring(0, contactsWeWant.length()-1);
+			//String text = beforeContacts.replaceAll("Contact(.*.)\\S*","");
+			textTo.setText( number + ","+contactsWeWant);
 		}
 	}
 
@@ -848,10 +900,12 @@ public class Compose extends Activity {
 								Toast.LENGTH_SHORT).show();
 						contacts += mycontacts.get(i).contactName + "<"
 								+ mycontacts.get(i).phoneNumber + ">,";
+						contactList.add(mycontacts.get(i).phoneNumber);
 					}
 
 				}
-				setToNumber(contacts);
+				//setToNumber(contacts);
+				setToNumber("Contact(" + contactList.size() +")");
 				CONTACT_DIALOG.dismiss();
 			}
 		});
@@ -867,8 +921,10 @@ public class Compose extends Activity {
 				for (int i = 0; i < mycontacts.size(); i++) {
 					contact += mycontacts.get(i).contactName + "<"
 							+ mycontacts.get(i).phoneNumber + ">,";
+					contactList.add(mycontacts.get(i).phoneNumber);
 				}
-				setToNumber(contact);
+				//setToNumber(contact);
+				setToNumber("Contact(" + contactList.size() +")");
 				// Toast.makeText(getApplicationContext(), contact.length(),
 				// Toast.LENGTH_LONG).show();
 				CONTACT_DIALOG.dismiss();
