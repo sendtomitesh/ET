@@ -223,7 +223,11 @@ public class Compose extends Activity {
 	public void sendMessage(View v) {
 
 		String repairedNumbers = "";
-		String arr[] = textTo.getText().toString().split(",");
+		String contactsFromToEditBox = removeContactTagFromList(textTo.getText().toString());
+		
+		String mixContacts=combineContact(contactsFromToEditBox);
+		
+		String arr[] = mixContacts.split(",");
 
 		for (int i = 0; i < arr.length; i++) {
 
@@ -232,28 +236,18 @@ public class Compose extends Activity {
 				continue;
 			}
 			
-			contactList.add(arr[i]);
-			//arr[i] = repairPhoneNumber(arr[i]);
-			//if (i == arr.length - 1){
-			//repairedNumbers = repairedNumbers + "," + arr[i];
+			//contactList.add(arr[i]);
+			arr[i] = repairPhoneNumber(arr[i]);
+			if (i == arr.length - 1){
+			repairedNumbers = repairedNumbers + "," + arr[i];
 			
-			//}
-			//else{
-				//repairedNumbers = repairedNumbers + "," + arr[i] + ",";
-			//}
-		}
-		
-		for (int i = 0; i < contactList.size(); i++) {
-		
-			contactList.set(i, repairPhoneNumber(contactList.get(i)));
-			
-			if (i == contactList.size() - 1){
-				repairedNumbers = repairedNumbers + "," + contactList.get(i);
 			}
 			else{
-				repairedNumbers = repairedNumbers + "," + contactList.get(i) + ",";
+				repairedNumbers = repairedNumbers + "," + arr[i] + ",";
 			}
 		}
+		
+		
 
 		// replaces ,, to , if exists
 		repairedNumbers = manageComma(repairedNumbers);
@@ -277,6 +271,24 @@ public class Compose extends Activity {
 					textMessage.getText().toString(),scheduleDateTime);
 		}
 
+	}
+
+	private String combineContact(String contactsFromToEditBox) {
+		// TODO Auto-generated method stub\
+		String numberListFromArray="";
+		for (int i = 0; i < contactList.size(); i++) {
+            
+            contactList.set(i, repairPhoneNumber(contactList.get(i)));
+            
+            if (i == contactList.size() - 1){
+                    numberListFromArray = numberListFromArray + "," + contactList.get(i);
+            }
+            else{
+                    numberListFromArray = numberListFromArray + "," + contactList.get(i) + ",";
+            }
+		}
+		return numberListFromArray+contactsFromToEditBox;
+		
 	}
 
 	public String manageComma(String s) {
@@ -787,22 +799,24 @@ public class Compose extends Activity {
 			textTo.setText(number + ",");
 		} else {
 			
-			String beforeContacts = textTo.getText().toString();
-			String [] contactArray = beforeContacts.split(",");
-			String contactsWeWant="";
-			for(int i=0;i<contactArray.length;i++)
-			{
-				if(contactArray[i].contains("Contact"))
-					continue;
-				contactsWeWant =contactsWeWant +contactArray[i]+",";
-				
-			}
-			contactsWeWant= contactsWeWant.substring(0, contactsWeWant.length()-1);
-			//String text = beforeContacts.replaceAll("Contact(.*.)\\S*","");
-			textTo.setText( number + ","+contactsWeWant);
+			textTo.setText( number + ","+removeContactTagFromList(textTo.getText().toString()));
 		}
 	}
-
+public String removeContactTagFromList(String mixString)
+{
+	
+	String [] contactArray = mixString.split(",");
+	String contactsWeWant="";
+	for(int i=0;i<contactArray.length;i++)
+	{
+		if(contactArray[i].contains("Contact"))
+			continue;
+		contactsWeWant =contactsWeWant +contactArray[i]+",";
+		
+	}
+	contactsWeWant= contactsWeWant.substring(0, contactsWeWant.length()-1);
+	return contactsWeWant;
+}
 	public String repairPhoneNumber(String num) {
 		String repairedNumber = num;
 
