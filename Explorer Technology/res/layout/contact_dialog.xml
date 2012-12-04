@@ -8,13 +8,15 @@
     android:gravity="center" >
 
     <RelativeLayout
-        
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
+        android:layout_marginLeft="5dp"
         android:background="#ffffff" >
 
-        <LinearLayout style="@style/TitleBar" >
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            style="@style/TitleBar" >
 
             <ImageView
                 android:id="@+id/image_title"
@@ -31,12 +33,31 @@
                 android:text="@string/contacts" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/layoutSearchBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayout1"
+             >
+
+            <EditText
+                android:id="@+id/contactSearchBox"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1" >
+
+                <requestFocus />
+            </EditText>
+
+        </LinearLayout>
+
         <ListView
             android:id="@+id/contact_listview"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="45dp"
-            android:layout_marginTop="40dp"
+            android:layout_below="@+id/layoutSearchBox"
             android:clickable="true"
             android:divider="@color/Grey"
             android:dividerHeight="1dp"
@@ -59,8 +80,8 @@
             <Button
                 android:id="@+id/btn_contact_select_all"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/select_all" />
         </LinearLayout>
     </RelativeLayout>

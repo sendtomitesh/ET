@@ -91,7 +91,7 @@ public class Groups extends Activity {
 				Map<String, String> map = mylist.get(position);
 				String msg_Id = map.get("id");
 				String group_name = map.get("name");
-				moveToCompose(group_name + "(" + msg_Id + ")");
+				moveToCompose(group_name + "<" + msg_Id + ">");
 
 			}
 		});

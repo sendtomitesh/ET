@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -58,7 +59,7 @@ public class Compose extends Activity {
 	Boolean isDraft = false;
 	String scheduleDateTime = null; // To store scheduled message date and time
 	private mItems[] itemss;
-	List<String> allContacts = new ArrayList<String>();
+	
 	List<String> contactList = new ArrayList<String>();
 	String contactCount ;
 
@@ -79,13 +80,12 @@ public class Compose extends Activity {
 		if (intent.hasExtra("id")) {
 			msgId = intent.getStringExtra("id");
 			isDraft = true;
-			// Toast.makeText(getApplicationContext(), msgId,
-			// Toast.LENGTH_LONG).show();
+			
 		}
 
 		if (intent.hasExtra("to")) {
-			// textTo.setText(intent.getStringExtra("to"));
-			setToNumber(intent.getStringExtra("to"));
+			 textTo.setText(textTo.getText().toString()+","+intent.getStringExtra("to"));
+			//setToNumber(intent.getStringExtra("to"));
 		}
 		if (intent.hasExtra("msg")) {
 			textMessage.setText(intent.getStringExtra("msg"));
@@ -96,8 +96,9 @@ public class Compose extends Activity {
 	private void checkIfComesFromGroups() {
 		Intent intent = getIntent();
 		if (intent.hasExtra("groupName")) {
-			String groupName = intent.getStringExtra("groupName");
-			setToNumber(groupName);
+			
+			textTo.setText(textTo.getText().toString()+","+intent.getStringExtra("groupName"));
+			
 		}
 
 	}
@@ -105,8 +106,7 @@ public class Compose extends Activity {
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
-		// Toast.makeText(getApplicationContext(),
-		// textMessage.getText().toString(), Toast.LENGTH_LONG).show();
+		
 		if (!isDraft) {
 			if (!textTo.getText().toString().equals("")
 					|| !textMessage.getText().toString().equals("")) {
@@ -210,7 +210,7 @@ public class Compose extends Activity {
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 				String formatedDate = dateFormat.format(date);
 				scheduleDateTime = formatedDate;
-				Toast.makeText(getApplicationContext(), scheduleDateTime, Toast.LENGTH_LONG).show();
+			//	Toast.makeText(getApplicationContext(), scheduleDateTime, Toast.LENGTH_LONG).show();
 				DATE_PICKER_DIALOG.dismiss();
 								
 			}
@@ -222,8 +222,39 @@ public class Compose extends Activity {
 	}
 	public void sendMessage(View v) {
 
+		
+		// replaces ,, to , if exists
+		String repairedNumbers="";
+		try
+		{
+		repairedNumbers=setupAndGetFinalContactList();
+		}
+		catch(Exception e)
+		{
+			Toast.makeText(Compose.this, "Error in generating Contact list", Toast.LENGTH_LONG).show();
+			return;
+		}
+		
+		Toast.makeText(Compose.this, scheduleDateTime, Toast.LENGTH_LONG).show();
+		if(repairedNumbers.equals("") && !groupIds.equals("")) {
+
+		//	Toast.makeText(Compose.this, groupIds, Toast.LENGTH_LONG).show();
+			new SendMessageToGroup().execute(textSender.getText().toString(),
+					groupIds, textMessage.getText().toString()); 
+		}
+		else if (!repairedNumbers.equals("")){
+			
+		//	Toast.makeText(Compose.this, repairedNumbers, Toast.LENGTH_LONG).show();
+		//	Toast.makeText(Compose.this, groupIds, Toast.LENGTH_LONG).show();
+			new SendMessage().execute(textSender.getText().toString(), repairedNumbers,
+					textMessage.getText().toString(),scheduleDateTime);       
+		}   
+
+	}
+	private String setupAndGetFinalContactList()
+	{
 		String repairedNumbers = "";
-		String contactsFromToEditBox = removeContactTagFromList(textTo.getText().toString());
+		String contactsFromToEditBox = removeContactTag(textTo.getText().toString());
 		
 		String mixContacts=combineContact(contactsFromToEditBox);
 		mixContacts=manageComma(mixContacts);
@@ -250,28 +281,12 @@ public class Compose extends Activity {
 			}
 		}
 		
-		
-
-		// replaces ,, to , if exists
 		repairedNumbers = manageComma(repairedNumbers);
 	
 		
 		
 		groupIds = manageComma(groupIds);
-	
-		if(repairedNumbers.equals("") && !groupIds.equals("")) {
-
-			 
-			new SendMessageToGroup().execute(Utility.username,
-					Utility.password, textSender.getText().toString(),
-					groupIds, textMessage.getText().toString());
-		}
-		else if (!repairedNumbers.equals("")){
-			
-			new SendMessage().execute(Utility.username, Utility.password,
-					textSender.getText().toString(), repairedNumbers,
-					textMessage.getText().toString(),scheduleDateTime);
-		}  
+		return repairedNumbers;
 
 	}
 
@@ -280,14 +295,9 @@ public class Compose extends Activity {
 		String numberListFromArray="";
 		for (int i = 0; i < contactList.size(); i++) {
             
-            contactList.set(i, repairPhoneNumber(contactList.get(i)));
+           // contactList.set(i, repairPhoneNumber(contactList.get(i)));
+            numberListFromArray = numberListFromArray + "," + contactList.get(i) + ",";
             
-            if (i == contactList.size() - 1){
-                    numberListFromArray = numberListFromArray + "," + contactList.get(i);
-            }
-            else{
-                    numberListFromArray = numberListFromArray + "," + contactList.get(i) + ",";
-            }
 		}
 		return numberListFromArray+contactsFromToEditBox;
 		
@@ -319,6 +329,97 @@ public class Compose extends Activity {
 
 		return gId;
 
+	}
+	public void updateContactTag()
+	{
+		String [] contactArray = textTo.getText().toString().split(",");
+		String contactsWeWant="";
+		if(isContactTagPresent(contactArray))
+		{
+			for(int i=0;i<contactArray.length;i++)
+			{
+				if(contactArray[i].contains("Contact"))
+					contactArray[i]="Contact("+contactList.size()+")";
+				contactsWeWant =contactsWeWant +contactArray[i]+",";
+				
+			}
+			if(contactsWeWant.length()>0)
+			{
+				contactsWeWant= contactsWeWant.substring(0, contactsWeWant.length()-1);
+				contactsWeWant=manageComma(contactsWeWant);
+			}
+			textTo.setText(contactsWeWant);
+		}
+		else
+		{
+			if(textTo.getText().length()>0)
+				textTo.setText("Contact("+contactList.size()+")"+","+ textTo.getText().toString());
+			else
+				textTo.setText("Contact("+contactList.size()+")");
+		}
+		
+		
+
+	}
+	private Boolean isContactTagPresent(String [] contactArray)
+	{
+		for(int i=0;i<contactArray.length;i++)
+		{
+			if(contactArray[i].contains("Contact"))
+				return true;
+		}
+		return false;
+	}
+	private String removeContactTag(String mixString)
+	{
+		String [] contactArray = mixString.split(",");
+		String contactsWeWant="";
+		for(int i=0;i<contactArray.length;i++)
+		{
+			if(contactArray[i].contains("Contact"))
+				continue;
+			
+			contactsWeWant =contactsWeWant +contactArray[i]+",";
+			
+		}
+		contactsWeWant=manageComma(contactsWeWant);
+		return contactsWeWant;
+
+	}
+		
+	public String repairPhoneNumber(String num) {
+		String repairedNumber = num;
+
+		// get country code
+		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String countryCode = tm.getNetworkCountryIso();
+
+		// get phone code from country code
+		countryCode = Iso2Phone.getPhone(countryCode);
+
+		// if number starts from + means it has code attached, nothing to do
+		if (repairedNumber.startsWith("+")) {
+
+			repairedNumber = repairedNumber.substring(1,
+					repairedNumber.length());
+			return repairedNumber;
+		}
+
+		// remove 0 if its a first digit
+		if (repairedNumber.startsWith("0")) {
+			repairedNumber = repairedNumber.substring(1,
+					repairedNumber.length());
+
+		}
+		if (repairedNumber.length() == 10) // valid number in india
+		{
+			repairedNumber = countryCode + repairedNumber;
+		} else if (repairedNumber.length() == 11) // valid number in nigeria
+		{
+			repairedNumber = countryCode + repairedNumber;
+		}
+
+		return repairedNumber;
 	}
 
 	public void globalInitialize() {
@@ -391,7 +492,7 @@ public class Compose extends Activity {
 			int status;
 			// status = APICalls.
 
-			status = APICalls.sendMsg(args[2], args[3], args[4],args[5]);
+			status = APICalls.sendMsg(args[0], args[1], args[2],args[3]);
 			return status;
 
 		}
@@ -399,9 +500,10 @@ public class Compose extends Activity {
 		@Override
 		protected void onPostExecute(Integer result) {
 			
-			super.onPostExecute(result);
+			
 
-			if (result == 0) {
+			if (result == 0) 
+			{
 				insertSentMessage();
 				new UpdateCredits().execute();
 				if (isDraft) {
@@ -410,12 +512,15 @@ public class Compose extends Activity {
 				}
 				Toast.makeText(getApplicationContext(),
 						"Message sent successfully ", Toast.LENGTH_LONG).show();
-			} else {
+			} 
+			else 
+			{
 				Toast.makeText(getApplicationContext(),
-						"Error sending message ", Toast.LENGTH_LONG).show();
+						"ERROR SENDING SMS. PLEASE CHECK YOUR INTERNET CONNECTION! ", Toast.LENGTH_LONG).show();
 			}
 
-			try {
+			try 
+			{
 				pd.dismiss();
 			} catch (Exception e) {
 			}
@@ -426,13 +531,15 @@ public class Compose extends Activity {
 						.execute(textSender.getText().toString(), groupIds,
 								textMessage.getText().toString());
 
-			} else
+			} 
+			else
 				moveToDashboard();
-
+			super.onPostExecute(result);
 		}
 
 	}
 
+	
 	public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
 
 		@Override
@@ -451,7 +558,7 @@ public class Compose extends Activity {
 			int status;
 			// status = APICalls.
 
-			status = APICalls.sendToGroup(args[2], args[3], args[4]);
+			status = APICalls.sendToGroup(args[0], args[1], args[2]);
 			return status;
 
 		}
@@ -459,20 +566,23 @@ public class Compose extends Activity {
 		@Override
 		protected void onPostExecute(Integer result) {
 
-			super.onPostExecute(result);
+			
 
-			if (result == 0) {
+			if (result == 0) 
+			{
 				insertSentMessage();
 				new UpdateCredits().execute();
 				Toast.makeText(getApplicationContext(),
-						"Message sent successfully ", Toast.LENGTH_LONG).show();
+						"Message sent successfully to group ", Toast.LENGTH_LONG).show();
 				if (isDraft) {
 					new DeleteDraft().execute(getApplicationContext());
 					moveToDashboard();
 				}
-			} else {
+			} 
+			else 
+			{
 				Toast.makeText(getApplicationContext(),
-						"Error sending message ", Toast.LENGTH_LONG).show();
+						"Error sending to group ", Toast.LENGTH_LONG).show();
 			}
 
 			groupIds = "";
@@ -481,10 +591,13 @@ public class Compose extends Activity {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
+			moveToDashboard();
+			
+			super.onPostExecute(result);
 		}
 
 	}
+	
 
 	public class ShowGroups extends
 			AsyncTask<String, Void, ArrayList<HashMap<String, String>>> {
@@ -512,12 +625,14 @@ public class Compose extends Activity {
 			groupList = mylist;
 			isGroupListLoaded = true;
 			showinList();
-			super.onPostExecute(mylist);
+			
 
 			try {
 				pd.dismiss();
 			} catch (Exception e) {
 			}
+			
+			super.onPostExecute(mylist);
 		}
 
 	}
@@ -536,99 +651,7 @@ public class Compose extends Activity {
 
 	}
 
-	void test() {
-		final Dialog CONTACT_DIALOG = new Dialog(Compose.this,
-				R.style.DialogWindowTitle);
-		CONTACT_DIALOG.setContentView(R.layout.contact_dialog);
-
-		final Button btnOk = (Button) CONTACT_DIALOG
-				.findViewById(R.id.btn_contact_ok);
-		final Button btnSelectAll = (Button) CONTACT_DIALOG
-				.findViewById(R.id.btn_contact_select_all);
-
-		String[] PROJECTION = new String[] { Contacts._ID,
-				Contacts.DISPLAY_NAME, Phone.NUMBER };
-		Cursor contactCursor = getContentResolver().query(Phone.CONTENT_URI,
-				PROJECTION, null, null, null);
-
-		String[] from = new String[] { Contacts.DISPLAY_NAME, Phone.NUMBER };
-		int[] to = new int[] { R.id.contact_name, R.id.contact_number };
-
-		final ListView listview = (ListView) CONTACT_DIALOG
-				.findViewById(R.id.contact_listview);
-		ContactsAdapter adapter = new ContactsAdapter(getApplicationContext(),
-				R.layout.contact_dialog, contactCursor, from, to);
-		listview.setAdapter(adapter);
-		listview.setClickable(true);
-		listview.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-		listview.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				CheckBox checkContact = (CheckBox) view
-						.findViewById(R.id.checkbox_contact);
-				// checkContact.setFocusable(true);
-				// checkContact.setFocusableInTouchMode(true);
-
-				if (!checkContact.isChecked()) {
-					checkContact.setChecked(true);
-				} else {
-					checkContact.setChecked(false);
-				}
-				// TODO Auto-generated method stub
-				
-				// finish();
-			}
-
-		});
-
-		btnSelectAll.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-				String contact = "";
-				for (int i = 0; i < listview.getChildCount(); i++) {
-					listview.setItemChecked(i, true);
-					// RelativeLayout itemLayout =
-					// (RelativeLayout)listview.getChildAt(i);
-					// TextView textNumber =
-					// (TextView)itemLayout.findViewById(R.id.txt_contact_number);
-					// TextView textName =
-					// (TextView)itemLayout.findViewById(R.id.txt_contact_name);
-					// CheckBox checkContact =
-					// (CheckBox)itemLayout.findViewById(R.id.checkbox_contact);
-					// checkContact.setChecked(true);
-
-					// contact += textName.getText() + "<" +
-					// textNumber.getText() + ">,";
-				}
-				// setToNumber(contact);
-				// Toast.makeText(getApplicationContext(), contact,
-				// Toast.LENGTH_LONG).show();
-				// CONTACT_DIALOG.dismiss();
-
-			}
-		});
-
-		btnOk.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-				CONTACT_DIALOG.dismiss();
-
-			}
-		});
-		CONTACT_DIALOG.show();
-
-	}
-	
-	public void getCallLog(View v) {
+public void getCallLog(View v) {
 		final Dialog CALL_LOG_DIALOG = new Dialog(Compose.this,
 				R.style.DialogWindowTitle);
 		CALL_LOG_DIALOG.setContentView(R.layout.contact_dialog);
@@ -687,19 +710,15 @@ public class Compose extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				String contacts = "";
+				
 				for (int i = 0; i < callLogs.size(); i++) {
 					if (callLogs.get(i).checked) {
 						
-						contacts += callLogs.get(i).contactName + "<"
-								+ callLogs.get(i).phoneNumber + ">,";
-						contactList.add(callLogs.get(i).phoneNumber);
+							contactList.add(callLogs.get(i).phoneNumber);
 					}
 
 				}
-				//int count = logContact.size() + fromContact.size();
-				//setToNumber(contacts);
-				setToNumber("Contact("+ contactList.size() +")");
+				updateContactTag();
 				CALL_LOG_DIALOG.dismiss();
 			}
 		});
@@ -718,7 +737,7 @@ public class Compose extends Activity {
 					contactList.add(callLogs.get(i).phoneNumber);
 				}
 				//setToNumber(contact);
-				setToNumber("Contact("+ contactList.size() +"),");
+				updateContactTag();
 				// Toast.makeText(getApplicationContext(), contact.length(),
 				// Toast.LENGTH_LONG).show();
 				CALL_LOG_DIALOG.dismiss();
@@ -783,75 +802,7 @@ public class Compose extends Activity {
 		textTo.setText(textTo.getText()+","+number);
 		
 	}
-	public void setToNumber(String number) {
-		//if (textTo.getText().length() < 0) {
-			//textTo.setText(number + ",");
-		//} else {
-			//String beforeContacts = textTo.getText().toString();
-			//textTo.setText(beforeContacts + number + ",");
-		//}
-		
-		if (textTo.getText().length() < 0) {
-			textTo.setText(number + ",");
-		} else {
-			
-			textTo.setText( number + ","+removeContactTagFromList(textTo.getText().toString()));
-		}
-	}
-public String removeContactTagFromList(String mixString)
-{
 	
-	String [] contactArray = mixString.split(",");
-	String contactsWeWant="";
-	for(int i=0;i<contactArray.length;i++)
-	{
-		if(contactArray[i].contains("Contact"))
-			continue;
-		contactsWeWant =contactsWeWant +contactArray[i]+",";
-		
-	}
-	if(contactsWeWant.length()>0)
-	{
-		contactsWeWant= contactsWeWant.substring(0, contactsWeWant.length()-1);
-		contactsWeWant=manageComma(contactsWeWant);
-	}
-	return contactsWeWant;
-}
-	public String repairPhoneNumber(String num) {
-		String repairedNumber = num;
-
-		// get country code
-		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-		String countryCode = tm.getNetworkCountryIso();
-
-		// get phone code from country code
-		countryCode = Iso2Phone.getPhone(countryCode);
-
-		// if number starts from + means it has code attached, nothing to do
-		if (repairedNumber.startsWith("+")) {
-
-			repairedNumber = repairedNumber.substring(1,
-					repairedNumber.length());
-			return repairedNumber;
-		}
-
-		// remove 0 if its a first digit
-		if (repairedNumber.startsWith("0")) {
-			repairedNumber = repairedNumber.substring(1,
-					repairedNumber.length());
-
-		}
-		if (repairedNumber.length() == 10) // valid number in india
-		{
-			repairedNumber = countryCode + repairedNumber;
-		} else if (repairedNumber.length() == 11) // valid number in nigeria
-		{
-			repairedNumber = countryCode + repairedNumber;
-		}
-
-		return repairedNumber;
-	}
-
 	public void getContacts(View v) {
 		// Intent contactPickerIntent = new
 		// Intent(Intent.ACTION_PICK,Contacts.CONTENT_URI);
@@ -906,18 +857,15 @@ public String removeContactTagFromList(String mixString)
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				String contacts = "";
+				
 				for (int i = 0; i < mycontacts.size(); i++) {
 					if (mycontacts.get(i).checked) {
 						
-						contacts += mycontacts.get(i).contactName + "<"
-								+ mycontacts.get(i).phoneNumber + ">,";
 						contactList.add(mycontacts.get(i).phoneNumber);
 					}
 
 				}
-				//setToNumber(contacts);
-				setToNumber("Contact(" + contactList.size() +")");
+				updateContactTag();
 				CONTACT_DIALOG.dismiss();
 			}
 		});
@@ -936,7 +884,7 @@ public String removeContactTagFromList(String mixString)
 					contactList.add(mycontacts.get(i).phoneNumber);
 				}
 				//setToNumber(contact);
-				setToNumber("Contact(" + contactList.size() +")");
+				updateContactTag();
 				// Toast.makeText(getApplicationContext(), contact.length(),
 				// Toast.LENGTH_LONG).show();
 				CONTACT_DIALOG.dismiss();
