@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import android.R.integer;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -202,6 +202,7 @@ public class Compose extends Activity {
 		
 		btnDone.setOnClickListener(new OnClickListener() {
 			
+			@SuppressLint("SimpleDateFormat")
 			@SuppressWarnings("deprecation")
 			@Override
 			public void onClick(View v) {
@@ -811,14 +812,17 @@ public void getCallLog(View v) {
 				R.style.DialogWindowTitle);
 		CONTACT_DIALOG.setContentView(R.layout.contact_dialog);
 
+		final EditText textSerach = (EditText)CONTACT_DIALOG.findViewById(R.id.contactSearchBox);
 		final Button btnOk = (Button) CONTACT_DIALOG
 				.findViewById(R.id.btn_contact_ok);
+		final Button btnSearch = (Button) CONTACT_DIALOG
+				.findViewById(R.id.btnSearch);
 		final Button btnSelectAll = (Button) CONTACT_DIALOG
 				.findViewById(R.id.btn_contact_select_all);
 
-		String[] PROJECTION = new String[] { Contacts._ID,
+		final String[] PROJECTION = new String[] { Contacts._ID,
 				Contacts.DISPLAY_NAME, Phone.NUMBER };
-		Cursor contactCursor = getContentResolver().query(Phone.CONTENT_URI,
+		final Cursor contactCursor = getContentResolver().query(Phone.CONTENT_URI,
 				PROJECTION, null, null, null);
 		// Create and populate planets.
 		itemss = (mItems[]) getLastNonConfigurationInstance();
@@ -889,6 +893,33 @@ public void getCallLog(View v) {
 				// Toast.LENGTH_LONG).show();
 				CONTACT_DIALOG.dismiss();
 
+			}
+		});
+		
+		btnSearch.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				String searchText  = textSerach.getText().toString();
+				Cursor contactCursor = getContentResolver().query(Phone.CONTENT_URI,
+						PROJECTION, Contacts.DISPLAY_NAME, searchText, null);
+				// Create and populate planets.
+				itemss = (mItems[]) getLastNonConfigurationInstance();
+				final ArrayList<mItems> mycontacts = new ArrayList<Compose.mItems>();
+				
+				contactCursor.moveToFirst();
+				while (contactCursor.moveToNext()) {
+					mycontacts.add(new mItems(contactCursor.getString(contactCursor
+							.getColumnIndex(Phone.NUMBER)), contactCursor
+							.getString(contactCursor
+									.getColumnIndex(Contacts.DISPLAY_NAME))));
+				}
+
+				final SelectArralAdapter myAdapter = new SelectArralAdapter(
+						Compose.this, mycontacts);
+				listview.setAdapter(myAdapter);
+				
 			}
 		});
 
