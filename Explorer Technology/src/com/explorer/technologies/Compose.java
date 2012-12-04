@@ -664,7 +664,9 @@ public void getCallLog(View v) {
 				.findViewById(R.id.btn_contact_ok);
 		final Button btnSelectAll = (Button) CALL_LOG_DIALOG
 				.findViewById(R.id.btn_contact_select_all);
-
+		final EditText textSerach = (EditText)CALL_LOG_DIALOG.findViewById(R.id.contactSearchBox);
+		final Button btnSearch = (Button) CALL_LOG_DIALOG
+				.findViewById(R.id.btnSearch);
 		String order = android.provider.CallLog.Calls.DATE + " DESC";
 		String[] PROJECTION = { android.provider.CallLog.Calls._ID,
 				android.provider.CallLog.Calls.NUMBER,
@@ -745,6 +747,40 @@ public void getCallLog(View v) {
 
 			}
 		});
+		btnSearch.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				String searchText  = textSerach.getText().toString();
+				String order = android.provider.CallLog.Calls.DATE + " DESC";
+				String[] PROJECTION = { android.provider.CallLog.Calls._ID,
+						android.provider.CallLog.Calls.NUMBER,
+						android.provider.CallLog.Calls.CACHED_NAME, };
+
+				final Cursor contactCursor = getContentResolver().query(
+						android.provider.CallLog.Calls.CONTENT_URI, PROJECTION, android.provider.CallLog.Calls.CACHED_NAME+ " like " + "'"+searchText+"%'", null,
+						order);
+				// Create and populate planets.
+				itemss = (mItems[]) getLastNonConfigurationInstance();
+				final ArrayList<mItems> callLogs = new ArrayList<Compose.mItems>();
+				contactCursor.moveToFirst();
+				while (contactCursor.moveToNext()) {
+					callLogs.add(new mItems(contactCursor.getString(contactCursor
+							.getColumnIndex(android.provider.CallLog.Calls.NUMBER)), contactCursor
+							.getString(contactCursor
+									.getColumnIndex(android.provider.CallLog.Calls.CACHED_NAME))));
+				}
+
+				final SelectArralAdapter myAdapter = new SelectArralAdapter(
+						Compose.this, callLogs);
+
+				final ListView listview = (ListView) CALL_LOG_DIALOG
+						.findViewById(R.id.contact_listview);
+				listview.setAdapter(myAdapter);
+				
+			}
+		});
 
 		CALL_LOG_DIALOG.show();
 		
@@ -823,7 +859,7 @@ public void getCallLog(View v) {
 		final String[] PROJECTION = new String[] { Contacts._ID,
 				Contacts.DISPLAY_NAME, Phone.NUMBER };
 		final Cursor contactCursor = getContentResolver().query(Phone.CONTENT_URI,
-				PROJECTION, null, null, null);
+				PROJECTION,null, null, null);
 		// Create and populate planets.
 		itemss = (mItems[]) getLastNonConfigurationInstance();
 		final ArrayList<mItems> mycontacts = new ArrayList<Compose.mItems>();
@@ -903,7 +939,7 @@ public void getCallLog(View v) {
 				// TODO Auto-generated method stub
 				String searchText  = textSerach.getText().toString();
 				Cursor contactCursor = getContentResolver().query(Phone.CONTENT_URI,
-						PROJECTION, Contacts.DISPLAY_NAME, searchText, null);
+						PROJECTION, Contacts.DISPLAY_NAME + " like " + "'"+searchText+"%'", null, null);
 				// Create and populate planets.
 				itemss = (mItems[]) getLastNonConfigurationInstance();
 				final ArrayList<mItems> mycontacts = new ArrayList<Compose.mItems>();
