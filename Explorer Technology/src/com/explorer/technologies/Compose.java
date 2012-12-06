@@ -77,6 +77,7 @@ public class Compose extends Activity {
 	private void checkIfComesFromDrafts() {
 		// TODO Auto-generated method stub
 		Intent intent = getIntent();
+		
 		if (intent.hasExtra("id")) {
 			msgId = intent.getStringExtra("id");
 			isDraft = true;
@@ -92,7 +93,7 @@ public class Compose extends Activity {
 		}
 
 	}
-
+	
 	private void checkIfComesFromGroups() {
 		Intent intent = getIntent();
 		if (intent.hasExtra("groupName")) {
@@ -652,6 +653,7 @@ public class Compose extends Activity {
 
 	}
 
+@SuppressWarnings("deprecation")
 public void getCallLog(View v) {
 		final Dialog CALL_LOG_DIALOG = new Dialog(Compose.this,
 				R.style.DialogWindowTitle);
@@ -728,6 +730,7 @@ public void getCallLog(View v) {
 
 		btnSelectAll.setOnClickListener(new OnClickListener() {
 
+			@SuppressWarnings("unused")
 			@Override
 			public void onClick(View v) {
 				// Toast.makeText(getApplicationContext(), "Items : " +
@@ -840,6 +843,7 @@ public void getCallLog(View v) {
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void getContacts(View v) {
 		// Intent contactPickerIntent = new
 		// Intent(Intent.ACTION_PICK,Contacts.CONTENT_URI);
@@ -912,6 +916,7 @@ public void getCallLog(View v) {
 
 		btnSelectAll.setOnClickListener(new OnClickListener() {
 
+			@SuppressWarnings("unused")
 			@Override
 			public void onClick(View v) {
 				// Toast.makeText(getApplicationContext(), "Items : " +
@@ -970,9 +975,11 @@ public void getCallLog(View v) {
 		private String contactName = "";
 		private boolean checked = false;
 
+		@SuppressWarnings("unused")
 		public mItems() {
 		}
 
+		@SuppressWarnings("unused")
 		public mItems(String cName) {
 			this.contactName = cName;
 		}
@@ -981,6 +988,7 @@ public void getCallLog(View v) {
 			this.contactName = cName;
 		}
 
+		@SuppressWarnings("unused")
 		public mItems(String pN, String cName, boolean checked) {
 			this.phoneNumber = pN;
 			this.contactName = cName;
@@ -995,10 +1003,12 @@ public void getCallLog(View v) {
 			return phoneNumber;
 		}
 
+		@SuppressWarnings("unused")
 		public void setContactName(String cName) {
 			this.contactName = cName;
 		}
 
+		@SuppressWarnings("unused")
 		public void setPhoneNumber(String pNo) {
 			this.phoneNumber = pNo;
 		}
@@ -1025,6 +1035,7 @@ public void getCallLog(View v) {
 		private TextView textPhone;
 		private TextView textname;
 
+		@SuppressWarnings("unused")
 		public SelectViewHolder() {
 		}
 
@@ -1038,6 +1049,7 @@ public void getCallLog(View v) {
 			return checkBox;
 		}
 
+		@SuppressWarnings("unused")
 		public void setCheckBox(CheckBox checkBox) {
 			this.checkBox = checkBox;
 		}
@@ -1050,10 +1062,12 @@ public void getCallLog(View v) {
 			return textname;
 		}
 
+		@SuppressWarnings("unused")
 		public void setphoneText(TextView textView) {
 			this.textPhone = textView;
 		}
 
+		@SuppressWarnings("unused")
 		public void setContactText(TextView tv) {
 			this.textname = tv;
 		}
