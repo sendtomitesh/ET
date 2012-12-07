@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -25,8 +24,8 @@ public class Draft extends Activity {
 	ImageView imgTitle;
 	Button btnDelete;
 	TextView txtTitle;
-	SQLiteDatabase db;
-	DbHelper dbHelper;
+	//SQLiteDatabase db;
+	//DbHelper dbHelper;
 	Cursor cursor;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,20 +39,12 @@ public class Draft extends Activity {
     
     @Override
     protected void onStop() {
-    	super.onStop();
     	if(cursor != null)
     	{
     		cursor.close();
     	}
-    	if(db != null)
-    	{
-    		if(db.isOpen()){
-    			db.close();
-    		}
-    	}
-    	if(dbHelper != null){
-			dbHelper.close();
-		}
+    	super.onStop();
+    	
     }
     
     @Override
@@ -87,9 +78,10 @@ public class Draft extends Activity {
     	int[] to = new int[] { R.id.txt_from_name,R.id.txt_message };
     	final ListView listview = (ListView) findViewById(R.id.listview_inbox);
     	    	
-    	dbHelper = new DbHelper(getApplicationContext());
-    	db = dbHelper.getReadableDatabase();
-    	cursor = DatabaseFunctions.getDraftCursor(getApplicationContext(),db);
+    	//dbHelper = new DbHelper(getApplicationContext());
+    	//db = dbHelper.getReadableDatabase();
+    	//cursor = DatabaseFunctions.getDraftCursor(getApplicationContext(),DatabaseFunctions.db);
+    	cursor = DatabaseFunctions.getDraftCursor();
     	
     	if(cursor != null){
     		startManagingCursor(cursor);
@@ -147,7 +139,7 @@ public class Draft extends Activity {
     }
     private void discardCurrent(String msgId)
     {
-    	DatabaseFunctions.deleteDraftMessage(getApplicationContext(), msgId);
+    	DatabaseFunctions.deleteDraftMessage(msgId);
     	showDrafts();
     }
     private void moveToCompose(String id,String to,String msg) {
@@ -163,7 +155,7 @@ public class Draft extends Activity {
     
     private void deleteAllDrafts()
     {
-    	DatabaseFunctions.deleteAllDraftMessage(getApplicationContext());
+    	DatabaseFunctions.deleteAllDraftMessage();
     }
 	  @SuppressWarnings("deprecation")
 	  @Override

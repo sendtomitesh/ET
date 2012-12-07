@@ -8,7 +8,6 @@ import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -23,8 +22,6 @@ import android.widget.Toast;
 
 public class AddAutoReply extends Activity {
 
-	SQLiteDatabase db;
-	DbHelper dbHelper;
 	private static final int CONTACT_PICKER_RESULT = 1001;
 	
 	EditText textTo, textMessage;
@@ -37,24 +34,8 @@ public class AddAutoReply extends Activity {
 		
 	}
 
-	@Override
-    protected void onStop() {
-    	super.onStop();
-    	if(db != null)
-    	{
-    		if(db.isOpen()){
-    			db.close();
-    		}
-    	}
-    	if(dbHelper != null){
-			dbHelper.close();
-		}
-    }
-    
 	public void createAutoReply(View v)
     {
-		dbHelper = new DbHelper(getApplicationContext());
-		db = dbHelper.getReadableDatabase();
 		String to = textTo.getText().toString();
 		String message = textMessage.getText().toString();
 		
@@ -64,11 +45,11 @@ public class AddAutoReply extends Activity {
 		else{
 			Boolean checkAleradyExist;
 			
-			checkAleradyExist = DatabaseFunctions.checkAutoReply(AddAutoReply.this,to,db);
+			checkAleradyExist = DatabaseFunctions.checkAutoReply(to);
 			//Toast.makeText(AddAutoReply.this, checkAleradyExist.toString(), Toast.LENGTH_LONG).show();
 			if(!checkAleradyExist)
 			{
-				DatabaseFunctions.addAutoReply(getApplicationContext(),to, message);
+				DatabaseFunctions.addAutoReply(to, message);
 				Toast.makeText(AddAutoReply.this, "Auto Reply Created Successfully", Toast.LENGTH_LONG).show();
 				finish();
 			}

@@ -85,7 +85,8 @@ public class Compose extends Activity {
 		}
 
 		if (intent.hasExtra("to")) {
-			 textTo.setText(textTo.getText().toString()+","+intent.getStringExtra("to"));
+			 //textTo.setText(textTo.getText().toString()+","+intent.getStringExtra("to"));
+			textTo.setText(intent.getStringExtra("to"));
 			//setToNumber(intent.getStringExtra("to"));
 		}
 		if (intent.hasExtra("msg")) {
@@ -145,7 +146,7 @@ public class Compose extends Activity {
 
 	private void saveMsgToDrafts() {
 
-		DatabaseFunctions.saveToDrafts(getApplicationContext(), textTo
+		DatabaseFunctions.saveToDrafts(textTo
 				.getText().toString(), textMessage.getText().toString());
 
 	}
@@ -509,7 +510,7 @@ public class Compose extends Activity {
 				insertSentMessage();
 				new UpdateCredits().execute();
 				if (isDraft) {
-					new DeleteDraft().execute(getApplicationContext());
+					new DeleteDraft().execute();
 					// isDraft=false;
 				}
 				Toast.makeText(getApplicationContext(),
@@ -577,7 +578,7 @@ public class Compose extends Activity {
 				Toast.makeText(getApplicationContext(),
 						"Message sent successfully to group ", Toast.LENGTH_LONG).show();
 				if (isDraft) {
-					new DeleteDraft().execute(getApplicationContext());
+					new DeleteDraft().execute();
 					moveToDashboard();
 				}
 			} 
@@ -639,10 +640,10 @@ public class Compose extends Activity {
 
 	}
 
-	public class DeleteDraft extends AsyncTask<Context, Integer, String> {
+	public class DeleteDraft extends AsyncTask<String, Integer, String> {
 		@Override
-		protected String doInBackground(Context... params) {
-			DatabaseFunctions.deleteDraftMessage(params[0], msgId);
+		protected String doInBackground(String... params) {
+			DatabaseFunctions.deleteDraftMessage(msgId);
 			return null;
 		}
 

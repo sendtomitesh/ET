@@ -3,10 +3,10 @@ package com.explorer.technologies;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -80,6 +80,7 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 	    return convertView;
 	}
 
+	@SuppressWarnings("unused")
 	private String getContactNameFromNumber(String phoneNumber)
 	{
 		String name = "";
@@ -106,6 +107,7 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 
 		
 	}
+	@SuppressLint("SimpleDateFormat")
 	private String ConvertToDate(String dateString){
 	
 		long timestamp = Long.parseLong(dateString);    

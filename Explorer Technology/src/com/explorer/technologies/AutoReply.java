@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -28,8 +27,8 @@ public class AutoReply extends Activity {
 	ImageView imgTitle;
 	TextView txtTitle;
 	Button btnNew,btnDelete;
-	SQLiteDatabase db;
-	DbHelper dbHelper;
+	//SQLiteDatabase db;
+	//DbHelper dbHelper;
 	Cursor cursor; 
     
 	@Override
@@ -43,9 +42,8 @@ public class AutoReply extends Activity {
     
 	@Override
 	protected void onResume() {
-		super.onResume();
 		showAutoReplyList();
-		
+		super.onResume();
 	}
     
 	@Override
@@ -61,15 +59,7 @@ public class AutoReply extends Activity {
     	{
     		cursor.close();
     	}
-    	if(db != null)
-    	{
-    		if(db.isOpen()){
-    			db.close();
-    		}
-    	}
-    	if(dbHelper != null){
-			dbHelper.close();
-		}
+    	
     }
     
     private void initilizeGlobals()
@@ -95,13 +85,13 @@ public class AutoReply extends Activity {
     
     private void discardCurrent(String msgId)
     {
-    	DatabaseFunctions.deleteAutoReply(getApplicationContext(), msgId);
+    	DatabaseFunctions.deleteAutoReply(msgId);
     	showAutoReplyList();
     }
     public void deleteAll(View v)
     {
     	
-    	DatabaseFunctions.deleteAllAutoReply(getApplicationContext());
+    	DatabaseFunctions.deleteAllAutoReply();
     	showAutoReplyList();
     	Toast.makeText(getApplicationContext(), "All Records Deleted", Toast.LENGTH_LONG).show();
     }
@@ -116,9 +106,9 @@ public class AutoReply extends Activity {
     	int[] to = new int[] { R.id.txt_from_name,R.id.txt_message };
     	final ListView listview = (ListView) findViewById(R.id.listview_inbox);
     	    	
-    	dbHelper = new DbHelper(getApplicationContext());
-    	db = dbHelper.getReadableDatabase();
-    	cursor = DatabaseFunctions.getAutoReplyCursor(getApplicationContext(),db);
+    	//dbHelper = new DbHelper(getApplicationContext());
+    	//db = dbHelper.getReadableDatabase();
+    	cursor = DatabaseFunctions.getAutoReplyCursor();
     	
     	if(cursor!=null){
     		startManagingCursor(cursor);
@@ -185,7 +175,7 @@ public class AutoReply extends Activity {
 				}
 				else{
 					
-					DatabaseFunctions.updateAutoReply(getApplicationContext(), smsTo, msg);
+					DatabaseFunctions.updateAutoReply(smsTo, msg);
 					showAutoReplyList();
 					dialog.dismiss();
 				}

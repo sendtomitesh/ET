@@ -42,5 +42,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		this.onCreate(db);
 		Log.d(TAG, "Database updated successfully!");
 	}
+	
+	
 
 }

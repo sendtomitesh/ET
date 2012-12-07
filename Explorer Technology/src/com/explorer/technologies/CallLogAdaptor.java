@@ -77,9 +77,6 @@ public class CallLogAdaptor extends SimpleCursorAdapter{
 	    return convertView;
 	}
 
-	
-	
-	 	
 	 public class ViewHolder {
 	    
 		 TextView contactId,contactName,contactNumber;

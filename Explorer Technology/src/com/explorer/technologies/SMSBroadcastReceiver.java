@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -16,8 +15,7 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 
 public class SMSBroadcastReceiver extends BroadcastReceiver {
-	private static DbHelper dbHelper;
-	private static SQLiteDatabase db;
+	
 	private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 	private static final String TAG = "SMSBroadcastReceiver";
 	int count = 0;
@@ -36,10 +34,8 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 					messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
 				}
 				if (messages.length > -1) {
-					dbHelper = new DbHelper(context);
-					db = dbHelper.getReadableDatabase();
-					Boolean check = DatabaseFunctions.checkAutoReply(context,
-							messages[0].getOriginatingAddress(), db);
+					
+					Boolean check = DatabaseFunctions.checkAutoReply(messages[0].getOriginatingAddress());
 					Log.i(TAG,"Message recieved: " + messages[0].getMessageBody());
 					// Add Notification here and remove toast
 					
@@ -48,7 +44,7 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 						//			+ messages[0].getOriginatingAddress(),
 							//Toast.LENGTH_LONG).show();
 					if (check) {
-						String message = DatabaseFunctions.getAutoReplyMessage(context, messages[0].getOriginatingAddress(),db);
+						String message = DatabaseFunctions.getAutoReplyMessage(messages[0].getOriginatingAddress());
 						
 						SendMessage sendMessage = new SendMessage();
 						sendMessage.execute(Utility.sender_id,messages[0].getOriginatingAddress(), message);

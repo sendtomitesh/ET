@@ -3,6 +3,7 @@ package com.explorer.technologies;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 public class SentListAdapter extends SimpleCursorAdapter {
 
 	private Cursor dataCursor;
-	private Context contextLocal;
+	//private Context contextLocal;
 	private LayoutInflater mInflater;
 	
 	
@@ -24,7 +25,7 @@ public class SentListAdapter extends SimpleCursorAdapter {
 	    super(context, layout, dataCursor, from, to);
 	        this.dataCursor = dataCursor;
 	        mInflater = LayoutInflater.from(context);
-	        contextLocal = context;
+	        //contextLocal = context;
 	        //initial fill
 	       
 	}
@@ -76,6 +77,7 @@ public class SentListAdapter extends SimpleCursorAdapter {
 	}
 
 	
+	@SuppressLint("SimpleDateFormat")
 	private String ConvertToDate(String dateString){
 		
 		long timestamp = Long.parseLong(dateString);    

@@ -20,6 +20,9 @@ public class Main extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        //Open the database 
+        DatabaseFunctions.openDb(getApplicationContext());
+        
         textCredits = (TextView)findViewById(R.id.txt_credits);
         if(Utility.smsCredit == null){
         	textCredits.setText("Credit : 0" + Utility.smsCredit);
@@ -38,23 +41,16 @@ public class Main extends Activity {
     
     @Override
 	protected void onResume() {
+    	textCredits.setText("Credit : " + Utility.smsCredit);
 		super.onResume();
-		
-        textCredits.setText("Credit : " + Utility.smsCredit);
-        
+	   
 	}
+    
     @Override
-    protected void onStop() {
-    	super.onStop();
-    	if(db != null)
-    	{
-    		if(db.isOpen()){
-    			db.close();
-    		}
-    	}
-    	if(dbHelper != null){
-			dbHelper.close();
-		}
+    protected void onDestroy() {
+    	// TODO Auto-generated method stub
+    	DatabaseFunctions.closeDb();
+    	super.onDestroy();
     }
     
     @Override
@@ -119,6 +115,7 @@ public class Main extends Activity {
     {
     	Intent inboxIntent = new Intent(getApplicationContext(),Inbox.class);
     	startActivity(inboxIntent);
+    	
     	
     }
     
