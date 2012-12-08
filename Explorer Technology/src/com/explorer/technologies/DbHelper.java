@@ -22,7 +22,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 		String createDrafts = "CREATE TABLE IF NOT EXISTS " + TABLE_DRAFTS
 				+ "(id integer primary key autoincrement, "
-				+ "sms_to VARCHAR,message VARCHAR);";
+				+ "sms_to VARCHAR,message VARCHAR,sms_to_complete VARCHAR);";
 
 		String createAutoReply = "CREATE TABLE IF NOT EXISTS "
 				+ TABLE_AUTO_REPLY + "(id integer primary key autoincrement, "

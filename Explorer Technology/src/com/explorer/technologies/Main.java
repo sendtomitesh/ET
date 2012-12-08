@@ -81,6 +81,7 @@ public class Main extends Activity {
 				.findViewById(R.id.btn_forward);
 		
 		textFrom.setText("From : " + from );
+		
 		textMessage.setText(message);
 		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
 		

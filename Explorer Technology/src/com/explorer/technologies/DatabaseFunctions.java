@@ -11,16 +11,18 @@ public class DatabaseFunctions {
 	// Global declarations
 	static DbHelper dbHelper;
 	static SQLiteDatabase db;
-	// private static final String ROW_ID = "id";
+	// private static final String ROW_ID = "id";sms_to_complete
 	private static final String TO = "sms_to";
+	private static final String TO_COMPLETE = "sms_to_complete";
 	private static final String MESSAGE = "message";
 
 	// Save drats Message
-	public static Boolean saveToDrafts(String to,String message) {
+	public static Boolean saveToDrafts(String to,String message,String toComplete) {
 
 		ContentValues values = new ContentValues();
 		values.put(TO, to);
 		values.put(MESSAGE, message);
+		values.put(TO_COMPLETE, toComplete);
 
 		try {
 		
@@ -42,7 +44,7 @@ public class DatabaseFunctions {
 		try {
 
 			cursor = db.rawQuery(
-					"SELECT  id AS _id,sms_to,message FROM drafts", null);
+					"SELECT  id AS _id,sms_to,message,sms_to_complete FROM drafts", null);
 
 		} catch (Exception e) {
 			Log.e("DRAFT SELECT", "error : " + e.toString());

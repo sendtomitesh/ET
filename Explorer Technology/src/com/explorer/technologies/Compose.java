@@ -92,6 +92,17 @@ public class Compose extends Activity {
 		if (intent.hasExtra("msg")) {
 			textMessage.setText(intent.getStringExtra("msg"));
 		}
+		
+		if(intent.hasExtra("toComplete")) {
+			String[] contacts = intent.getStringExtra("toComplete").toString().split(",");
+			
+			for (int i = 0; i < contacts.length; i++) {
+				
+				contactList.add(contacts[i]);
+				//Toast.makeText(getApplicationContext(), contacts[i], Toast.LENGTH_SHORT).show();
+			}
+			
+		}
 
 	}
 	
@@ -145,9 +156,9 @@ public class Compose extends Activity {
 	};
 
 	private void saveMsgToDrafts() {
-
+		String toComplete = setupAndGetFinalContactList();
 		DatabaseFunctions.saveToDrafts(textTo
-				.getText().toString(), textMessage.getText().toString());
+				.getText().toString(), textMessage.getText().toString(),toComplete);
 
 	}
 

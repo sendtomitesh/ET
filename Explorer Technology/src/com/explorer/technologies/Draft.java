@@ -74,13 +74,10 @@ public class Draft extends Activity {
     {
     	
     	
-    	String[] from = new String[] {"sms_to","message"};
-    	int[] to = new int[] { R.id.txt_from_name,R.id.txt_message };
+    	String[] from = new String[] {"sms_to","message","sms_to_complete"};
+    	int[] to = new int[] { R.id.txt_from_name,R.id.txt_message ,R.id.txt_from};
     	final ListView listview = (ListView) findViewById(R.id.listview_inbox);
     	    	
-    	//dbHelper = new DbHelper(getApplicationContext());
-    	//db = dbHelper.getReadableDatabase();
-    	//cursor = DatabaseFunctions.getDraftCursor(getApplicationContext(),DatabaseFunctions.db);
     	cursor = DatabaseFunctions.getDraftCursor();
     	
     	if(cursor != null){
@@ -114,7 +111,8 @@ public class Draft extends Activity {
     	                		String msg_Id = cursor.getString(0);
     	            			String to = cursor.getString(1);
     	            			String msg = cursor.getString(2);
-    	                		moveToCompose(msg_Id,to,msg);
+    	            			String toComplete = cursor.getString(3);
+    	                		moveToCompose(msg_Id,to,msg,toComplete);
     	                	}
     	                	else
     	                	{
@@ -142,12 +140,13 @@ public class Draft extends Activity {
     	DatabaseFunctions.deleteDraftMessage(msgId);
     	showDrafts();
     }
-    private void moveToCompose(String id,String to,String msg) {
+    private void moveToCompose(String id,String to,String msg,String toComplete) {
 		// TODO Auto-generated method stub
     	Intent dashboardIntent = new Intent(getApplicationContext(), Compose.class);
     	dashboardIntent.putExtra("id", id);
     	dashboardIntent.putExtra("to", to);
     	dashboardIntent.putExtra("msg", msg);
+    	dashboardIntent.putExtra("toComplete", toComplete);
 		startActivity(dashboardIntent);
 		finish();
     	
