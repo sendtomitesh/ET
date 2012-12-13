@@ -55,12 +55,8 @@ public class Inbox extends Activity {
 	    	    
 	    		final String optionArr[];
 	    		cursor.moveToPosition(position);
-	    		if(checkForValidNumber(cursor.getString(cursor.getColumnIndex("address"))))
-	    		{
-	    			optionArr=new String[]{"Reply", "Forward","Delete"};
-	    		}
-	    		else
-	    			optionArr=new String[]{"Delete"};
+	    		optionArr=new String[]{"Reply", "Forward","Delete"};
+	    		
 	    		AlertDialog multichoice;
 	    		multichoice=new AlertDialog.Builder(Inbox.this)
 	    			
@@ -69,20 +65,14 @@ public class Inbox extends Activity {
 
 	                   @Override
 	                   public void onClick(DialogInterface dialog, int which) {
-	                	   if(optionArr.length==1)
-	                	   {
-	                		   deleteMsg(cursor.getString(0));
-	                	   }
-	                	   else
-	                	   {
-	                		   if(which==2){
+	                	      if(which==2){
 	                			   deleteMsg(cursor.getString(0));
 	                		   }
 	                		   else{
 	                			   moveToCompose(which,cursor.getString(cursor.getColumnIndex("address")),cursor.getString(cursor.getColumnIndex("body")));
 	                		   }
 	                	       
-	                	   }
+	                	   
 	                   }
 	               })
 	               
