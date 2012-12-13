@@ -31,12 +31,7 @@ public class Main extends Activity {
         	textCredits.setText("Credit : " + Utility.smsCredit);
         }
         
-        //checkNotification();
-        Intent intent = getIntent();
-        if (intent.hasExtra("notify")) {
-			checkNotification();
-		}
-        //checkNotification();
+        
     }
     
     @Override
@@ -59,59 +54,7 @@ public class Main extends Activity {
         return true;
     }
     
-    
-    private void checkNotification(){
-    	final Intent intent = getIntent();
-    	String from = "";
-    	String message = "";
-    	if (intent.hasExtra("msg")) {
-				message = intent.getStringExtra("msg").toString();
-		}
-    	if (intent.hasExtra("to")) {
-			from = intent.getStringExtra("to").toString();
-    	}
-    	final Dialog NOTIFICATION_DIALOG = new Dialog(Main.this,R.style.DialogWindowTitle);
-    	NOTIFICATION_DIALOG.setContentView(R.layout.nitification_dialog);
-
-    	final TextView textFrom = (TextView) NOTIFICATION_DIALOG.findViewById(R.id.txt_title);
-    	final TextView textMessage = (TextView) NOTIFICATION_DIALOG.findViewById(R.id.txt_message);
-		final Button btnReply = (Button) NOTIFICATION_DIALOG
-				.findViewById(R.id.btn_reply);
-		final Button btnForward = (Button) NOTIFICATION_DIALOG
-				.findViewById(R.id.btn_forward);
-		
-		textFrom.setText("From : " + from );
-		
-		textMessage.setText(message);
-		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-		
-		btnReply.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent composeIntent = new Intent(getApplicationContext(),Compose.class);
-				composeIntent.putExtra("to", intent.getStringExtra("to"));
-		    	startActivity(composeIntent);
-				NOTIFICATION_DIALOG.dismiss();
-			}
-		});
-		
-		btnForward.setOnClickListener(new OnClickListener() {
-			
-			
-			@Override
-			public void onClick(View v) {
-				Intent composeIntent = new Intent(getApplicationContext(),Compose.class);
-				composeIntent.putExtra("msg", intent.getStringExtra("msg"));
-		    	startActivity(composeIntent);
-				NOTIFICATION_DIALOG.dismiss();
-			}
-		});
-		
-		NOTIFICATION_DIALOG.show();
-			
-	}
-    
+        
     public void gotoInbox(View v)
     {
     	Intent inboxIntent = new Intent(getApplicationContext(),Inbox.class);

@@ -49,8 +49,8 @@
             android:theme="@style/NoTitleExplorerTech" />
         <activity
             android:name="com.explorer.technologies.Groups"
-            android:theme="@style/NoTitleExplorerTech" 
-            android:configChanges="orientation"/>
+            android:configChanges="orientation"
+            android:theme="@style/NoTitleExplorerTech" />
         <activity
             android:name="com.explorer.technologies.AddAutoReply"
             android:theme="@style/NoTitleExplorerTech" />
@@ -69,7 +69,9 @@
         </activity>
 
         <receiver android:name="com.explorer.technologies.SMSBroadcastReceiver" >
-            <intent-filter>
+            <intent-filter
+                android:exported="true"
+                android:priority="999" >
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" >
                 </action>
             </intent-filter>
@@ -78,6 +80,11 @@
         <activity
             android:name="com.explorer.technologies.Layouts"
             android:label="@string/title_activity_layouts" >
+        </activity>
+        <activity
+            android:name="com.explorer.technologies.SMSDialog"
+            android:label="@string/title_activity_smsdialog" 
+            android:theme="@style/Theme.Transparent">
         </activity>
     </application>
 

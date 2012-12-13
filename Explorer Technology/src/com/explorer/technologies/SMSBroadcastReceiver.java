@@ -9,6 +9,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.sax.StartElementListener;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.telephony.SmsMessage;
@@ -39,7 +40,8 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 					Log.i(TAG,"Message recieved: " + messages[0].getMessageBody());
 					// Add Notification here and remove toast
 					
-					createNotification(context, messages[0].getOriginatingAddress(), messages[0].getMessageBody());
+					//createNotification(context, messages[0].getOriginatingAddress(), messages[0].getMessageBody());
+					movetoDialog(context, messages[0].getOriginatingAddress(), messages[0].getMessageBody());
 					//Toast.makeText(context,"Message recieved from: "
 						//			+ messages[0].getOriginatingAddress(),
 							//Toast.LENGTH_LONG).show();
@@ -50,12 +52,22 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 						sendMessage.execute(Utility.sender_id,messages[0].getOriginatingAddress(), message);
 						
 					}
-
+					
 				}
 			}
 		}
 	}
-
+	public void movetoDialog(Context context,String title,String message)
+	{
+		
+		Intent resultIntent = new Intent(context,SMSDialog.class);
+		resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		resultIntent.putExtra("notify", "notify");
+		resultIntent.putExtra("to", title);
+		resultIntent.putExtra("msg", message);
+		context.startActivity(resultIntent);
+		
+	}
 	private void createNotification(Context context,String title,String message){
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
 		.setSmallIcon(R.drawable.ic_launcher)
