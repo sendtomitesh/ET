@@ -11,6 +11,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	public static final String DB_NAME = "expTechDB";
 	public static final String TABLE_DRAFTS = "drafts";
 	public static final String TABLE_AUTO_REPLY = "autoReply";
+	public static final String TABLE_AUTO_REPLY_DETAIL = "autoReplyDetail";
 	public static final String TAG = DbHelper.class.getSimpleName();
 
 	public DbHelper(Context context) {
@@ -27,9 +28,14 @@ public class DbHelper extends SQLiteOpenHelper {
 		String createAutoReply = "CREATE TABLE IF NOT EXISTS "
 				+ TABLE_AUTO_REPLY + "(id integer primary key autoincrement, "
 				+ "sms_to VARCHAR,message VARCHAR);";
+		
+		String createAutoReplyDetail = "CREATE TABLE IF NOT EXISTS "
+				+ TABLE_AUTO_REPLY_DETAIL + "(id integer primary key autoincrement, "
+				+ "autoReplyId integer,sms_to VARCHAR,sentOn DATETIME);";
 
 		db.execSQL(createDrafts);
 		db.execSQL(createAutoReply);
+		db.execSQL(createAutoReplyDetail);
 
 		Log.d(TAG, "Database created successfully!");
 

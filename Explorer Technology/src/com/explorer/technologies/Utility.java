@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
@@ -36,6 +38,12 @@ public class Utility {
 		return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
 	}
 
+	public static void alert(Context context,String message) {
+        AlertDialog.Builder bld = new AlertDialog.Builder(context);
+        bld.setMessage(message);
+        bld.setNeutralButton("OK", null);
+        bld.create().show();
+    }
 	public static boolean getSharedPrefValues(SharedPreferences sp) {
 		// TODO Auto-generated method stub
 

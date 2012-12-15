@@ -42,31 +42,22 @@
                 android:id="@+id/txt_to"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/to"
+                android:hint="@string/keyword"
                 android:inputType="text" />
-
-            
-            <Button
-                android:id="@+id/btn_contacts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txt_to"
-                android:onClick="getContacts"
-                android:text="@string/contacts" />
                                  
             <EditText
                 android:id="@+id/txt_message"
-                android:layout_margin="3dp"
-                android:padding="8dp"
-                android:background="@drawable/textarea_bordered"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/btn_contacts"
+                android:layout_below="@+id/txt_to"
+                android:layout_margin="3dp"
+                android:background="@drawable/textarea_bordered"
                 android:gravity="top|left"
                 android:hint="@string/message"
                 android:lines="8"
                 android:maxLines="10"
                 android:minLines="6"
+                android:padding="8dp"
                 android:scrollbars="vertical"
                 android:singleLine="false" />
 

@@ -1,31 +1,33 @@
 package com.explorer.technologies;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.sax.StartElementListener;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import android.widget.Toast;
 
 public class SMSBroadcastReceiver extends BroadcastReceiver {
 	
 	private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 	private static final String TAG = "SMSBroadcastReceiver";
 	int count = 0;
+	Context appContext;
+	private ArrayList<AutoReplyData> autoReplyList;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.i(TAG, "Intent recieved: " + intent.getAction());
-
+		this.appContext = context;
 		if (intent.getAction().equals(SMS_RECEIVED)) {
+			DatabaseFunctions.openDb(appContext);
 
 			Bundle bundle = intent.getExtras();
 			if (bundle != null) {
@@ -38,24 +40,49 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 					
 					Boolean check = DatabaseFunctions.checkAutoReply(messages[0].getOriginatingAddress());
 					Log.i(TAG,"Message recieved: " + messages[0].getMessageBody());
-					// Add Notification here and remove toast
-					
-					//createNotification(context, messages[0].getOriginatingAddress(), messages[0].getMessageBody());
+				
+					// Add Notification Dialog
 					movetoDialog(context, messages[0].getOriginatingAddress(), messages[0].getMessageBody());
-					//Toast.makeText(context,"Message recieved from: "
-						//			+ messages[0].getOriginatingAddress(),
-							//Toast.LENGTH_LONG).show();
-					if (check) {
-						String message = DatabaseFunctions.getAutoReplyMessage(messages[0].getOriginatingAddress());
+					sendAutoReply(messages[0].getOriginatingAddress(), messages[0].getMessageBody());
+					
+					//if (check) {
+						//String message = DatabaseFunctions.getAutoReplyMessage(messages[0].getOriginatingAddress());
 						
-						SendMessage sendMessage = new SendMessage();
-						sendMessage.execute(Utility.sender_id,messages[0].getOriginatingAddress(), message);
+						//SendMessage sendMessage = new SendMessage();
+						//sendMessage.execute(Utility.sender_id,messages[0].getOriginatingAddress(), message);
 						
-					}
+						
+					//}
 					
 				}
 			}
 		}
+	}
+	
+		
+	public void sendAutoReply(String to,String message){
+	
+		Date date = new Date();
+		autoReplyList = getAutoReplyList();
+		
+		for (int i = 0; i < autoReplyList.size(); i++) {
+			AutoReplyData data = new AutoReplyData();
+			data = autoReplyList.get(i);
+			if(checkKeyword(data.keyword,message)){
+				//Toast.makeText(appContext,"Id : " + data.id + "\nKeyword : " + data.keyword + "\n" + data.message, Toast.LENGTH_SHORT).show();
+				new SendMessage().execute(Utility.sender_id,to,data.message);
+				boolean check = DatabaseFunctions.addAutoReplyDetail(data.id,to,date.toString());
+				Toast.makeText(appContext,"Id : " + data.id + "\nKeyword : " + data.keyword + "\n" + data.message, Toast.LENGTH_SHORT).show();
+				if(check){
+					Toast.makeText(appContext,"Success!", Toast.LENGTH_SHORT).show();
+				}
+				else{
+					Toast.makeText(appContext,"Fail!", Toast.LENGTH_SHORT).show();
+				}
+				
+			}
+		}
+		
 	}
 	public void movetoDialog(Context context,String title,String message)
 	{
@@ -68,46 +95,26 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 		context.startActivity(resultIntent);
 		
 	}
-	private void createNotification(Context context,String title,String message){
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-		.setSmallIcon(R.drawable.ic_launcher)
-		.setContentTitle(title)
-		.setContentText(message);
-		
-		Intent resultIntent = new Intent(context,Main.class);
-		resultIntent.putExtra("notify", "notify");
-		resultIntent.putExtra("to", title);
-		resultIntent.putExtra("msg", message);
-		// The stack builder object will contain an artificial back stack for the
-		// started Activity.
-		// This ensures that navigating backward from the Activity leads out of
-		// your application to the Home screen.
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-		// Adds the back stack for the Intent (but not the Intent itself)
-		stackBuilder.addParentStack(Main.class);
-		// Adds the Intent that starts the Activity to the top of the stack
-		stackBuilder.addNextIntent(resultIntent);
-		PendingIntent resultPendingIntent =
-		        stackBuilder.getPendingIntent(
-		            0,
-		            PendingIntent.FLAG_UPDATE_CURRENT
-		        );
-		mBuilder.setContentIntent(resultPendingIntent);
-		NotificationManager mNotificationManager =
-		    (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-		
-		Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-		mBuilder.setSound(uri);
-		mBuilder.setAutoCancel(true);
-		mBuilder.setNumber(count);
-		mBuilder.setAutoCancel(true);
+	private ArrayList<AutoReplyData> getAutoReplyList(){
 		
-		// count allows you to update the notification later on.
-		mNotificationManager.notify(count, mBuilder.build());
+		Cursor cursor = DatabaseFunctions.getAutoReplyCursor();
+		ArrayList<AutoReplyData> replyList = new ArrayList<SMSBroadcastReceiver.AutoReplyData>();
 		
-		
-		count++;
+		while (cursor.moveToNext()) {
+			AutoReplyData data = new AutoReplyData(cursor.getString(0),cursor.getString(1),cursor.getString(2));
+			replyList.add(data);
+		}
+		if(!cursor.isClosed()){
+			cursor.close();
+		}
+		return replyList;
+	}
+	
+	private boolean checkKeyword(String keyword,String message){
+		String msg = message.toLowerCase(Locale.getDefault());
+		String key = keyword.toLowerCase(Locale.getDefault());
+		return msg.contains(key);
 	}
 		
 	public class SendMessage extends AsyncTask<String, Void, Integer> {
@@ -133,6 +140,34 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 				
 			}
 	
+	}
+	
+	class AutoReplyData {
+		String id;
+		String keyword;
+		String message;
+		
+		public AutoReplyData() {
+			
+		}
+		public AutoReplyData(String id,String keyword, String message) {
+			this.id = id;
+			this.keyword = keyword;
+			this.message = message;
+		}
+
+		public String getId() {
+			return id;
+		}
+		
+		public String getKeyword() {
+			return keyword;
+		}
+
+		public String getMessage() {
+			return message;
+		}
+		
 	}
 
 }

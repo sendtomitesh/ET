@@ -1,5 +1,7 @@
 package com.explorer.technologies;
 
+import java.sql.Date;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -84,6 +86,28 @@ public class DatabaseFunctions {
 
 		} catch (Exception e) {
 			Log.e("AUTO_REPLY INSERT", "error : " + e.toString());
+			return false;
+		} 
+		return true;
+
+	}
+	
+	// Save Auto Reply Detail
+	public static Boolean addAutoReplyDetail(String autoReplyId,String to,String date) {
+		
+		ContentValues values = new ContentValues();
+		values.put("autoReplyId", autoReplyId);
+		values.put(TO, to);
+		values.put("sentOn",date);
+
+		try {
+			
+			// Perform insert into Database
+			db.insert(DbHelper.TABLE_AUTO_REPLY_DETAIL, null, values);
+			Log.d("AUTO_REPLY_DETAIL INSERT", "Record inserted!");
+
+		} catch (Exception e) {
+			Log.e("AUTO_REPLY_DETAIL", "error : " + e.toString());
 			return false;
 		} 
 		return true;
@@ -192,6 +216,7 @@ public class DatabaseFunctions {
 
 			cursor = db.rawQuery(
 					"SELECT  id AS _id,sms_to,message FROM autoReply", null);
+			
 
 		} catch (Exception e) {
 			Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
@@ -218,10 +243,9 @@ public class DatabaseFunctions {
 	
 	public static void openDb(Context context)
 	{
-		dbHelper = new DbHelper(context);
-    	db = dbHelper.getWritableDatabase();
-    	
-    	
+			dbHelper = new DbHelper(context);
+	    	db = dbHelper.getWritableDatabase();
+		
 	}
 	public static void closeDb()
 	{

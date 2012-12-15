@@ -112,7 +112,7 @@ public class AutoReply extends Activity {
     	
     	if(cursor!=null){
     		startManagingCursor(cursor);
-    		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.inbox_item,cursor, from, to);
+    		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.auto_reply_item,cursor, from, to);
             listview.setAdapter(adapter);
             
             listview.setChoiceMode(ListView.CHOICE_MODE_SINGLE);

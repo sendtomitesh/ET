@@ -1,16 +1,12 @@
 package com.explorer.technologies;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class Main extends Activity {
 	SQLiteDatabase db;
@@ -20,7 +16,7 @@ public class Main extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        //Open the database 
+        //Open the database
         DatabaseFunctions.openDb(getApplicationContext());
         
         textCredits = (TextView)findViewById(R.id.txt_credits);
