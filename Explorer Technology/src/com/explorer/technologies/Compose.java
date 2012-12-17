@@ -488,7 +488,7 @@ public class Compose extends Activity {
 
 	}
 
-	public class SendMessage extends AsyncTask<String, Void, Integer> {
+	public class SendMessage extends AsyncTask<String, Void, String> {
 
 		@Override
 		protected void onPreExecute() {
@@ -501,9 +501,9 @@ public class Compose extends Activity {
 		}
 
 		@Override
-		protected Integer doInBackground(String... args) {
+		protected String doInBackground(String... args) {
 
-			int status;
+			String status;
 			// status = APICalls.
 
 			status = APICalls.sendMsg(args[0], args[1], args[2],args[3]);
@@ -512,26 +512,28 @@ public class Compose extends Activity {
 		}
 
 		@Override
-		protected void onPostExecute(Integer result) {
+		protected void onPostExecute(String result) {
 			
 			
 
-			if (result == 0) 
-			{
+			//if (result == 0) 
+			//{
 				insertSentMessage();
 				new UpdateCredits().execute();
 				if (isDraft) {
 					new DeleteDraft().execute();
 					// isDraft=false;
 				}
+				//Toast.makeText(getApplicationContext(),
+					//	"Message sent successfully ", Toast.LENGTH_LONG).show();
 				Toast.makeText(getApplicationContext(),
-						"Message sent successfully ", Toast.LENGTH_LONG).show();
-			} 
-			else 
-			{
-				Toast.makeText(getApplicationContext(),
-						"ERROR SENDING SMS. PLEASE CHECK YOUR INTERNET CONNECTION! ", Toast.LENGTH_LONG).show();
-			}
+						result, Toast.LENGTH_LONG).show();
+			//} 
+			//else 
+			//{
+				//Toast.makeText(getApplicationContext(),
+					//	"ERROR SENDING SMS. PLEASE CHECK YOUR INTERNET CONNECTION! ", Toast.LENGTH_LONG).show();
+			//}
 
 			try 
 			{
@@ -554,7 +556,7 @@ public class Compose extends Activity {
 	}
 
 	
-	public class SendMessageToGroup extends AsyncTask<String, Void, Integer> {
+	public class SendMessageToGroup extends AsyncTask<String, Void, String> {
 
 		@Override
 		protected void onPreExecute() {
@@ -567,9 +569,9 @@ public class Compose extends Activity {
 		}
 
 		@Override
-		protected Integer doInBackground(String... args) {
+		protected String doInBackground(String... args) {
 
-			int status;
+			String status;
 			// status = APICalls.
 
 			status = APICalls.sendToGroup(args[0], args[1], args[2]);
@@ -578,26 +580,27 @@ public class Compose extends Activity {
 		}
 
 		@Override
-		protected void onPostExecute(Integer result) {
+		protected void onPostExecute(String result) {
 
 			
 
-			if (result == 0) 
-			{
+			//if (result == 0) 
+			//{
 				insertSentMessage();
 				new UpdateCredits().execute();
-				Toast.makeText(getApplicationContext(),
-						"Message sent successfully to group ", Toast.LENGTH_LONG).show();
+				//Toast.makeText(getApplicationContext(),
+					//	"Message sent successfully to group ", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
 				if (isDraft) {
 					new DeleteDraft().execute();
 					moveToDashboard();
 				}
-			} 
-			else 
-			{
-				Toast.makeText(getApplicationContext(),
-						"Error sending to group ", Toast.LENGTH_LONG).show();
-			}
+			//} 
+			//else 
+			//{
+				//Toast.makeText(getApplicationContext(),
+					//	"Error sending to group ", Toast.LENGTH_LONG).show();
+			//}
 
 			groupIds = "";
 			try {

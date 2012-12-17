@@ -39,10 +39,20 @@ public class Utility {
 	}
 
 	public static void alert(Context context,String message) {
-        AlertDialog.Builder bld = new AlertDialog.Builder(context);
-        bld.setMessage(message);
-        bld.setNeutralButton("OK", null);
-        bld.create().show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message);
+        builder.setNeutralButton("OK", null);
+        builder.create();
+        builder.show();
+    }
+	
+	public static void alert(Context context,String title,String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setNeutralButton("OK", null);
+        builder.create();
+        builder.show();
     }
 	public static boolean getSharedPrefValues(SharedPreferences sp) {
 		// TODO Auto-generated method stub

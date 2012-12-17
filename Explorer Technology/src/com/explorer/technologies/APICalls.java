@@ -175,61 +175,9 @@ public class APICalls {
 
 		}
 
-	//returns 0 for success, 1 for error in registration1, 2 for protocol error, 3 for IO error and 4 for JSon parsing error
-	public static int sendMsg(String sender,String to,String message,String sheduleDate) 
-	{
-				// Create a new HttpClient and Post Header
-				HttpClient httpclient = new DefaultHttpClient();
-
-				HttpPost httppost = new HttpPost(Utility.ServerPath);
-
-				try {
-					
-					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-					
-					nameValuePairs.add(new BasicNameValuePair("method", "compose"));
-					
-					nameValuePairs.add(new BasicNameValuePair("username",Utility.username));
-					nameValuePairs.add(new BasicNameValuePair("password", Utility.password));
-					nameValuePairs.add(new BasicNameValuePair("sender", sender));
-					nameValuePairs.add(new BasicNameValuePair("to", to));
-					nameValuePairs.add(new BasicNameValuePair("message", message));
-					nameValuePairs.add(new BasicNameValuePair("international","1" ));
-					nameValuePairs.add(new BasicNameValuePair("format", "json"));
-					
-					if(sheduleDate != null){
-						nameValuePairs.add(new BasicNameValuePair("sendondate", sheduleDate));
-					}
-					
-					
-					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-					
-					// Execute HTTP Post Request
-				
-					HttpResponse response = httpclient.execute(httppost);
-					JSONObject jo=Utility.getjsonFromInputStream(response.getEntity().getContent());
-					if(jo.getString("error").equals("0"))return 0;
-					else return 1;
-				} catch (ClientProtocolException e) {
-				
-					Log.e("Client error", e.toString());
-					return 2;
-				} catch (IOException e) {
-					
-					Log.e("IO Error", e.toString());
-					return 3;
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					return 4;
-					
-				}
-
-			}
-	//returns 0 for success, 1 for error in registration1, 2 for protocol error, 3 for IO error and 4 for JSon parsing error
-		public static int sendToGroup(String sender,String groupIds,String message) 
-				{
-					
-					
+		//returns 0 for success, 1 for error in registration1, 2 for protocol error, 3 for IO error and 4 for JSon parsing error
+		public static String sendMsg(String sender,String to,String message,String sheduleDate) 
+		{
 					// Create a new HttpClient and Post Header
 					HttpClient httpclient = new DefaultHttpClient();
 
@@ -244,11 +192,14 @@ public class APICalls {
 						nameValuePairs.add(new BasicNameValuePair("username",Utility.username));
 						nameValuePairs.add(new BasicNameValuePair("password", Utility.password));
 						nameValuePairs.add(new BasicNameValuePair("sender", sender));
-						nameValuePairs.add(new BasicNameValuePair("source", "group"));
-						nameValuePairs.add(new BasicNameValuePair("groupid", groupIds));
+						nameValuePairs.add(new BasicNameValuePair("to", to));
 						nameValuePairs.add(new BasicNameValuePair("message", message));
-						nameValuePairs.add(new BasicNameValuePair("international","0" ));
+						nameValuePairs.add(new BasicNameValuePair("international","1" ));
 						nameValuePairs.add(new BasicNameValuePair("format", "json"));
+						
+						if(sheduleDate != null){
+							nameValuePairs.add(new BasicNameValuePair("sendondate", sheduleDate));
+						}
 						
 						
 						httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -257,23 +208,74 @@ public class APICalls {
 					
 						HttpResponse response = httpclient.execute(httppost);
 						JSONObject jo=Utility.getjsonFromInputStream(response.getEntity().getContent());
-						if(jo.getString("error").equals("0"))return 0;
-						else return 1;
+						return jo.getString("status");
+						
 					} catch (ClientProtocolException e) {
 					
 						Log.e("Client error", e.toString());
-						return 2;
+						return "Client error";
 					} catch (IOException e) {
 						
 						Log.e("IO Error", e.toString());
-						return 3;
+						return "IO error";
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
-						return 4;
+						return "JSON error";
 						
 					}
 
 				}
+		//returns 0 for success, 1 for error in registration1, 2 for protocol error, 3 for IO error and 4 for JSon parsing error
+			public static String sendToGroup(String sender,String groupIds,String message) 
+					{
+						
+						
+						// Create a new HttpClient and Post Header
+						HttpClient httpclient = new DefaultHttpClient();
+
+						HttpPost httppost = new HttpPost(Utility.ServerPath);
+
+						try {
+							
+							List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+							
+							nameValuePairs.add(new BasicNameValuePair("method", "compose"));
+							
+							nameValuePairs.add(new BasicNameValuePair("username",Utility.username));
+							nameValuePairs.add(new BasicNameValuePair("password", Utility.password));
+							nameValuePairs.add(new BasicNameValuePair("sender", sender));
+							nameValuePairs.add(new BasicNameValuePair("source", "group"));
+							nameValuePairs.add(new BasicNameValuePair("groupid", groupIds));
+							nameValuePairs.add(new BasicNameValuePair("message", message));
+							nameValuePairs.add(new BasicNameValuePair("international","0" ));
+							nameValuePairs.add(new BasicNameValuePair("format", "json"));
+							
+							
+							httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+							
+							// Execute HTTP Post Request
+						
+							HttpResponse response = httpclient.execute(httppost);
+							JSONObject jo=Utility.getjsonFromInputStream(response.getEntity().getContent());
+							return jo.getString("status");
+							
+						} catch (ClientProtocolException e) {
+							
+							Log.e("Client error", e.toString());
+							return "Client error";
+						} catch (IOException e) {
+							
+							Log.e("IO Error", e.toString());
+							return "IO error";
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							return "JSON error";
+							
+						}
+
+
+					}
+
 
 	
 }

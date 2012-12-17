@@ -38,21 +38,11 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 				}
 				if (messages.length > -1) {
 					
-					Boolean check = DatabaseFunctions.checkAutoReply(messages[0].getOriginatingAddress());
 					Log.i(TAG,"Message recieved: " + messages[0].getMessageBody());
 				
 					// Add Notification Dialog
 					movetoDialog(context, messages[0].getOriginatingAddress(), messages[0].getMessageBody());
 					sendAutoReply(messages[0].getOriginatingAddress(), messages[0].getMessageBody());
-					
-					//if (check) {
-						//String message = DatabaseFunctions.getAutoReplyMessage(messages[0].getOriginatingAddress());
-						
-						//SendMessage sendMessage = new SendMessage();
-						//sendMessage.execute(Utility.sender_id,messages[0].getOriginatingAddress(), message);
-						
-						
-					//}
 					
 				}
 			}
@@ -99,7 +89,7 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 	private ArrayList<AutoReplyData> getAutoReplyList(){
 		
 		Cursor cursor = DatabaseFunctions.getAutoReplyCursor();
-		ArrayList<AutoReplyData> replyList = new ArrayList<SMSBroadcastReceiver.AutoReplyData>();
+		ArrayList<AutoReplyData> replyList = new ArrayList<AutoReplyData>();
 		
 		while (cursor.moveToNext()) {
 			AutoReplyData data = new AutoReplyData(cursor.getString(0),cursor.getString(1),cursor.getString(2));
@@ -117,57 +107,29 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 		return msg.contains(key);
 	}
 		
-	public class SendMessage extends AsyncTask<String, Void, Integer> {
+	public class SendMessage extends AsyncTask<String, Void, String> {
 	
 			@Override
-			protected Integer doInBackground(String... args) {
+			protected String doInBackground(String... args) {
 	
 				return APICalls.sendMsg(args[0], args[1],args[2],null);
 	
 			}
 	
 			@Override
-			protected void onPostExecute(Integer result) {
+			protected void onPostExecute(String result) {
 	
 				super.onPostExecute(result);
-				if(result == 0){
-					Log.d("AUTO REPLY", "Message sent successfully!");
-				}
-				else{
-					Log.d("AUTO REPLY", "Message not sent");
-				}
+				//if(result == 0){
+					Log.d("AUTO REPLY", result);
+				//}
+				//else{
+					//Log.d("AUTO REPLY", "Message not sent");
+				//}
 				
 				
 			}
 	
 	}
 	
-	class AutoReplyData {
-		String id;
-		String keyword;
-		String message;
-		
-		public AutoReplyData() {
-			
-		}
-		public AutoReplyData(String id,String keyword, String message) {
-			this.id = id;
-			this.keyword = keyword;
-			this.message = message;
-		}
-
-		public String getId() {
-			return id;
-		}
-		
-		public String getKeyword() {
-			return keyword;
-		}
-
-		public String getMessage() {
-			return message;
-		}
-		
-	}
-
 }

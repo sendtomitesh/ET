@@ -1,7 +1,5 @@
 package com.explorer.technologies;
 
-import java.sql.Date;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -142,6 +140,7 @@ public class DatabaseFunctions {
 		try {
 
 			db.execSQL("DELETE FROM autoReply WHERE id =" + id);
+			db.execSQL("DELETE FROM autoReplyDetail WHERE autoReplyId = " + id);
 			Log.d("DRAFT AUTO_REPLY", "Record deleted!");
 
 		} catch (Exception e) {
@@ -214,10 +213,31 @@ public class DatabaseFunctions {
 		Cursor cursor = null;
 		try {
 
-			cursor = db.rawQuery(
-					"SELECT  id AS _id,sms_to,message FROM autoReply", null);
+	//		cursor = db.rawQuery(
+		//			"SELECT  id AS _id,sms_to,message FROM autoReply", null);
 			
+			cursor = db.rawQuery(
+					"SELECT  autoReply.id AS _id,autoReply.sms_to,autoReply.message,Count(autoReplyDetail.autoReplyId) as reply_count"
+					+" FROM autoReply,autoReplyDetail Where autoReply.id = autoReplyDetail.autoReplyId"
+				    + " Group By autoReply.id", null);
+			//select id, sms_to,msg,count(id) as reply_count from AutoReply inner join AutoReplyData group by id
 
+		} catch (Exception e) {
+			Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
+			return null;
+		}
+
+		return cursor;
+	}
+	
+	public static Cursor getAutoReplyDetailCursor(String id) {
+		Cursor cursor = null;
+		try {
+
+			cursor = db.rawQuery(
+					"SELECT id AS _id,autoReplyId,sms_to,sentOn"
+					+" FROM autoReplyDetail Where autoReplyId = "+ id, null);
+			
 		} catch (Exception e) {
 			Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
 			return null;

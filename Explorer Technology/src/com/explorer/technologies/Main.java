@@ -50,13 +50,11 @@ public class Main extends Activity {
         return true;
     }
     
-        
-    public void gotoInbox(View v)
+    
+   public void gotoInbox(View v)
     {
-    	Intent inboxIntent = new Intent(getApplicationContext(),Inbox.class);
+	   Intent inboxIntent = new Intent(getApplicationContext(),Inbox.class);
     	startActivity(inboxIntent);
-    	
-    	
     }
     
     public void gotoCompose(View v)
