@@ -17,7 +17,8 @@ public class DatabaseFunctions {
 	private static final String MESSAGE = "message";
 
 	// Save drats Message
-	public static Boolean saveToDrafts(String to,String message,String toComplete) {
+	public static Boolean saveToDrafts(String to, String message,
+			String toComplete) {
 
 		ContentValues values = new ContentValues();
 		values.put(TO, to);
@@ -25,7 +26,7 @@ public class DatabaseFunctions {
 		values.put(TO_COMPLETE, toComplete);
 
 		try {
-		
+
 			// Perform insert into Database
 			db.insert(DbHelper.TABLE_DRAFTS, null, values);
 			Log.d("DRAFT INSERT", "Record inserted!");
@@ -43,8 +44,10 @@ public class DatabaseFunctions {
 		Cursor cursor = null;
 		try {
 
-			cursor = db.rawQuery(
-					"SELECT  id AS _id,sms_to,message,sms_to_complete FROM drafts", null);
+			cursor = db
+					.rawQuery(
+							"SELECT  id AS _id,sms_to,message,sms_to_complete FROM drafts",
+							null);
 
 		} catch (Exception e) {
 			Log.e("DRAFT SELECT", "error : " + e.toString());
@@ -65,19 +68,19 @@ public class DatabaseFunctions {
 		} catch (Exception e) {
 			Log.e("DRAFT DELETE", "error : " + e.toString());
 			return false;
-		} 
+		}
 		return true;
 	}
 
 	// Save Auto Reply Message
-	public static Boolean addAutoReply(String to,String message) {
+	public static Boolean addAutoReply(String to, String message) {
 
 		ContentValues values = new ContentValues();
 		values.put(TO, to);
 		values.put(MESSAGE, message);
 
 		try {
-			
+
 			// Perform insert into Database
 			db.insert(DbHelper.TABLE_AUTO_REPLY, null, values);
 			Log.d("AUTO_REPLY INSERT", "Record inserted!");
@@ -85,21 +88,22 @@ public class DatabaseFunctions {
 		} catch (Exception e) {
 			Log.e("AUTO_REPLY INSERT", "error : " + e.toString());
 			return false;
-		} 
+		}
 		return true;
 
 	}
-	
+
 	// Save Auto Reply Detail
-	public static Boolean addAutoReplyDetail(String autoReplyId,String to,String date) {
-		
+	public static Boolean addAutoReplyDetail(String autoReplyId, String to,
+			String date) {
+
 		ContentValues values = new ContentValues();
 		values.put("autoReplyId", autoReplyId);
 		values.put(TO, to);
-		values.put("sentOn",date);
+		values.put("sentOn", date);
 
 		try {
-			
+
 			// Perform insert into Database
 			db.insert(DbHelper.TABLE_AUTO_REPLY_DETAIL, null, values);
 			Log.d("AUTO_REPLY_DETAIL INSERT", "Record inserted!");
@@ -107,30 +111,29 @@ public class DatabaseFunctions {
 		} catch (Exception e) {
 			Log.e("AUTO_REPLY_DETAIL", "error : " + e.toString());
 			return false;
-		} 
+		}
 		return true;
 
 	}
-	
+
 	// Update Auto Reply Message
-	public static Boolean updateAutoReply(String to,
-				String message) {
+	public static Boolean updateAutoReply(String to, String message) {
 
-			ContentValues values = new ContentValues();
-			values.put(MESSAGE, message);
+		ContentValues values = new ContentValues();
+		values.put(MESSAGE, message);
 
-			try {
-			
-				// Perform Update
-				String strFilter = "sms_to='" + to + "'";
-				db.update(DbHelper.TABLE_AUTO_REPLY, values, strFilter, null);
-				Log.d("AUTO_REPLY UPDATE", "Record Updated!");
+		try {
 
-			} catch (Exception e) {
-				Log.e("AUTO_REPLY UPDATE", "error : " + e.toString());
-				return false;
-			} 
-			return true;
+			// Perform Update
+			String strFilter = "sms_to='" + to + "'";
+			db.update(DbHelper.TABLE_AUTO_REPLY, values, strFilter, null);
+			Log.d("AUTO_REPLY UPDATE", "Record Updated!");
+
+		} catch (Exception e) {
+			Log.e("AUTO_REPLY UPDATE", "error : " + e.toString());
+			return false;
+		}
+		return true;
 
 	}
 
@@ -146,9 +149,10 @@ public class DatabaseFunctions {
 		} catch (Exception e) {
 			Log.e("DRAFT AUTO_REPLY", "error : " + e.toString());
 			return false;
-		} 
+		}
 		return true;
 	}
+
 	// Return true if draft message get deleted
 	public static Boolean deleteAllDraftMessage() {
 
@@ -160,7 +164,7 @@ public class DatabaseFunctions {
 		} catch (Exception e) {
 			Log.e("DRAFT DELETE", "error : " + e.toString());
 			return false;
-		} 
+		}
 		return true;
 	}
 
@@ -168,9 +172,9 @@ public class DatabaseFunctions {
 	public static Boolean checkAutoReply(String to) {
 
 		Boolean check = false;
-		
+
 		try {
-			 Cursor cursor = db.rawQuery(
+			Cursor cursor = db.rawQuery(
 					"SELECT  sms_to FROM autoReply where sms_to='" + to + "'",
 					null);
 
@@ -182,17 +186,17 @@ public class DatabaseFunctions {
 		} catch (Exception e) {
 			Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
 		}
-		
+
 		return check;
 	}
-	
+
 	// Get autoreply message for particular number set
 	public static String getAutoReplyMessage(String to) {
 
 		String message = "";
-		
+
 		try {
-			 Cursor cursor = db.rawQuery(
+			Cursor cursor = db.rawQuery(
 					"SELECT  message FROM autoReply where sms_to='" + to + "'",
 					null);
 
@@ -204,7 +208,7 @@ public class DatabaseFunctions {
 		} catch (Exception e) {
 			Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
 		}
-		
+
 		return message;
 	}
 
@@ -213,14 +217,15 @@ public class DatabaseFunctions {
 		Cursor cursor = null;
 		try {
 
-	//		cursor = db.rawQuery(
-		//			"SELECT  id AS _id,sms_to,message FROM autoReply", null);
-			
-			cursor = db.rawQuery(
-					"SELECT  autoReply.id AS _id,autoReply.sms_to,autoReply.message,Count(autoReplyDetail.autoReplyId) as reply_count"
-					+" FROM autoReply,autoReplyDetail Where autoReply.id = autoReplyDetail.autoReplyId"
-				    + " Group By autoReply.id", null);
-			//select id, sms_to,msg,count(id) as reply_count from AutoReply inner join AutoReplyData group by id
+			// cursor = db.rawQuery(
+			// "SELECT  id AS _id,sms_to,message FROM autoReply", null);
+
+			cursor = db
+					.rawQuery(
+							"SELECT a.id as _id, a.sms_to,a.message,Count(d.id) as reply_count from autoReply as a " 
+							+"LEFT JOIN autoReplyDetail as d on a.id = d.autoReplyId GROUP BY"
+							+" a.id , a.sms_to,a.message ORDER BY a.id DESC",
+							null);
 
 		} catch (Exception e) {
 			Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
@@ -229,15 +234,14 @@ public class DatabaseFunctions {
 
 		return cursor;
 	}
-	
+
 	public static Cursor getAutoReplyDetailCursor(String id) {
 		Cursor cursor = null;
 		try {
 
-			cursor = db.rawQuery(
-					"SELECT id AS _id,autoReplyId,sms_to,sentOn"
-					+" FROM autoReplyDetail Where autoReplyId = "+ id, null);
-			
+			cursor = db.rawQuery("SELECT id AS _id,autoReplyId,sms_to,sentOn"
+					+ " FROM autoReplyDetail Where autoReplyId = " + id + " ORDER BY id DESC", null);
+
 		} catch (Exception e) {
 			Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
 			return null;
@@ -257,23 +261,22 @@ public class DatabaseFunctions {
 		} catch (Exception e) {
 			Log.e("AUTO_REPLY DELETE", "error : " + e.toString());
 			return false;
-		} 
+		}
 		return true;
 	}
-	
-	public static void openDb(Context context)
-	{
-			dbHelper = new DbHelper(context);
-	    	db = dbHelper.getWritableDatabase();
-		
+
+	public static void openDb(Context context) {
+		dbHelper = new DbHelper(context);
+		db = dbHelper.getWritableDatabase();
+
 	}
-	public static void closeDb()
-	{
-		if(db.isOpen()){
+
+	public static void closeDb() {
+		if (db.isOpen()) {
 			db.close();
 			dbHelper.close();
 		}
-			
+
 	}
 
 }
