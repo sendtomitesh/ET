@@ -12,7 +12,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import android.widget.Toast;
 
 public class SMSBroadcastReceiver extends BroadcastReceiver {
 	
@@ -48,10 +47,11 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 			}
 		}
 	}
-	
 		
+	@SuppressWarnings("unused")
 	public void sendAutoReply(String to,String message){
 	
+		
 		Date date = new Date();
 		autoReplyList = getAutoReplyList();
 		
@@ -62,13 +62,6 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 				//Toast.makeText(appContext,"Id : " + data.id + "\nKeyword : " + data.keyword + "\n" + data.message, Toast.LENGTH_SHORT).show();
 				new SendMessage().execute(Utility.sender_id,to,data.message);
 				boolean check = DatabaseFunctions.addAutoReplyDetail(data.id,to,date.toString());
-				Toast.makeText(appContext,"Id : " + data.id + "\nKeyword : " + data.keyword + "\n" + data.message, Toast.LENGTH_SHORT).show();
-				if(check){
-					Toast.makeText(appContext,"Success!", Toast.LENGTH_SHORT).show();
-				}
-				else{
-					Toast.makeText(appContext,"Fail!", Toast.LENGTH_SHORT).show();
-				}
 				
 			}
 		}
@@ -109,9 +102,12 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 		
 	public class SendMessage extends AsyncTask<String, Void, String> {
 	
+			String to = "";
+			String message = "";
 			@Override
 			protected String doInBackground(String... args) {
-	
+				to = args[1];
+				message = args[2];
 				return APICalls.sendMsg(args[0], args[1],args[2],null);
 	
 			}
@@ -120,13 +116,12 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 			protected void onPostExecute(String result) {
 	
 				super.onPostExecute(result);
-				//if(result == 0){
-					Log.d("AUTO REPLY", result);
-				//}
-				//else{
-					//Log.d("AUTO REPLY", "Message not sent");
-				//}
 				
+				Long milliseconds = System.currentTimeMillis();
+
+				DatabaseFunctions.saveSentMessage(to,
+						message,to,result,
+						milliseconds.toString());
 				
 			}
 	

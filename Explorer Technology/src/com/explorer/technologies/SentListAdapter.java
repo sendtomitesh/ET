@@ -50,13 +50,13 @@ public class SentListAdapter extends SimpleCursorAdapter {
 	    }
 
 	    dataCursor.moveToPosition(position);
-	    int from_index = dataCursor.getColumnIndex("address"); 
+	    int from_index = dataCursor.getColumnIndex("sms_to"); 
 	    String label_to = dataCursor.getString(from_index);
 	    
-	    int message_index = dataCursor.getColumnIndex("body"); 
+	    int message_index = dataCursor.getColumnIndex("message"); 
 	    String label_message = dataCursor.getString(message_index);
 	    
-	    int date_index = dataCursor.getColumnIndex("date"); 
+	    int date_index = dataCursor.getColumnIndex("sentOn"); 
 	    String label_date = dataCursor.getString(date_index);
 	    
 	    
@@ -72,6 +72,8 @@ public class SentListAdapter extends SimpleCursorAdapter {
 	    holder.txt_to.setText("To : " + label_to);
 	    holder.txt_message.setText(label_message);
 	    holder.txt_date.setText(date);
+	    
+	    
 	    
 	    return convertView;
 	}

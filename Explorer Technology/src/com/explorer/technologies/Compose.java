@@ -59,9 +59,9 @@ public class Compose extends Activity {
 	Boolean isDraft = false;
 	String scheduleDateTime = null; // To store scheduled message date and time
 	private mItems[] itemss;
-	
+
 	List<String> contactList = new ArrayList<String>();
-	String contactCount ;
+	String contactCount;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,41 +77,44 @@ public class Compose extends Activity {
 	private void checkIfComesFromDrafts() {
 		// TODO Auto-generated method stub
 		Intent intent = getIntent();
-		
+
 		if (intent.hasExtra("id")) {
 			msgId = intent.getStringExtra("id");
 			isDraft = true;
-			
+
 		}
 
 		if (intent.hasExtra("to")) {
-			 //textTo.setText(textTo.getText().toString()+","+intent.getStringExtra("to"));
+			// textTo.setText(textTo.getText().toString()+","+intent.getStringExtra("to"));
 			textTo.setText(intent.getStringExtra("to"));
-			//setToNumber(intent.getStringExtra("to"));
+			// setToNumber(intent.getStringExtra("to"));
 		}
 		if (intent.hasExtra("msg")) {
 			textMessage.setText(intent.getStringExtra("msg"));
 		}
-		
-		if(intent.hasExtra("toComplete")) {
-			String[] contacts = intent.getStringExtra("toComplete").toString().split(",");
-			
+
+		if (intent.hasExtra("toComplete")) {
+			String[] contacts = intent.getStringExtra("toComplete").toString()
+					.split(",");
+
 			for (int i = 0; i < contacts.length; i++) {
-				
+
 				contactList.add(contacts[i]);
-				//Toast.makeText(getApplicationContext(), contacts[i], Toast.LENGTH_SHORT).show();
+				// Toast.makeText(getApplicationContext(), contacts[i],
+				// Toast.LENGTH_SHORT).show();
 			}
-			
+
 		}
 
 	}
-	
+
 	private void checkIfComesFromGroups() {
 		Intent intent = getIntent();
 		if (intent.hasExtra("groupName")) {
-			
-			textTo.setText(textTo.getText().toString()+","+intent.getStringExtra("groupName"));
-			
+
+			textTo.setText(textTo.getText().toString() + ","
+					+ intent.getStringExtra("groupName"));
+
 		}
 
 	}
@@ -119,7 +122,7 @@ public class Compose extends Activity {
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
-		
+
 		if (!isDraft) {
 			if (!textTo.getText().toString().equals("")
 					|| !textMessage.getText().toString().equals("")) {
@@ -157,8 +160,8 @@ public class Compose extends Activity {
 
 	private void saveMsgToDrafts() {
 		String toComplete = setupAndGetFinalContactList();
-		DatabaseFunctions.saveToDrafts(textTo
-				.getText().toString(), textMessage.getText().toString(),toComplete);
+		DatabaseFunctions.saveToDrafts(textTo.getText().toString(), textMessage
+				.getText().toString(), toComplete);
 
 	}
 
@@ -167,13 +170,13 @@ public class Compose extends Activity {
 		finish();
 
 	}
-	
-	//Schedule Message
-	public void scheduleMessage(View v)
-	{
-		//Set Scheduled date time to scheduledDataTime
-		
-		final Dialog DATE_PICKER_DIALOG = new Dialog(Compose.this,R.style.DialogWindowTitle);
+
+	// Schedule Message
+	public void scheduleMessage(View v) {
+		// Set Scheduled date time to scheduledDataTime
+
+		final Dialog DATE_PICKER_DIALOG = new Dialog(Compose.this,
+				R.style.DialogWindowTitle);
 		DATE_PICKER_DIALOG.setContentView(R.layout.date_time_dialog);
 
 		final Button btnSetTime = (Button) DATE_PICKER_DIALOG
@@ -182,99 +185,102 @@ public class Compose extends Activity {
 				.findViewById(R.id.btn_set_date);
 		final Button btnDone = (Button) DATE_PICKER_DIALOG
 				.findViewById(R.id.btn_done);
-		final LinearLayout layoutTime = (LinearLayout)DATE_PICKER_DIALOG.findViewById(R.id.layout_time);
-		final LinearLayout layoutDate = (LinearLayout)DATE_PICKER_DIALOG.findViewById(R.id.layout_date);
-		
-		final DatePicker datePicker = (DatePicker)DATE_PICKER_DIALOG.findViewById(R.id.date_picker);
-		final TimePicker timePicker = (TimePicker)DATE_PICKER_DIALOG.findViewById(R.id.time_picker);
-		
-		
-		
+		final LinearLayout layoutTime = (LinearLayout) DATE_PICKER_DIALOG
+				.findViewById(R.id.layout_time);
+		final LinearLayout layoutDate = (LinearLayout) DATE_PICKER_DIALOG
+				.findViewById(R.id.layout_date);
+
+		final DatePicker datePicker = (DatePicker) DATE_PICKER_DIALOG
+				.findViewById(R.id.date_picker);
+		final TimePicker timePicker = (TimePicker) DATE_PICKER_DIALOG
+				.findViewById(R.id.time_picker);
+
 		btnSetTime.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				
+
 				layoutDate.setVisibility(View.INVISIBLE);
 				layoutTime.setVisibility(View.VISIBLE);
-				
+
 			}
 		});
-		
+
 		btnSetDate.setOnClickListener(new OnClickListener() {
-			
-			
+
 			@Override
 			public void onClick(View v) {
 				layoutDate.setVisibility(View.VISIBLE);
 				layoutTime.setVisibility(View.INVISIBLE);
-				
-				
+
 			}
 		});
-		
+
 		btnDone.setOnClickListener(new OnClickListener() {
-			
+
 			@SuppressLint("SimpleDateFormat")
 			@SuppressWarnings("deprecation")
 			@Override
 			public void onClick(View v) {
-				
-				Date date = new Date(datePicker.getYear() - 1900, datePicker.getMonth(), datePicker.getDayOfMonth(),timePicker.getCurrentHour(),timePicker.getCurrentMinute());
-				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+				Date date = new Date(datePicker.getYear() - 1900, datePicker
+						.getMonth(), datePicker.getDayOfMonth(), timePicker
+						.getCurrentHour(), timePicker.getCurrentMinute());
+				SimpleDateFormat dateFormat = new SimpleDateFormat(
+						"yyyy-MM-dd hh:mm:ss");
 				String formatedDate = dateFormat.format(date);
 				scheduleDateTime = formatedDate;
-			//	Toast.makeText(getApplicationContext(), scheduleDateTime, Toast.LENGTH_LONG).show();
+				// Toast.makeText(getApplicationContext(), scheduleDateTime,
+				// Toast.LENGTH_LONG).show();
 				DATE_PICKER_DIALOG.dismiss();
-								
+
 			}
 		});
 
-		
 		DATE_PICKER_DIALOG.show();
-		
+
 	}
+
 	public void sendMessage(View v) {
 
-		
 		// replaces ,, to , if exists
-		String repairedNumbers="";
-		try
-		{
-		repairedNumbers=setupAndGetFinalContactList();
-		}
-		catch(Exception e)
-		{
-			Toast.makeText(Compose.this, "Error in generating Contact list", Toast.LENGTH_LONG).show();
+		String repairedNumbers = "";
+		try {
+			repairedNumbers = setupAndGetFinalContactList();
+		} catch (Exception e) {
+			Toast.makeText(Compose.this, "Error in generating Contact list",
+					Toast.LENGTH_LONG).show();
 			return;
 		}
-		
-		Toast.makeText(Compose.this, scheduleDateTime, Toast.LENGTH_LONG).show();
-		if(repairedNumbers.equals("") && !groupIds.equals("")) {
 
-		//	Toast.makeText(Compose.this, groupIds, Toast.LENGTH_LONG).show();
+		
+			//Toast.makeText(Compose.this, scheduleDateTime, Toast.LENGTH_LONG).show();
+		
+		if (repairedNumbers.equals("") && !groupIds.equals("")) {
+
+			// Toast.makeText(Compose.this, groupIds, Toast.LENGTH_LONG).show();
 			new SendMessageToGroup().execute(textSender.getText().toString(),
-					groupIds, textMessage.getText().toString()); 
+					groupIds, textMessage.getText().toString());
+		} else if (!repairedNumbers.equals("")) {
+
+			// Toast.makeText(Compose.this, repairedNumbers,
+			// Toast.LENGTH_LONG).show();
+			// Toast.makeText(Compose.this, groupIds, Toast.LENGTH_LONG).show();
+			new SendMessage().execute(textSender.getText().toString(),
+					repairedNumbers, textMessage.getText().toString(),
+					scheduleDateTime);
 		}
-		else if (!repairedNumbers.equals("")){
-			
-		//	Toast.makeText(Compose.this, repairedNumbers, Toast.LENGTH_LONG).show();
-		//	Toast.makeText(Compose.this, groupIds, Toast.LENGTH_LONG).show();
-			new SendMessage().execute(textSender.getText().toString(), repairedNumbers,
-					textMessage.getText().toString(),scheduleDateTime);       
-		}   
 
 	}
-	private String setupAndGetFinalContactList()
-	{
+
+	private String setupAndGetFinalContactList() {
 		String repairedNumbers = "";
-		String contactsFromToEditBox = removeContactTag(textTo.getText().toString());
-		
-		String mixContacts=combineContact(contactsFromToEditBox);
-		mixContacts=manageComma(mixContacts);
-		
-		
-		
+		String contactsFromToEditBox = removeContactTag(textTo.getText()
+				.toString());
+
+		String mixContacts = combineContact(contactsFromToEditBox);
+		mixContacts = manageComma(mixContacts);
+
 		String arr[] = mixContacts.split(",");
 
 		for (int i = 0; i < arr.length; i++) {
@@ -283,22 +289,19 @@ public class Compose extends Activity {
 				groupIds = groupIds + "," + extractGroupId(arr[i]) + ",";
 				continue;
 			}
-			
-			//contactList.add(arr[i]);
+
+			// contactList.add(arr[i]);
 			arr[i] = repairPhoneNumber(arr[i]);
-			if (i == arr.length - 1){
-			repairedNumbers = repairedNumbers + "," + arr[i];
-			
-			}
-			else{
+			if (i == arr.length - 1) {
+				repairedNumbers = repairedNumbers + "," + arr[i];
+
+			} else {
 				repairedNumbers = repairedNumbers + "," + arr[i] + ",";
 			}
 		}
-		
+
 		repairedNumbers = manageComma(repairedNumbers);
-	
-		
-		
+
 		groupIds = manageComma(groupIds);
 		return repairedNumbers;
 
@@ -306,15 +309,16 @@ public class Compose extends Activity {
 
 	private String combineContact(String contactsFromToEditBox) {
 		// TODO Auto-generated method stub\
-		String numberListFromArray="";
+		String numberListFromArray = "";
 		for (int i = 0; i < contactList.size(); i++) {
-            
-           // contactList.set(i, repairPhoneNumber(contactList.get(i)));
-            numberListFromArray = numberListFromArray + "," + contactList.get(i) + ",";
-            
+
+			// contactList.set(i, repairPhoneNumber(contactList.get(i)));
+			numberListFromArray = numberListFromArray + ","
+					+ contactList.get(i) + ",";
+
 		}
-		return numberListFromArray+contactsFromToEditBox;
-		
+		return numberListFromArray + contactsFromToEditBox;
+
 	}
 
 	public String manageComma(String s) {
@@ -322,11 +326,11 @@ public class Compose extends Activity {
 			s = s.replaceAll(",,", ",");
 
 			// removes last ,
-			if (s.charAt(s.length() - 1) == ','){
+			if (s.charAt(s.length() - 1) == ',') {
 				s = s.substring(0, s.length() - 1);
 			}
 			// remove first ,
-			if (s.charAt(0) == ','){
+			if (s.charAt(0) == ',') {
 				s = s.substring(1, s.length());
 			}
 		}
@@ -344,63 +348,56 @@ public class Compose extends Activity {
 		return gId;
 
 	}
-	public void updateContactTag()
-	{
-		String [] contactArray = textTo.getText().toString().split(",");
-		String contactsWeWant="";
-		if(isContactTagPresent(contactArray))
-		{
-			for(int i=0;i<contactArray.length;i++)
-			{
-				if(contactArray[i].contains("Contact"))
-					contactArray[i]="Contact("+contactList.size()+")";
-				contactsWeWant =contactsWeWant +contactArray[i]+",";
-				
+
+	public void updateContactTag() {
+		String[] contactArray = textTo.getText().toString().split(",");
+		String contactsWeWant = "";
+		if (isContactTagPresent(contactArray)) {
+			for (int i = 0; i < contactArray.length; i++) {
+				if (contactArray[i].contains("Contact"))
+					contactArray[i] = "Contact(" + contactList.size() + ")";
+				contactsWeWant = contactsWeWant + contactArray[i] + ",";
+
 			}
-			if(contactsWeWant.length()>0)
-			{
-				contactsWeWant= contactsWeWant.substring(0, contactsWeWant.length()-1);
-				contactsWeWant=manageComma(contactsWeWant);
+			if (contactsWeWant.length() > 0) {
+				contactsWeWant = contactsWeWant.substring(0,
+						contactsWeWant.length() - 1);
+				contactsWeWant = manageComma(contactsWeWant);
 			}
 			textTo.setText(contactsWeWant);
-		}
-		else
-		{
-			if(textTo.getText().length()>0)
-				textTo.setText("Contact("+contactList.size()+")"+","+ textTo.getText().toString());
+		} else {
+			if (textTo.getText().length() > 0)
+				textTo.setText("Contact(" + contactList.size() + ")" + ","
+						+ textTo.getText().toString());
 			else
-				textTo.setText("Contact("+contactList.size()+")");
+				textTo.setText("Contact(" + contactList.size() + ")");
 		}
-		
-		
 
 	}
-	private Boolean isContactTagPresent(String [] contactArray)
-	{
-		for(int i=0;i<contactArray.length;i++)
-		{
-			if(contactArray[i].contains("Contact"))
+
+	private Boolean isContactTagPresent(String[] contactArray) {
+		for (int i = 0; i < contactArray.length; i++) {
+			if (contactArray[i].contains("Contact"))
 				return true;
 		}
 		return false;
 	}
-	private String removeContactTag(String mixString)
-	{
-		String [] contactArray = mixString.split(",");
-		String contactsWeWant="";
-		for(int i=0;i<contactArray.length;i++)
-		{
-			if(contactArray[i].contains("Contact"))
+
+	private String removeContactTag(String mixString) {
+		String[] contactArray = mixString.split(",");
+		String contactsWeWant = "";
+		for (int i = 0; i < contactArray.length; i++) {
+			if (contactArray[i].contains("Contact"))
 				continue;
-			
-			contactsWeWant =contactsWeWant +contactArray[i]+",";
-			
+
+			contactsWeWant = contactsWeWant + contactArray[i] + ",";
+
 		}
-		contactsWeWant=manageComma(contactsWeWant);
+		contactsWeWant = manageComma(contactsWeWant);
 		return contactsWeWant;
 
 	}
-		
+
 	public String repairPhoneNumber(String num) {
 		String repairedNumber = num;
 
@@ -454,7 +451,8 @@ public class Compose extends Activity {
 
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				txtViewCounter.setText("Count : " + textMessage.getText().length());
+				txtViewCounter.setText("Count : "
+						+ textMessage.getText().length());
 
 			}
 		});
@@ -462,7 +460,16 @@ public class Compose extends Activity {
 
 	}
 
-	public void insertSentMessage() {
+	public void insertSentMessage(String messageStatus) {
+		String toComplete = setupAndGetFinalContactList();
+		Long milliseconds = System.currentTimeMillis();
+		DatabaseFunctions.saveSentMessage(textTo.getText().toString(),
+				textMessage.getText().toString(), toComplete, messageStatus,
+				milliseconds.toString());
+
+	}
+
+	public void insertSentMessage1() {
 		ContentValues values = new ContentValues();
 		values.put("address", textTo.getText().toString());
 		values.put("body", textMessage.getText().toString());
@@ -506,37 +513,35 @@ public class Compose extends Activity {
 			String status;
 			// status = APICalls.
 
-			status = APICalls.sendMsg(args[0], args[1], args[2],args[3]);
+			status = APICalls.sendMsg(args[0], args[1], args[2], args[3]);
 			return status;
 
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
-			
-			
 
-			//if (result == 0) 
-			//{
-				insertSentMessage();
-				new UpdateCredits().execute();
-				if (isDraft) {
-					new DeleteDraft().execute();
-					// isDraft=false;
-				}
-				//Toast.makeText(getApplicationContext(),
-					//	"Message sent successfully ", Toast.LENGTH_LONG).show();
-				Toast.makeText(getApplicationContext(),
-						result, Toast.LENGTH_LONG).show();
-			//} 
-			//else 
-			//{
-				//Toast.makeText(getApplicationContext(),
-					//	"ERROR SENDING SMS. PLEASE CHECK YOUR INTERNET CONNECTION! ", Toast.LENGTH_LONG).show();
-			//}
+			// if (result == 0)
+			// {
+			insertSentMessage(result);
+			new UpdateCredits().execute();
+			if (isDraft) {
+				new DeleteDraft().execute();
+				// isDraft=false;
+			}
+			// Toast.makeText(getApplicationContext(),
+			// "Message sent successfully ", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
+					.show();
+			// }
+			// else
+			// {
+			// Toast.makeText(getApplicationContext(),
+			// "ERROR SENDING SMS. PLEASE CHECK YOUR INTERNET CONNECTION! ",
+			// Toast.LENGTH_LONG).show();
+			// }
 
-			try 
-			{
+			try {
 				pd.dismiss();
 			} catch (Exception e) {
 			}
@@ -547,15 +552,13 @@ public class Compose extends Activity {
 						.execute(textSender.getText().toString(), groupIds,
 								textMessage.getText().toString());
 
-			} 
-			else
+			} else
 				moveToDashboard();
 			super.onPostExecute(result);
 		}
 
 	}
 
-	
 	public class SendMessageToGroup extends AsyncTask<String, Void, String> {
 
 		@Override
@@ -582,25 +585,24 @@ public class Compose extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 
-			
-
-			//if (result == 0) 
-			//{
-				insertSentMessage();
-				new UpdateCredits().execute();
-				//Toast.makeText(getApplicationContext(),
-					//	"Message sent successfully to group ", Toast.LENGTH_LONG).show();
-				Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
-				if (isDraft) {
-					new DeleteDraft().execute();
-					moveToDashboard();
-				}
-			//} 
-			//else 
-			//{
-				//Toast.makeText(getApplicationContext(),
-					//	"Error sending to group ", Toast.LENGTH_LONG).show();
-			//}
+			// if (result == 0)
+			// {
+			insertSentMessage(result);
+			new UpdateCredits().execute();
+			// Toast.makeText(getApplicationContext(),
+			// "Message sent successfully to group ", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
+					.show();
+			if (isDraft) {
+				new DeleteDraft().execute();
+				moveToDashboard();
+			}
+			// }
+			// else
+			// {
+			// Toast.makeText(getApplicationContext(),
+			// "Error sending to group ", Toast.LENGTH_LONG).show();
+			// }
 
 			groupIds = "";
 			try {
@@ -609,12 +611,11 @@ public class Compose extends Activity {
 				e.printStackTrace();
 			}
 			moveToDashboard();
-			
+
 			super.onPostExecute(result);
 		}
 
 	}
-	
 
 	public class ShowGroups extends
 			AsyncTask<String, Void, ArrayList<HashMap<String, String>>> {
@@ -642,13 +643,12 @@ public class Compose extends Activity {
 			groupList = mylist;
 			isGroupListLoaded = true;
 			showinList();
-			
 
 			try {
 				pd.dismiss();
 			} catch (Exception e) {
 			}
-			
+
 			super.onPostExecute(mylist);
 		}
 
@@ -668,20 +668,22 @@ public class Compose extends Activity {
 
 	}
 
-@SuppressWarnings("deprecation")
-public void getCallLog(View v) {
+	@SuppressWarnings("deprecation")
+	public void getCallLog(View v) {
 		final Dialog CALL_LOG_DIALOG = new Dialog(Compose.this,
 				R.style.DialogWindowTitle);
 		CALL_LOG_DIALOG.setContentView(R.layout.contact_dialog);
 
-		final TextView textTitle = (TextView)CALL_LOG_DIALOG.findViewById(R.id.txt_title);
+		final TextView textTitle = (TextView) CALL_LOG_DIALOG
+				.findViewById(R.id.txt_title);
 		textTitle.setText(getString(R.string.call_log));
-		
+
 		final Button btnOk = (Button) CALL_LOG_DIALOG
 				.findViewById(R.id.btn_contact_ok);
 		final Button btnSelectAll = (Button) CALL_LOG_DIALOG
 				.findViewById(R.id.btn_contact_select_all);
-		final EditText textSerach = (EditText)CALL_LOG_DIALOG.findViewById(R.id.contactSearchBox);
+		final EditText textSerach = (EditText) CALL_LOG_DIALOG
+				.findViewById(R.id.contactSearchBox);
 		final Button btnSearch = (Button) CALL_LOG_DIALOG
 				.findViewById(R.id.btnSearch);
 		String order = android.provider.CallLog.Calls.DATE + " DESC";
@@ -690,17 +692,18 @@ public void getCallLog(View v) {
 				android.provider.CallLog.Calls.CACHED_NAME, };
 
 		final Cursor contactCursor = getContentResolver().query(
-				android.provider.CallLog.Calls.CONTENT_URI, PROJECTION, null, null,
-				order);
-		
+				android.provider.CallLog.Calls.CONTENT_URI, PROJECTION, null,
+				null, order);
+
 		// Create and populate mItems.
 		itemss = (mItems[]) getLastNonConfigurationInstance();
 		final ArrayList<mItems> callLogs = new ArrayList<Compose.mItems>();
 		contactCursor.moveToFirst();
 		while (contactCursor.moveToNext()) {
-			callLogs.add(new mItems(contactCursor.getString(contactCursor
-					.getColumnIndex(android.provider.CallLog.Calls.NUMBER)), contactCursor
-					.getString(contactCursor
+			callLogs.add(new mItems(
+					contactCursor.getString(contactCursor
+							.getColumnIndex(android.provider.CallLog.Calls.NUMBER)),
+					contactCursor.getString(contactCursor
 							.getColumnIndex(android.provider.CallLog.Calls.CACHED_NAME))));
 		}
 
@@ -730,11 +733,11 @@ public void getCallLog(View v) {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+
 				for (int i = 0; i < callLogs.size(); i++) {
 					if (callLogs.get(i).checked) {
-						
-							contactList.add(callLogs.get(i).phoneNumber);
+
+						contactList.add(callLogs.get(i).phoneNumber);
 					}
 
 				}
@@ -757,7 +760,7 @@ public void getCallLog(View v) {
 							+ callLogs.get(i).phoneNumber + ">,";
 					contactList.add(callLogs.get(i).phoneNumber);
 				}
-				//setToNumber(contact);
+				// setToNumber(contact);
 				updateContactTag();
 				// Toast.makeText(getApplicationContext(), contact.length(),
 				// Toast.LENGTH_LONG).show();
@@ -766,27 +769,31 @@ public void getCallLog(View v) {
 			}
 		});
 		btnSearch.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				String searchText  = textSerach.getText().toString();
+				String searchText = textSerach.getText().toString();
 				String order = android.provider.CallLog.Calls.DATE + " DESC";
 				String[] PROJECTION = { android.provider.CallLog.Calls._ID,
 						android.provider.CallLog.Calls.NUMBER,
 						android.provider.CallLog.Calls.CACHED_NAME, };
 
 				final Cursor contactCursor = getContentResolver().query(
-						android.provider.CallLog.Calls.CONTENT_URI, PROJECTION, android.provider.CallLog.Calls.CACHED_NAME+ " like " + "'"+searchText+"%'", null,
-						order);
+						android.provider.CallLog.Calls.CONTENT_URI,
+						PROJECTION,
+						android.provider.CallLog.Calls.CACHED_NAME + " like "
+								+ "'" + searchText + "%'", null, order);
 				// Create and populate planets.
 				itemss = (mItems[]) getLastNonConfigurationInstance();
 				final ArrayList<mItems> callLogs = new ArrayList<Compose.mItems>();
 				contactCursor.moveToFirst();
 				while (contactCursor.moveToNext()) {
-					callLogs.add(new mItems(contactCursor.getString(contactCursor
-							.getColumnIndex(android.provider.CallLog.Calls.NUMBER)), contactCursor
-							.getString(contactCursor
+					callLogs.add(new mItems(
+							contactCursor
+									.getString(contactCursor
+											.getColumnIndex(android.provider.CallLog.Calls.NUMBER)),
+							contactCursor.getString(contactCursor
 									.getColumnIndex(android.provider.CallLog.Calls.CACHED_NAME))));
 				}
 
@@ -796,19 +803,18 @@ public void getCallLog(View v) {
 				final ListView listview = (ListView) CALL_LOG_DIALOG
 						.findViewById(R.id.contact_listview);
 				listview.setAdapter(myAdapter);
-				
+
 			}
 		});
 
 		CALL_LOG_DIALOG.show();
-		
+
 	}
 
 	public void getGroups(View v) {
-		if (!isGroupListLoaded){
+		if (!isGroupListLoaded) {
 			new ShowGroups().execute();
-		}
-		else{
+		} else {
 			showinList();
 		}
 
@@ -818,9 +824,11 @@ public void getCallLog(View v) {
 		final Dialog GROUP_DIALOG = new Dialog(Compose.this,
 				R.style.DialogWindowTitle);
 		GROUP_DIALOG.setContentView(R.layout.contact_dialog);
-		final LinearLayout buttonLayout = (LinearLayout)GROUP_DIALOG.findViewById(R.id.button_layout);
+		final LinearLayout buttonLayout = (LinearLayout) GROUP_DIALOG
+				.findViewById(R.id.button_layout);
 		buttonLayout.setVisibility(View.GONE);
-		final TextView textTitle = (TextView)GROUP_DIALOG.findViewById(R.id.txt_title);
+		final TextView textTitle = (TextView) GROUP_DIALOG
+				.findViewById(R.id.txt_title);
 		textTitle.setText("Select Group");
 
 		String[] from = new String[] { "id", "name" };
@@ -852,12 +860,11 @@ public void getCallLog(View v) {
 
 	}
 
-	public void setToNumberforGroup(String number)
-	{
-		textTo.setText(textTo.getText()+","+number);
-		
+	public void setToNumberforGroup(String number) {
+		textTo.setText(textTo.getText() + "," + number);
+
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void getContacts(View v) {
 		// Intent contactPickerIntent = new
@@ -867,7 +874,8 @@ public void getCallLog(View v) {
 				R.style.DialogWindowTitle);
 		CONTACT_DIALOG.setContentView(R.layout.contact_dialog);
 
-		final EditText textSerach = (EditText)CONTACT_DIALOG.findViewById(R.id.contactSearchBox);
+		final EditText textSerach = (EditText) CONTACT_DIALOG
+				.findViewById(R.id.contactSearchBox);
 		final Button btnOk = (Button) CONTACT_DIALOG
 				.findViewById(R.id.btn_contact_ok);
 		final Button btnSearch = (Button) CONTACT_DIALOG
@@ -877,8 +885,8 @@ public void getCallLog(View v) {
 
 		final String[] PROJECTION = new String[] { Contacts._ID,
 				Contacts.DISPLAY_NAME, Phone.NUMBER };
-		final Cursor contactCursor = getContentResolver().query(Phone.CONTENT_URI,
-				PROJECTION,null, null, null);
+		final Cursor contactCursor = getContentResolver().query(
+				Phone.CONTENT_URI, PROJECTION, null, null, null);
 		// Create and populate planets.
 		itemss = (mItems[]) getLastNonConfigurationInstance();
 		final ArrayList<mItems> mycontacts = new ArrayList<Compose.mItems>();
@@ -916,10 +924,10 @@ public void getCallLog(View v) {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+
 				for (int i = 0; i < mycontacts.size(); i++) {
 					if (mycontacts.get(i).checked) {
-						
+
 						contactList.add(mycontacts.get(i).phoneNumber);
 					}
 
@@ -943,7 +951,7 @@ public void getCallLog(View v) {
 							+ mycontacts.get(i).phoneNumber + ">,";
 					contactList.add(mycontacts.get(i).phoneNumber);
 				}
-				//setToNumber(contact);
+				// setToNumber(contact);
 				updateContactTag();
 				// Toast.makeText(getApplicationContext(), contact.length(),
 				// Toast.LENGTH_LONG).show();
@@ -951,31 +959,35 @@ public void getCallLog(View v) {
 
 			}
 		});
-		
+
 		btnSearch.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				String searchText  = textSerach.getText().toString();
-				Cursor contactCursor = getContentResolver().query(Phone.CONTENT_URI,
-						PROJECTION, Contacts.DISPLAY_NAME + " like " + "'"+searchText+"%'", null, null);
+				String searchText = textSerach.getText().toString();
+				Cursor contactCursor = getContentResolver().query(
+						Phone.CONTENT_URI,
+						PROJECTION,
+						Contacts.DISPLAY_NAME + " like " + "'" + searchText
+								+ "%'", null, null);
 				// Create and populate planets.
 				itemss = (mItems[]) getLastNonConfigurationInstance();
 				final ArrayList<mItems> mycontacts = new ArrayList<Compose.mItems>();
-				
+
 				contactCursor.moveToFirst();
 				while (contactCursor.moveToNext()) {
-					mycontacts.add(new mItems(contactCursor.getString(contactCursor
-							.getColumnIndex(Phone.NUMBER)), contactCursor
+					mycontacts.add(new mItems(contactCursor
 							.getString(contactCursor
+									.getColumnIndex(Phone.NUMBER)),
+							contactCursor.getString(contactCursor
 									.getColumnIndex(Contacts.DISPLAY_NAME))));
 				}
 
 				final SelectArralAdapter myAdapter = new SelectArralAdapter(
 						Compose.this, mycontacts);
 				listview.setAdapter(myAdapter);
-				
+
 			}
 		});
 
@@ -998,6 +1010,7 @@ public void getCallLog(View v) {
 		public mItems(String cName) {
 			this.contactName = cName;
 		}
+
 		public mItems(String pN, String cName) {
 			this.phoneNumber = pN;
 			this.contactName = cName;

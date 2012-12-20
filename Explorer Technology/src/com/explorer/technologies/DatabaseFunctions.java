@@ -222,9 +222,9 @@ public class DatabaseFunctions {
 
 			cursor = db
 					.rawQuery(
-							"SELECT a.id as _id, a.sms_to,a.message,Count(d.id) as reply_count from autoReply as a " 
-							+"LEFT JOIN autoReplyDetail as d on a.id = d.autoReplyId GROUP BY"
-							+" a.id , a.sms_to,a.message ORDER BY a.id DESC",
+							"SELECT a.id as _id, a.sms_to,a.message,Count(d.id) as reply_count from autoReply as a "
+									+ "LEFT JOIN autoReplyDetail as d on a.id = d.autoReplyId GROUP BY"
+									+ " a.id , a.sms_to,a.message ORDER BY a.id DESC",
 							null);
 
 		} catch (Exception e) {
@@ -240,7 +240,8 @@ public class DatabaseFunctions {
 		try {
 
 			cursor = db.rawQuery("SELECT id AS _id,autoReplyId,sms_to,sentOn"
-					+ " FROM autoReplyDetail Where autoReplyId = " + id + " ORDER BY id DESC", null);
+					+ " FROM autoReplyDetail Where autoReplyId = " + id
+					+ " ORDER BY id DESC", null);
 
 		} catch (Exception e) {
 			Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
@@ -263,6 +264,78 @@ public class DatabaseFunctions {
 			return false;
 		}
 		return true;
+	}
+
+	// Return drafts cursor
+	public static Cursor getSentMessageCursor() {
+		Cursor cursor = null;
+		try {
+
+			cursor = db.rawQuery(
+					"SELECT  id AS _id, sms_to , message , sms_to_complete , messageStatus "
+							+ ", sentOn FROM sentItems ORDER BY id DESC", null);
+
+		} catch (Exception e) {
+			Log.e("TABLE_SENT_ITEM SELECT", "error : " + e.toString());
+			return null;
+		}
+
+		return cursor;
+	}
+
+	// Return true if all Auto Reply message gets deleted
+	public static Boolean deleteAllSentMessage() {
+
+		try {
+
+			db.execSQL("DELETE FROM sentItems");
+			Log.d("TABLE_SENT_ITEM DELETE", "Record deleted!");
+
+		} catch (Exception e) {
+			Log.e("TABLE_SENT_ITEM DELETE", "error : " + e.toString());
+			return false;
+		}
+		return true;
+	}
+	
+	// Return true if all Auto Reply message gets deleted
+	public static Boolean deleteSentMessage(String sentId) {
+
+		try {
+
+			db.execSQL("DELETE FROM sentItems where id = " + sentId);
+			Log.d("TABLE_SENT_ITEM DELETE", "Record deleted!");
+
+		} catch (Exception e) {
+			Log.e("TABLE_SENT_ITEM DELETE", "error : " + e.toString());
+			return false;
+		}
+		return true;
+	}
+
+	// Save Sent messages
+	public static Boolean saveSentMessage(String to, String message,
+			String toComplete, String messageStatus, String date) {
+
+		ContentValues values = new ContentValues();
+		values.put(TO, to);
+		values.put(MESSAGE, message);
+		values.put("sms_to_complete", toComplete);
+		values.put("messageStatus", messageStatus);
+		values.put("sentOn", date);
+
+		try {
+
+			// Perform insert into Database
+			db.insert(DbHelper.TABLE_SENT_ITEMS, null, values);
+			Log.d("TABLE_SENT_ITEM INSERT", "Record inserted!");
+
+		} catch (Exception e) {
+			Log.e("TABLE_SENT_ITEM", "error : " + e.toString());
+			return false;
+		}
+		return true;
+
 	}
 
 	public static void openDb(Context context) {
