@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/main_background" >
 
-    <LinearLayout style="@style/TitleBar" >
+     <LinearLayout style="@style/TitleBar" >
 
         <ImageView
             android:layout_width="30dp"
@@ -17,6 +17,15 @@
         <TextView
             style="@style/TitleBarText"
             android:text="@string/dashboard" />
+
+        <TextView
+            android:id="@+id/txt_credits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <ScrollView
