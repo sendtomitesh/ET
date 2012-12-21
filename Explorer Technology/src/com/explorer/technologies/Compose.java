@@ -159,7 +159,10 @@ public class Compose extends Activity {
 	};
 
 	private void saveMsgToDrafts() {
-		String toComplete = setupAndGetFinalContactList();
+		String toComplete="";
+		
+		if(textTo.getText().length()>0)
+			toComplete = setupAndGetFinalContactList();
 		DatabaseFunctions.saveToDrafts(textTo.getText().toString(), textMessage
 				.getText().toString(), toComplete);
 
@@ -830,6 +833,9 @@ public class Compose extends Activity {
 		final TextView textTitle = (TextView) GROUP_DIALOG
 				.findViewById(R.id.txt_title);
 		textTitle.setText("Select Group");
+		
+		final EditText contactSearchBox = (EditText)GROUP_DIALOG.findViewById(R.id.contactSearchBox);
+		contactSearchBox.setHint("Group Name");
 
 		String[] from = new String[] { "id", "name" };
 		int[] to = new int[] { R.id.contact_id, R.id.contact_name };
