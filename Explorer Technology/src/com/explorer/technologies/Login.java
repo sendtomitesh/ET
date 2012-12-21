@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -46,9 +47,13 @@ public class Login extends Activity {
 	}
 	public void register(View V)
 	{
-		Intent dashboardIntent = new Intent(getApplicationContext(), Register.class);
+		Uri uri = Uri.parse("http://www.xwireless.net/register.php");
+		Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+		startActivity(intent);
+		
+	/*	Intent dashboardIntent = new Intent(getApplicationContext(), Register.class);
 		startActivity(dashboardIntent);
-		finish();
+		finish(); */
 	}
 	public void movetoDashboard()
 	{

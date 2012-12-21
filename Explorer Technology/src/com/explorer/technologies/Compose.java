@@ -145,8 +145,8 @@ public class Compose extends Activity {
 			case DialogInterface.BUTTON_POSITIVE:
 				// Yes button clicked
 
-				saveMsgToDrafts();
-				moveToDashboard();
+				if(saveMsgToDrafts())
+					moveToDashboard();
 				break;
 
 			case DialogInterface.BUTTON_NEGATIVE:
@@ -158,13 +158,23 @@ public class Compose extends Activity {
 
 	};
 
-	private void saveMsgToDrafts() {
+	private boolean saveMsgToDrafts() {
 		String toComplete="";
 		
 		if(textTo.getText().length()>0)
+			try
+			{
 			toComplete = setupAndGetFinalContactList();
-		DatabaseFunctions.saveToDrafts(textTo.getText().toString(), textMessage
-				.getText().toString(), toComplete);
+			DatabaseFunctions.saveToDrafts(textTo.getText().toString(), textMessage
+					.getText().toString(), toComplete);
+			}
+			catch(Exception e)
+			{
+				Toast.makeText(getApplicationContext(), "Wrong Characters in To field, please re-enter", Toast.LENGTH_SHORT).show();
+				return false;
+			}
+		return true;
+		
 
 	}
 
@@ -835,10 +845,12 @@ public class Compose extends Activity {
 		textTitle.setText("Select Group");
 		
 		final EditText contactSearchBox = (EditText)GROUP_DIALOG.findViewById(R.id.contactSearchBox);
+		final Button btnSearch = (Button) GROUP_DIALOG
+				.findViewById(R.id.btnSearch);
 		contactSearchBox.setHint("Group Name");
 
-		String[] from = new String[] { "id", "name" };
-		int[] to = new int[] { R.id.contact_id, R.id.contact_name };
+		final String[] from = new String[] { "id", "name" };
+		final int[] to = new int[] { R.id.contact_id, R.id.contact_name };
 		final ListView listview = (ListView) GROUP_DIALOG
 				.findViewById(R.id.contact_listview);
 
@@ -860,6 +872,41 @@ public class Compose extends Activity {
 				setToNumberforGroup(name);
 				GROUP_DIALOG.dismiss();
 
+			}
+		});
+		
+		btnSearch.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				String searchText = contactSearchBox.getText().toString().toLowerCase();
+				ArrayList<HashMap<String, String>> filteredGroup = new ArrayList<HashMap<String,String>>();
+				for(int i=0;i<groupList.size();i++)
+				{
+					String name=groupList.get(i).get("name").toLowerCase();
+					if(name.contains(searchText))
+					{
+						
+						HashMap<String, String> newHash = new HashMap<String, String>();
+						newHash.put("id", groupList.get(i).get("id").toString());
+						newHash.put("name", groupList.get(i).get("name").toString());
+						filteredGroup.add(newHash);
+						
+					}
+					
+				}
+				
+				if(filteredGroup.size()>0)
+				{
+					ListAdapter adapter = new SimpleAdapter(Compose.this, filteredGroup,
+							R.layout.call_log_item, from, to);
+	
+					listview.setAdapter(adapter);
+				}
+
+				
+				
 			}
 		});
 		GROUP_DIALOG.show();

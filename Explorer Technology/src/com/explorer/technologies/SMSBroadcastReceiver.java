@@ -71,6 +71,7 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 		
 		Intent resultIntent = new Intent(context,SMSDialog.class);
 		resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		
 		resultIntent.putExtra("notify", "notify");
 		resultIntent.putExtra("to", title);
 		resultIntent.putExtra("msg", message);

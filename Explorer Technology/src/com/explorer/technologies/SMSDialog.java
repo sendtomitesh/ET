@@ -19,6 +19,12 @@ public class SMSDialog extends Activity {
 		
         
 	}
+	@Override
+	protected void onNewIntent(Intent intent) {
+		// TODO Auto-generated method stub
+		checkNotification();
+		super.onNewIntent(intent);
+	}
 
 	@Override
 	public void onBackPressed() {

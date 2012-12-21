@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.View;
@@ -55,14 +57,13 @@ public class Main extends Activity {
     private void globalInitialize(){
     	 textCredits = (TextView)findViewById(R.id.txt_credits);
          textLink  = (TextView)findViewById(R.id.txt_link);
-         textLink.setOnClickListener(new OnClickListener() {
- 			
- 			@Override
- 			public void onClick(View v) {
- 				// TODO Auto-generated method stub
- 				Linkify.addLinks(textLink, Linkify.WEB_URLS);
- 			}
- 		});
+         textLink.setText(Html.fromHtml(
+            "<a href=\"http://www.xwireless.net\">X-Wireless</a>"));
+         textLink.setMovementMethod(LinkMovementMethod.getInstance());
+         TextView textGetCredit=(TextView)findViewById(R.id.txtGetsmsCredit);
+         textGetCredit.setText(Html.fromHtml(
+            "<a href=\"http://xwireless.net/bulk_sms_how_to_pay.php\">Get Credit</a>"));
+         textGetCredit.setMovementMethod(LinkMovementMethod.getInstance());
     }
    public void gotoInbox(View v)
     {
