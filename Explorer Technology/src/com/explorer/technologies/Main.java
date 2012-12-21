@@ -4,22 +4,24 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 public class Main extends Activity {
 	SQLiteDatabase db;
 	DbHelper dbHelper;
 	TextView textCredits;
+	TextView textLink;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         //Open the database
         DatabaseFunctions.openDb(getApplicationContext());
-        
-        textCredits = (TextView)findViewById(R.id.txt_credits);
+        globalInitialize();
         if(Utility.smsCredit == null){
         	textCredits.setText("Credit : 0" + Utility.smsCredit);
         }
@@ -50,7 +52,18 @@ public class Main extends Activity {
         return true;
     }
     
-    
+    private void globalInitialize(){
+    	 textCredits = (TextView)findViewById(R.id.txt_credits);
+         textLink  = (TextView)findViewById(R.id.txt_link);
+         textLink.setOnClickListener(new OnClickListener() {
+ 			
+ 			@Override
+ 			public void onClick(View v) {
+ 				// TODO Auto-generated method stub
+ 				Linkify.addLinks(textLink, Linkify.WEB_URLS);
+ 			}
+ 		});
+    }
    public void gotoInbox(View v)
     {
 	   Intent inboxIntent = new Intent(getApplicationContext(),Inbox.class);
