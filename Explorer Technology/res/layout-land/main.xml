@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background" 
-    >
+    android:background="@color/main_background" >
 
     <LinearLayout style="@style/TitleBar" >
 
@@ -23,6 +22,7 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_marginBottom="30dp"
         android:layout_marginTop="40dp"
         android:fadingEdge="none"
         android:fillViewport="true" >
@@ -60,9 +60,8 @@
                 android:id="@+id/layout_sent"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_toRightOf="@+id/layout_inbox"
-                
                 android:layout_margin="10dp"
+                android:layout_toRightOf="@+id/layout_inbox"
                 android:background="@drawable/menu_layout"
                 android:gravity="center_horizontal"
                 android:onClick="gotoSent"
@@ -80,13 +79,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/sent" />
             </LinearLayout>
-           
-			<LinearLayout
+
+            <LinearLayout
                 android:id="@+id/layout_group"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_toRightOf="@+id/layout_sent"
                 android:layout_margin="10dp"
+                android:layout_toRightOf="@+id/layout_sent"
                 android:background="@drawable/menu_layout"
                 android:gravity="center_horizontal"
                 android:onClick="gotoGroups"
@@ -104,13 +103,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/group" />
             </LinearLayout>
-            
+
             <LinearLayout
                 android:id="@+id/layout_compose"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_margin="10dp"
                 android:layout_below="@+id/layout_inbox"
+                android:layout_margin="10dp"
                 android:background="@drawable/menu_layout"
                 android:gravity="center_horizontal"
                 android:onClick="gotoCompose"
@@ -128,8 +127,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/compose" />
             </LinearLayout>
-
-
 
             <LinearLayout
                 android:id="@+id/layout_draft"
@@ -156,8 +153,6 @@
                     android:text="@string/drafts" />
             </LinearLayout>
 
-
-
             <LinearLayout
                 android:id="@+id/layout_autoReply"
                 android:layout_width="100dp"
@@ -182,8 +177,18 @@
                     android:layout_height="wrap_content"
                     android:text="@string/autoreply" />
             </LinearLayout>
-            
         </RelativeLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/txt_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/header_background"
+        android:textSize="20sp" />
 
 </RelativeLayout>
