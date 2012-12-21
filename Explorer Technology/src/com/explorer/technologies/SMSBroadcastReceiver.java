@@ -50,7 +50,6 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 		
 	@SuppressWarnings("unused")
 	public void sendAutoReply(String to,String message){
-	
 		
 		Date date = new Date();
 		autoReplyList = getAutoReplyList();

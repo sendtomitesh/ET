@@ -43,6 +43,7 @@ public class SMSDialog extends Activity {
     	TextView textMessage = (TextView)findViewById(R.id.txt_message);
 		Button btnReply = (Button) findViewById(R.id.btn_reply);
 		Button btnForward = (Button) findViewById(R.id.btn_forward);
+		Button btnCancel = (Button) findViewById(R.id.btn_cancel);
 		
 		textFrom.setText("From : " + from );
 		
@@ -67,6 +68,13 @@ public class SMSDialog extends Activity {
 				Intent composeIntent = new Intent(getApplicationContext(),Compose.class);
 				composeIntent.putExtra("msg", intent.getStringExtra("msg"));
 		    	startActivity(composeIntent);
+				finish();
+			}
+		});
+		
+		btnCancel.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
 				finish();
 			}
 		});
