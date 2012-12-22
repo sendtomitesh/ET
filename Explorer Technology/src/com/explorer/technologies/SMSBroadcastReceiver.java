@@ -59,7 +59,10 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 			data = autoReplyList.get(i);
 			if(checkKeyword(data.keyword,message)){
 				//Toast.makeText(appContext,"Id : " + data.id + "\nKeyword : " + data.keyword + "\n" + data.message, Toast.LENGTH_SHORT).show();
-				new SendMessage().execute(Utility.sender_id,to,data.message);
+				if(Utility.hasConnection(appContext))
+					new SendMessage().execute(Utility.sender_id,to,data.message);
+				else
+					return;
 				boolean check = DatabaseFunctions.addAutoReplyDetail(data.id,to,date.toString());
 				
 			}

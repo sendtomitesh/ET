@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.explorer.technologies.Compose.DeleteDraft;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -17,6 +19,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Groups extends Activity {
 
@@ -34,7 +37,12 @@ public class Groups extends Activity {
 		txtTitle = (TextView) findViewById(R.id.txt_title);
 		imgTitle.setImageResource(R.drawable.groupsms);
 		txtTitle.setText(getResources().getString(R.string.groups));
-		new ShowGroups().execute();
+		if(Utility.hasConnection(getApplicationContext()))
+			new ShowGroups().execute();
+
+		else
+			Toast.makeText(getApplicationContext(), "No internet Connection Found!", Toast.LENGTH_LONG).show();
+		
 	}
 
 	public class ShowGroups extends

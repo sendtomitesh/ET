@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 public class SplashScreen extends Activity {
 
@@ -25,7 +26,13 @@ public class SplashScreen extends Activity {
 	    sp=getSharedPreferences("credentials", MODE_WORLD_READABLE);
         if(Utility.getSharedPrefValues(sp))
         {
-        	new loginAPI().execute();
+        	if(Utility.hasConnection(getApplicationContext()))
+        		new loginAPI().execute();
+        	else
+        	{
+        		Toast.makeText(getApplicationContext(), "No internet connection Found!", Toast.LENGTH_LONG).show();
+        		finish();
+        	}
         }
         else
         {

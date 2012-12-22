@@ -11,6 +11,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 public class Utility {
@@ -34,6 +36,28 @@ public class Utility {
 		sender_id = send_id;
 	}
 
+	public static boolean hasConnection(Context cont) {
+	    ConnectivityManager cm = (ConnectivityManager) cont.getApplicationContext().getSystemService(
+	        Context.CONNECTIVITY_SERVICE);
+
+	    NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+	    if (wifiNetwork != null && wifiNetwork.isConnected()) {
+	      return true;
+	    }
+
+	    NetworkInfo mobileNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+	    if (mobileNetwork != null && mobileNetwork.isConnected()) {
+	      return true;
+	    }
+
+	    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+	    if (activeNetwork != null && activeNetwork.isConnected()) {
+	      return true;
+	    }
+
+	    return false;
+	}
+	
 	public static boolean isLatinLetter(char c) {
 		return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
 	}

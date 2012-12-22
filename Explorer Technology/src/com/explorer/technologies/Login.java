@@ -42,7 +42,10 @@ public class Login extends Activity {
 		uname=et_Uname.getText().toString();
 		pass=et_Password.getText().toString();
 		sender_id= et_sender_id.getText().toString();
-		new LoginApi().execute();
+		if(Utility.hasConnection(getApplicationContext()))
+			new LoginApi().execute();
+		else
+			Toast.makeText(getApplicationContext(), "No internet Connection Found!", Toast.LENGTH_LONG).show();
 		
 	
 	}

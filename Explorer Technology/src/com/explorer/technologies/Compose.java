@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.explorer.technologies.Login.LoginApi;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -272,16 +274,26 @@ public class Compose extends Activity {
 		if (repairedNumbers.equals("") && !groupIds.equals("")) {
 
 			// Toast.makeText(Compose.this, groupIds, Toast.LENGTH_LONG).show();
-			new SendMessageToGroup().execute(textSender.getText().toString(),
-					groupIds, textMessage.getText().toString());
+			if(Utility.hasConnection(getApplicationContext()))
+				new SendMessageToGroup().execute(textSender.getText().toString(),
+						groupIds, textMessage.getText().toString());
+			else
+				Toast.makeText(getApplicationContext(), "No internet connection Found!", Toast.LENGTH_LONG).show();
+			
+			
 		} else if (!repairedNumbers.equals("")) {
 
 			// Toast.makeText(Compose.this, repairedNumbers,
 			// Toast.LENGTH_LONG).show();
 			// Toast.makeText(Compose.this, groupIds, Toast.LENGTH_LONG).show();
-			new SendMessage().execute(textSender.getText().toString(),
-					repairedNumbers, textMessage.getText().toString(),
-					scheduleDateTime);
+			if(Utility.hasConnection(getApplicationContext()))
+				new SendMessage().execute(textSender.getText().toString(),
+						repairedNumbers, textMessage.getText().toString(),
+						scheduleDateTime);
+			else
+				Toast.makeText(getApplicationContext(), "No internet connection Found!", Toast.LENGTH_LONG).show();
+			
+			
 		}
 
 	}
@@ -534,25 +546,21 @@ public class Compose extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 
-			// if (result == 0)
-			// {
+			
 			insertSentMessage(result);
-			new UpdateCredits().execute();
+			if(Utility.hasConnection(getApplicationContext()))
+				new UpdateCredits().execute();
+			else
+				Toast.makeText(getApplicationContext(), "No internet connection Found!", Toast.LENGTH_LONG).show();
+			
 			if (isDraft) {
 				new DeleteDraft().execute();
 				// isDraft=false;
 			}
-			// Toast.makeText(getApplicationContext(),
-			// "Message sent successfully ", Toast.LENGTH_LONG).show();
+			
 			Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
 					.show();
-			// }
-			// else
-			// {
-			// Toast.makeText(getApplicationContext(),
-			// "ERROR SENDING SMS. PLEASE CHECK YOUR INTERNET CONNECTION! ",
-			// Toast.LENGTH_LONG).show();
-			// }
+			
 
 			try {
 				pd.dismiss();
@@ -561,10 +569,16 @@ public class Compose extends Activity {
 
 			// if groups exists
 			if (groupIds != "") {
-				new SendMessageToGroup()
-						.execute(textSender.getText().toString(), groupIds,
-								textMessage.getText().toString());
+				
+				if(Utility.hasConnection(getApplicationContext()))
+					new SendMessageToGroup()
+							.execute(textSender.getText().toString(), groupIds,
+						textMessage.getText().toString());
 
+				else
+					Toast.makeText(getApplicationContext(), "No internet Connection Found!", Toast.LENGTH_LONG).show();
+				
+				
 			} else
 				moveToDashboard();
 			super.onPostExecute(result);
@@ -598,25 +612,31 @@ public class Compose extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 
-			// if (result == 0)
-			// {
+			
 			insertSentMessage(result);
-			new UpdateCredits().execute();
-			// Toast.makeText(getApplicationContext(),
-			// "Message sent successfully to group ", Toast.LENGTH_LONG).show();
+			
+			if(Utility.hasConnection(getApplicationContext()))
+				new UpdateCredits().execute();
+
+			else
+				Toast.makeText(getApplicationContext(), "No internet Connection Found!", Toast.LENGTH_LONG).show();
+
+			
+			
 			Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
 					.show();
-			if (isDraft) {
-				new DeleteDraft().execute();
+			if (isDraft) 
+			{
+				if(Utility.hasConnection(getApplicationContext()))
+					new DeleteDraft().execute();
+
+				else
+					Toast.makeText(getApplicationContext(), "No internet Connection Found!", Toast.LENGTH_LONG).show();
+
+				
 				moveToDashboard();
 			}
-			// }
-			// else
-			// {
-			// Toast.makeText(getApplicationContext(),
-			// "Error sending to group ", Toast.LENGTH_LONG).show();
-			// }
-
+			
 			groupIds = "";
 			try {
 				pd.dismiss();
@@ -826,7 +846,10 @@ public class Compose extends Activity {
 
 	public void getGroups(View v) {
 		if (!isGroupListLoaded) {
-			new ShowGroups().execute();
+			if(Utility.hasConnection(getApplicationContext()))
+				new ShowGroups().execute();
+			else
+				Toast.makeText(getApplicationContext(), "No internet connection Found!", Toast.LENGTH_LONG).show();
 		} else {
 			showinList();
 		}
