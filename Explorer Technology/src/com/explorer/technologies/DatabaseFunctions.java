@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 public class DatabaseFunctions {
 
@@ -29,10 +28,10 @@ public class DatabaseFunctions {
 
 			// Perform insert into Database
 			db.insert(DbHelper.TABLE_DRAFTS, null, values);
-			Log.d("DRAFT INSERT", "Record inserted!");
+			//Log.d("DRAFT INSERT", "Record inserted!");
 
 		} catch (Exception e) {
-			Log.e("DRAFT INSERT", "error : " + e.toString());
+			//Log.e("DRAFT INSERT", "error : " + e.toString());
 			return false;
 		}
 		return true;
@@ -50,7 +49,7 @@ public class DatabaseFunctions {
 							null);
 
 		} catch (Exception e) {
-			Log.e("DRAFT SELECT", "error : " + e.toString());
+			//Log.e("DRAFT SELECT", "error : " + e.toString());
 			return null;
 		}
 
@@ -63,10 +62,10 @@ public class DatabaseFunctions {
 		try {
 
 			db.execSQL("DELETE FROM drafts WHERE id =" + id);
-			Log.d("DRAFT DELETE", "Record deleted!");
+			//Log.d("DRAFT DELETE", "Record deleted!");
 
 		} catch (Exception e) {
-			Log.e("DRAFT DELETE", "error : " + e.toString());
+			//Log.e("DRAFT DELETE", "error : " + e.toString());
 			return false;
 		}
 		return true;
@@ -83,10 +82,10 @@ public class DatabaseFunctions {
 
 			// Perform insert into Database
 			db.insert(DbHelper.TABLE_AUTO_REPLY, null, values);
-			Log.d("AUTO_REPLY INSERT", "Record inserted!");
+			//Log.d("AUTO_REPLY INSERT", "Record inserted!");
 
 		} catch (Exception e) {
-			Log.e("AUTO_REPLY INSERT", "error : " + e.toString());
+			//Log.e("AUTO_REPLY INSERT", "error : " + e.toString());
 			return false;
 		}
 		return true;
@@ -106,10 +105,10 @@ public class DatabaseFunctions {
 
 			// Perform insert into Database
 			db.insert(DbHelper.TABLE_AUTO_REPLY_DETAIL, null, values);
-			Log.d("AUTO_REPLY_DETAIL INSERT", "Record inserted!");
+			//Log.d("AUTO_REPLY_DETAIL INSERT", "Record inserted!");
 
 		} catch (Exception e) {
-			Log.e("AUTO_REPLY_DETAIL", "error : " + e.toString());
+			//Log.e("AUTO_REPLY_DETAIL", "error : " + e.toString());
 			return false;
 		}
 		return true;
@@ -127,10 +126,10 @@ public class DatabaseFunctions {
 			// Perform Update
 			String strFilter = "sms_to='" + to + "'";
 			db.update(DbHelper.TABLE_AUTO_REPLY, values, strFilter, null);
-			Log.d("AUTO_REPLY UPDATE", "Record Updated!");
+			//Log.d("AUTO_REPLY UPDATE", "Record Updated!");
 
 		} catch (Exception e) {
-			Log.e("AUTO_REPLY UPDATE", "error : " + e.toString());
+			//Log.e("AUTO_REPLY UPDATE", "error : " + e.toString());
 			return false;
 		}
 		return true;
@@ -144,10 +143,10 @@ public class DatabaseFunctions {
 
 			db.execSQL("DELETE FROM autoReply WHERE id =" + id);
 			db.execSQL("DELETE FROM autoReplyDetail WHERE autoReplyId = " + id);
-			Log.d("DRAFT AUTO_REPLY", "Record deleted!");
+			//Log.d("DRAFT AUTO_REPLY", "Record deleted!");
 
 		} catch (Exception e) {
-			Log.e("DRAFT AUTO_REPLY", "error : " + e.toString());
+			//Log.e("DRAFT AUTO_REPLY", "error : " + e.toString());
 			return false;
 		}
 		return true;
@@ -159,10 +158,10 @@ public class DatabaseFunctions {
 		try {
 
 			db.execSQL("DELETE FROM drafts");
-			Log.d("DRAFT DELETE", "Record deleted!");
+			//Log.d("DRAFT DELETE", "Record deleted!");
 
 		} catch (Exception e) {
-			Log.e("DRAFT DELETE", "error : " + e.toString());
+			//Log.e("DRAFT DELETE", "error : " + e.toString());
 			return false;
 		}
 		return true;
@@ -184,7 +183,7 @@ public class DatabaseFunctions {
 
 			cursor.close();
 		} catch (Exception e) {
-			Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
+			//Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
 		}
 
 		return check;
@@ -206,7 +205,7 @@ public class DatabaseFunctions {
 
 			cursor.close();
 		} catch (Exception e) {
-			Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
+			//Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
 		}
 
 		return message;
@@ -228,7 +227,7 @@ public class DatabaseFunctions {
 							null);
 
 		} catch (Exception e) {
-			Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
+			//Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
 			return null;
 		}
 
@@ -244,7 +243,7 @@ public class DatabaseFunctions {
 					+ " ORDER BY id DESC", null);
 
 		} catch (Exception e) {
-			Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
+			//Log.e("AUTO_REPLY SELECT", "error : " + e.toString());
 			return null;
 		}
 
@@ -257,10 +256,10 @@ public class DatabaseFunctions {
 		try {
 
 			db.execSQL("DELETE FROM autoReply");
-			Log.d("AUTO_REPLY DELETE", "Record deleted!");
+			//Log.d("AUTO_REPLY DELETE", "Record deleted!");
 
 		} catch (Exception e) {
-			Log.e("AUTO_REPLY DELETE", "error : " + e.toString());
+			//Log.e("AUTO_REPLY DELETE", "error : " + e.toString());
 			return false;
 		}
 		return true;
@@ -276,7 +275,7 @@ public class DatabaseFunctions {
 							+ ", sentOn FROM sentItems ORDER BY id DESC", null);
 
 		} catch (Exception e) {
-			Log.e("TABLE_SENT_ITEM SELECT", "error : " + e.toString());
+			//Log.e("TABLE_SENT_ITEM SELECT", "error : " + e.toString());
 			return null;
 		}
 
@@ -289,10 +288,10 @@ public class DatabaseFunctions {
 		try {
 
 			db.execSQL("DELETE FROM sentItems");
-			Log.d("TABLE_SENT_ITEM DELETE", "Record deleted!");
+			//Log.d("TABLE_SENT_ITEM DELETE", "Record deleted!");
 
 		} catch (Exception e) {
-			Log.e("TABLE_SENT_ITEM DELETE", "error : " + e.toString());
+			//Log.e("TABLE_SENT_ITEM DELETE", "error : " + e.toString());
 			return false;
 		}
 		return true;
@@ -304,10 +303,10 @@ public class DatabaseFunctions {
 		try {
 
 			db.execSQL("DELETE FROM sentItems where id = " + sentId);
-			Log.d("TABLE_SENT_ITEM DELETE", "Record deleted!");
+			//Log.d("TABLE_SENT_ITEM DELETE", "Record deleted!");
 
 		} catch (Exception e) {
-			Log.e("TABLE_SENT_ITEM DELETE", "error : " + e.toString());
+			//Log.e("TABLE_SENT_ITEM DELETE", "error : " + e.toString());
 			return false;
 		}
 		return true;
@@ -328,10 +327,10 @@ public class DatabaseFunctions {
 
 			// Perform insert into Database
 			db.insert(DbHelper.TABLE_SENT_ITEMS, null, values);
-			Log.d("TABLE_SENT_ITEM INSERT", "Record inserted!");
+			//Log.d("TABLE_SENT_ITEM INSERT", "Record inserted!");
 
 		} catch (Exception e) {
-			Log.e("TABLE_SENT_ITEM", "error : " + e.toString());
+			//Log.e("TABLE_SENT_ITEM", "error : " + e.toString());
 			return false;
 		}
 		return true;

@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background" 
-    >
+    android:background="@color/main_background" >
 
     <LinearLayout style="@style/TitleBar" >
 
@@ -27,12 +26,12 @@
             android:textColor="#ffffff"
             android:textSize="18sp"
             android:textStyle="bold" />
-
     </LinearLayout>
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_marginBottom="25dp"
         android:layout_marginTop="40dp"
         android:fadingEdge="none"
         android:fillViewport="true" >
@@ -70,9 +69,8 @@
                 android:id="@+id/layout_sent"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_toRightOf="@+id/layout_inbox"
-                
                 android:layout_margin="10dp"
+                android:layout_toRightOf="@+id/layout_inbox"
                 android:background="@drawable/menu_layout"
                 android:gravity="center_horizontal"
                 android:onClick="gotoSent"
@@ -90,13 +88,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/sent" />
             </LinearLayout>
-           
-			<LinearLayout
+
+            <LinearLayout
                 android:id="@+id/layout_group"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_toRightOf="@+id/layout_sent"
                 android:layout_margin="10dp"
+                android:layout_toRightOf="@+id/layout_sent"
                 android:background="@drawable/menu_layout"
                 android:gravity="center_horizontal"
                 android:onClick="gotoGroups"
@@ -114,13 +112,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/group" />
             </LinearLayout>
-            
+
             <LinearLayout
                 android:id="@+id/layout_compose"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_margin="10dp"
                 android:layout_below="@+id/layout_inbox"
+                android:layout_margin="10dp"
                 android:background="@drawable/menu_layout"
                 android:gravity="center_horizontal"
                 android:onClick="gotoCompose"
@@ -138,8 +136,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/compose" />
             </LinearLayout>
-
-
 
             <LinearLayout
                 android:id="@+id/layout_draft"
@@ -166,8 +162,6 @@
                     android:text="@string/drafts" />
             </LinearLayout>
 
-
-
             <LinearLayout
                 android:id="@+id/layout_autoReply"
                 android:layout_width="100dp"
@@ -192,30 +186,29 @@
                     android:layout_height="wrap_content"
                     android:text="@string/autoreply" />
             </LinearLayout>
-
-             <TextView
-                 android:id="@+id/txt_link"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_alignParentLeft="true"
-                 android:layout_below="@+id/layout_autoReply"
-                 android:layout_marginBottom="10dp"
-                 android:layout_marginTop="10dp"
-                 android:text="@string/link"
-                 android:textColor="@color/header_background"
-                 android:textSize="15sp" />
-
-             <TextView
-                 android:id="@+id/txtGetsmsCredit"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_alignLeft="@+id/layout_autoReply"
-                 android:layout_alignTop="@+id/txt_link"
-                 android:text="@string/link"
-                 android:textColor="@color/header_background"
-                 android:textSize="15sp" />
-
         </RelativeLayout>
     </ScrollView>
+
+  <TextView
+        android:id="@+id/txt_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:textColor="@color/header_background"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/txtGetsmsCredit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="10dp"
+        android:textColor="@color/header_background"
+        android:textSize="15sp" />
 
 </RelativeLayout>

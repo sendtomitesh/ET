@@ -45,7 +45,7 @@ public class SMSDialog extends Activity {
 			from = intent.getStringExtra("to").toString();
     	}
     	
-    	TextView textFrom = (TextView)findViewById(R.id.txt_title);
+    	TextView textFrom = (TextView)findViewById(R.id.txt_from);
     	TextView textMessage = (TextView)findViewById(R.id.txt_message);
 		Button btnReply = (Button) findViewById(R.id.btn_reply);
 		Button btnForward = (Button) findViewById(R.id.btn_forward);

@@ -55,7 +55,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUTO_REPLY_DETAIL);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_SENT_ITEMS);
 		this.onCreate(db);
-		Log.d(TAG, "Database updated successfully!");
+		//Log.d(TAG, "Database updated successfully!");
 	}
 	
 	

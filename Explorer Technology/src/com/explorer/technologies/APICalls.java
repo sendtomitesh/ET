@@ -17,8 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 
 
 public class APICalls {
@@ -60,11 +58,11 @@ public class APICalls {
 			}
 		} catch (ClientProtocolException e) {
 		
-			Log.e("Client error", e.toString());
+			//Log.e("Client error", e.toString());
 			return 2;
 		} catch (IOException e) {
 			
-			Log.e("IO Error", e.toString());
+			//Log.e("IO Error", e.toString());
 			return 3;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -116,11 +114,11 @@ public class APICalls {
 			//	else return 1;
 			} catch (ClientProtocolException e) {
 			
-				Log.e("Client error", e.toString());
+				//Log.e("Client error", e.toString());
 				//return 2;
 			} catch (IOException e) {
 				
-				Log.e("IO Error", e.toString());
+				//Log.e("IO Error", e.toString());
 				//return 3;
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -161,11 +159,11 @@ public class APICalls {
 				else return 1;
 			} catch (ClientProtocolException e) {
 			
-				Log.e("Client error", e.toString());
+				//Log.e("Client error", e.toString());
 				return 2;
 			} catch (IOException e) {
 				
-				Log.e("IO Error", e.toString());
+				//Log.e("IO Error", e.toString());
 				return 3;
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -212,11 +210,11 @@ public class APICalls {
 						
 					} catch (ClientProtocolException e) {
 					
-						Log.e("Client error", e.toString());
+						//Log.e("Client error", e.toString());
 						return "Client error";
 					} catch (IOException e) {
 						
-						Log.e("IO Error", e.toString());
+						//Log.e("IO Error", e.toString());
 						return "IO error";
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
@@ -261,11 +259,11 @@ public class APICalls {
 							
 						} catch (ClientProtocolException e) {
 							
-							Log.e("Client error", e.toString());
+							//Log.e("Client error", e.toString());
 							return "Client error";
 						} catch (IOException e) {
 							
-							Log.e("IO Error", e.toString());
+							//Log.e("IO Error", e.toString());
 							return "IO error";
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
