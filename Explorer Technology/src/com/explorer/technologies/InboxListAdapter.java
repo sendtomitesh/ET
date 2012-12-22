@@ -8,7 +8,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract.PhoneLookup;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +100,7 @@ public class InboxListAdapter extends SimpleCursorAdapter {
 			 
 			
 		} catch (Exception e) {
-			Log.e("CONTACT NAME", "error : " + e.toString());
+			//Log.e("CONTACT NAME", "error : " + e.toString());
 			return null;
 		}
 

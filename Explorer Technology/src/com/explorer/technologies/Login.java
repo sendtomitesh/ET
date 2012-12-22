@@ -32,9 +32,6 @@ public class Login extends Activity {
 		et_sender_id =(EditText)findViewById(R.id.textbox_sender);
 		
 	}
-
-
-
 	
 	public void loginUser(View v) {
 

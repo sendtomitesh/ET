@@ -11,7 +11,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.util.Log;
 
 public class Utility {
 	public static String ServerPath = "http://smsc.xwireless.net/API/WebSMS/Http/v2.0/?";
@@ -85,12 +84,12 @@ public class Utility {
 			is.close();
 			result = sb.toString();
 		} catch (Exception e) {
-			Log.e("log_tag", "Error converting result " + e.toString());
+			//Log.e("log_tag", "Error converting result " + e.toString());
 		}
 		try {
 			jArray = new JSONObject(result);
 		} catch (JSONException e) {
-			Log.e("log_tag", "Error parsing data " + e.toString());
+			//Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 
 		return jArray;

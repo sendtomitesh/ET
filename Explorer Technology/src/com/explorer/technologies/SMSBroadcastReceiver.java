@@ -37,7 +37,7 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 				}
 				if (messages.length > -1) {
 					
-					Log.i(TAG,"Message recieved: " + messages[0].getMessageBody());
+					//Log.i(TAG,"Message recieved: " + messages[0].getMessageBody());
 				
 					// Add Notification Dialog
 					movetoDialog(context, messages[0].getOriginatingAddress(), messages[0].getMessageBody());
