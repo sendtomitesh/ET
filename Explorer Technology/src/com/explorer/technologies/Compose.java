@@ -74,6 +74,7 @@ public class Compose extends Activity {
 		textSender.setText(Utility.sender_id);
 		checkIfComesFromDrafts();
 		checkIfComesFromGroups();
+		
 	}
 
 	private void checkIfComesFromDrafts() {
@@ -254,9 +255,11 @@ public class Compose extends Activity {
 
 		DATE_PICKER_DIALOG.show();
 
+		
+		
 	}
 
-	public void sendMessage(View v) {
+		public void sendMessage(View v) {
 
 		// replaces ,, to , if exists
 		String repairedNumbers = "";
@@ -1247,4 +1250,6 @@ public class Compose extends Activity {
 	public Object onRetainNonConfigurationInstance() {
 		return itemss;
 	}
+
+	
 }
