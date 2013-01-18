@@ -15,6 +15,7 @@ public class SplashScreen extends Activity {
 	 SharedPreferences sp;
 	
 	/** Called when the activity is first created. */
+	@SuppressWarnings("deprecation")
 	@SuppressLint("WorldReadableFiles")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,11 +37,13 @@ public class SplashScreen extends Activity {
         }
         else
         {
-        	loadSplash();
+        	new GetCountries().execute();
         }
         // The thread to wait for splash screen events
        	    // TODO Auto-generated method stub
 	}
+	
+	
 	private void loadSplash() {
 		// TODO Auto-generated method stub
 		final SplashScreen sPlashScreen = this;
@@ -113,6 +116,40 @@ public class SplashScreen extends Activity {
 			else if(apiresult==1)
 			{
 				movetoLogin();
+			}
+			
+			super.onPostExecute(result);
+		}
+		
+	}
+	
+	public class GetCountries extends AsyncTask<String, Integer, Boolean>
+	{
+		
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			Country.initalizeList();
+			super.onPreExecute();
+		}
+		@Override
+		protected Boolean doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			
+			return Country.setCountries();
+		}
+		@Override
+		protected void onPostExecute(Boolean result) {
+			// TODO Auto-generated method stub
+			
+			if(result)
+			{
+				//Toast.makeText(getApplicationContext(), "Got countries",Toast.LENGTH_SHORT).show();
+				loadSplash();
+			}
+			else{
+				Toast.makeText(getApplicationContext(), "Could not load countries!",Toast.LENGTH_SHORT).show();
+				finish();
 			}
 			
 			super.onPostExecute(result);

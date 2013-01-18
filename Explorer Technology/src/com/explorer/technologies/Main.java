@@ -65,7 +65,7 @@ public class Main extends Activity {
     }
    public void gotoInbox(View v)
     {
-	   Intent inboxIntent = new Intent(getApplicationContext(),Inbox.class);
+	   Intent inboxIntent = new Intent(getApplicationContext(),InboxActivity.class);
     	startActivity(inboxIntent);
     }
     

@@ -37,7 +37,7 @@
             android:name="com.explorer.technologies.Register"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
-            android:name="com.explorer.technologies.Inbox"
+            android:name="com.explorer.technologies.InboxActivity"
             android:theme="@style/NoTitleExplorerTech" />
         <activity
             android:name="com.explorer.technologies.Sent"

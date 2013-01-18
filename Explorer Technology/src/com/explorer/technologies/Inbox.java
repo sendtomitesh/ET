@@ -1,141 +1,166 @@
 package com.explorer.technologies;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
+import android.provider.ContactsContract;
 
-public class Inbox extends Activity {
-	Button btnDelete;
-	InboxListAdapter inboxAdapter;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.inbox);
-        btnDelete =(Button)findViewById(R.id.btn_delete);
-        btnDelete.setVisibility(View.VISIBLE);
-        loadInbox();
-    }
-    
-    public void deleteAll(View v)
-    {
-    	deleteAllmsg();
-    	loadInbox();
-    }
-    public void loadInbox()
-    {
-	    	final ListView listview = (ListView) findViewById(R.id.listview_inbox);
-	    	
-    	
-	    	Uri uriSMSURI = Uri.parse("content://sms/inbox");
-	        final Cursor cursor = getContentResolver().query(uriSMSURI, null, null, null,null);
-	        
-	        startManagingCursor(cursor);
-	        
-	        final String[] from = new String[]{"address","body","date"};
-	        int[] to = new int[]{R.id.txt_from,R.id.txt_message,R.id.txt_date};
-	        
-	        inboxAdapter = new InboxListAdapter(this, R.layout.inbox_item, cursor, from, to);		
-	        listview.setAdapter(inboxAdapter);
-	        listview.setClickable(true);
-	    	listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-	    	  @Override
-	    	  public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
-	    	    
-	    		final String optionArr[];
-	    		cursor.moveToPosition(position);
-	    		optionArr=new String[]{"Reply", "Forward","Delete"};
-	    		
-	    		AlertDialog multichoice;
-	    		multichoice=new AlertDialog.Builder(Inbox.this)
-	    			
-	               .setTitle( "SMS Options" )
-	               .setItems(optionArr, new OnClickListener() {
-
-	                   @Override
-	                   public void onClick(DialogInterface dialog, int which) {
-	                	      if(which==2){
-	                			   deleteMsg(cursor.getString(0));
-	                		   }
-	                		   else{
-	                			   moveToCompose(which,cursor.getString(cursor.getColumnIndex("address")),cursor.getString(cursor.getColumnIndex("body")));
-	                		   }
-	                	       
-	                	   
-	                   }
-	               })
-	               
-	             
-	               .create();
-	    			
-	    		multichoice.show();
-	    	  }
-	    	});
-
-	  
+public class Inbox {
+	
+	private String mId;
+	private String mName;
+	private String mNumber;
+	private String mMessage;
+	private String mDate;
+	
+	
+	public static ArrayList<Inbox> sInboxList;
+	
+	public Inbox(String id,String name,String number,String message,String date){
+		this.mId = id;
+		this.mName = name;
+		this.mNumber = number;
+		this.mMessage = message;
+		this.mDate = date;
 	}
-    public boolean checkForValidNumber(String n)
-    {
-    	if(Utility.isLatinLetter(n.charAt(0)) || n.length()<10)
-    		return false;
-    	else
-    		return true;
+	
+	public static void initalizeList() {
+        sInboxList = new ArrayList<Inbox>();
     }
-    public void deleteMsg(String pid)
-    {
-    	String uri = "content://sms/" + pid;
-        getContentResolver().delete(Uri.parse(uri), null, null);
-        loadInbox();
+	
+	//public getters
+	public String getId() {
+        return this.mId;
     }
-    private int deleteAllmsg()
-    {
-    	Uri inboxUri = Uri.parse("content://sms/inbox");
-    	int count = 0;
-    	Cursor c = getContentResolver().query(inboxUri , null, null, null, null);
-    	while (c.moveToNext()) {
-    	    try {
-    	        // Delete the SMS
-    	        String pid = c.getString(0); // Get id;
-    	        String uri = "content://sms/" + pid;
-    	        count = getContentResolver().delete(Uri.parse(uri),
-    	                null, null);
-    	    } catch (Exception e) {
-    	    }
-    	}
-    	return count;
+	
+	public String getNumber() {
+        return this.mNumber;
     }
-    public void moveToCompose(int which,String to, String msg)
-    {
+	
+	public String getName() {
+        return this.mName;
+    }
+	
+	public String getMessage() {
+        return this.mMessage;
+    }
+	
+	public String getDate() {
+        return this.mDate;
+    }
+	
+	public static ArrayList<Inbox> getInboxList() {
+        return sInboxList;
+    }
+	public static void deleteMsg(int position)
+	{
+		sInboxList.remove(position);
+	}
+	
+	public static void deleteAllMsg()
+	{
+		sInboxList.removeAll(sInboxList);
+	}
+	//public setters
+	public void setId(String id) {
+        this.mId = id;
+    }
+	
+	public void setNumber(String number) {
+        this.mNumber = number;
+    }
+	
+	public void setName(String name) {
+        this.mName = name;
+    }
+	
+	public void setMessage(String message) {
+        this.mMessage = message;
+    }
+	
+	public void setDate(String date) {
+        this.mDate = date;
+    }
+	
+	
+    public static boolean setInbox(Context context) {
+    	initalizeList();
     	
-    	Intent composeIntent = new Intent(getApplicationContext(), Compose.class);
-    	//reply
-    	if(which==0){
-    		composeIntent.putExtra("to", to);
-        }
-    	//forward
-    	else{
-    		composeIntent.putExtra("msg", msg);
-    	}
-    	startActivity(composeIntent);
-		finish();
-    }
-    @SuppressWarnings("deprecation")
-	@Override
-    public void startManagingCursor(Cursor c) {
-        if (Build.VERSION.SDK_INT < 11) {
-            super.startManagingCursor(c);
+    	//get contacts from phone
+        Uri uriSMSURI = Uri.parse("content://sms/inbox");
+        final Cursor inboxCursor = context.getContentResolver().query(uriSMSURI, null, null, null,null);
+        
+        String id = "";
+        String number = "";
+        String message = "";
+        String date = "";
+        String name = "";
+        
+        try {
+            while (inboxCursor.moveToNext()) {
+                // This would allow you get several email addresses
+                // if the email addresses were stored in an array
+                id = inboxCursor.getString(0);
+            	number = inboxCursor.getString(inboxCursor.getColumnIndex("address"));
+            	message = inboxCursor.getString(inboxCursor.getColumnIndex("body"));
+            	date = inboxCursor.getString(inboxCursor.getColumnIndex("date"));
+                //create object and add it to list.
+            	name = getContactNameFromNumber(number, context);
+            	date =  convertToDate(date);
+            	
+                Inbox inbox = new Inbox(id,name, number, message, date);
+                sInboxList.add(inbox);
+
+            }
+            inboxCursor.close();
+            return true;
+
+        } catch (Exception e) {
+            return false;
         }
     }
     
+	
+	private static String getContactNameFromNumber(String phoneNumber,Context context)
+	{
+		String name = "";
+		//Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+		Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+		//return resolver.query(uri, new String[]{PhoneLookup.DISPLAY_NAME});
+		Cursor cursor = null;
+		try {
+
+			cursor = context.getContentResolver().query(uri,new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME},null,null,null);
+			 
+			 if (cursor.moveToFirst()) {
+				 name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+				 return name;
+			 }
+			 else{
+				 return phoneNumber;
+			 }
+			
+		} catch (Exception e) {
+			return phoneNumber;
+		}
+
+		
+	}
+	
+	@SuppressLint("SimpleDateFormat")
+	private static String convertToDate(String dateString){
+		long timestamp = Long.parseLong(dateString);    
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(timestamp);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd hh:mm a");
+		return dateFormat.format(calendar.getTime());
+	
+	}
+
+
 }

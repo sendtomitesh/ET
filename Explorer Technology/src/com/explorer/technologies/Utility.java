@@ -20,19 +20,22 @@ public class Utility {
 	public static String password;
 	public static String sender_id;
 	public static String smsCredit;
+	public static String sPrefix;
 
 	public static void storeCredentialsInSharedPref(SharedPreferences sp,
-			String uname, String pass, String send_id) {
+			String uname, String pass, String send_id,String prefix) {
 		Editor editor = sp.edit();
 		editor.putString("username", uname);
 		editor.putString("pass", pass);
 		editor.putString("sender_id", send_id);
+		editor.putString("prefix", prefix);
 		editor.commit();
 
 		// set values
 		username = uname;
 		password = pass;
 		sender_id = send_id;
+		sPrefix = prefix;
 	}
 
 	public static boolean hasConnection(Context cont) {

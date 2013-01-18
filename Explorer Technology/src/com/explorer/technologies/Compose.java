@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import com.explorer.technologies.Login.LoginApi;
+import java.util.Locale;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -23,7 +22,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts;
-import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -430,12 +428,12 @@ public class Compose extends Activity {
 		String repairedNumber = num;
 
 		// get country code
-		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-		String countryCode = tm.getNetworkCountryIso();
+		//TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		//String countryCode = tm.getNetworkCountryIso();
 
 		// get phone code from country code
-		countryCode = Iso2Phone.getPhone(countryCode);
-
+		//countryCode = Iso2Phone.getPhone(countryCode);
+		String countryCode = Utility.sPrefix;
 		// if number starts from + means it has code attached, nothing to do
 		if (repairedNumber.startsWith("+")) {
 
@@ -906,11 +904,13 @@ public class Compose extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				String searchText = contactSearchBox.getText().toString().toLowerCase();
+				String searchText = contactSearchBox.getText().toString();
+				searchText = searchText.toLowerCase(Locale.getDefault());
 				ArrayList<HashMap<String, String>> filteredGroup = new ArrayList<HashMap<String,String>>();
 				for(int i=0;i<groupList.size();i++)
 				{
-					String name=groupList.get(i).get("name").toLowerCase();
+					String name=groupList.get(i).get("name");
+					name = name.toLowerCase(Locale.getDefault());
 					if(name.contains(searchText))
 					{
 						

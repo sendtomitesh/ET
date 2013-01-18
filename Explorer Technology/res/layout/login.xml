@@ -40,7 +40,7 @@
             android:id="@+id/textbox_password"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_below="@+id/textbox_username"
             android:hint="@string/password"
             android:inputType="textPassword"          
@@ -51,27 +51,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textbox_password"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:hint="@string/sender_id"
             android:inputType="text"
             android:maxLength="11" />
         
+        <Spinner
+            android:id="@+id/spinner_country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textbox_sender"
+            android:layout_marginTop="15dp"
+             />
+        
         <Button android:id="@+id/btn_login"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:text="@string/login"
             android:onClick="loginUser"
-            android:layout_below="@+id/textbox_sender"/>
+            android:layout_below="@+id/spinner_country"/>
         
         
         <Button android:id="@+id/btn_forgot_password"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_toRightOf="@+id/btn_login"
             android:text="@string/forgot_password"
-            android:layout_below="@+id/textbox_sender"/>
+            android:layout_below="@+id/spinner_country"/>
 
         
     </RelativeLayout>
