@@ -1,13 +1,17 @@
 package com.explorer.technologies;
 
+import java.util.Locale;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -43,18 +47,33 @@ public class Login extends Activity {
 	private void loadSpinner() {
 
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String countryCode = tm.getNetworkCountryIso();
+		countryCode = countryCode.toUpperCase(Locale.getDefault());
+		Toast.makeText(getApplicationContext(), countryCode, Toast.LENGTH_SHORT).show();
+		
+		ArrayAdapter<Country> adapter = new ArrayAdapter<Country>(this,
 				android.R.layout.simple_spinner_dropdown_item,
-				Country.getCountryNames());
+				Country.sCountryList);
+
 
 		countrySpinner.setAdapter(adapter);
+		int pos = 1;
+		for(int i =0;i< Country.sCountryList.size();i++) {
+		    if(Country.sCountryList.get(i).getCode().equals(countryCode)){
+		          pos = i;
+		          
+		    }
+		}
+		countrySpinner.setSelection(pos);
 		countrySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parentView,
 					View selectedItemView, int position, long id) {
 
-				countrySpinner.setSelection(position);
+				//countrySpinner.setSelection(position);
 				prefix= Country.sCountryList.get(position).getPrefix();
+				//Toast.makeText(getApplicationContext(), "Prefix : " + prefix ,Toast.LENGTH_SHORT).show();
 
 			}
 

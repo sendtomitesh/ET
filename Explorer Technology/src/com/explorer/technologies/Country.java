@@ -17,14 +17,16 @@ public class Country {
 	private String mId;
 	private String mName;
 	private String mPrefix;
+	private String mCode;
 	
 	
 	public static ArrayList<Country> sCountryList;
 	
-	public Country(String id,String name,String prefix){
+	public Country(String id,String name,String prefix,String code){
 		this.mId = id;
 		this.mName = name;
 		this.mPrefix = prefix;
+		this.mCode = code;
 		
 	}
 	
@@ -45,6 +47,13 @@ public class Country {
         return this.mPrefix;
     }
 	
+	public String getCode(){
+		return this.mCode;
+	}
+	
+	public String toString() {
+		return "(+" + this.mPrefix + ") " + this.mName;
+	}
 	
 	public static ArrayList<Country> getInboxList() {
         return sCountryList;
@@ -63,13 +72,10 @@ public class Country {
         this.mPrefix = prefix;
     }
 	
-	public static ArrayList<String> getCountryNames(){
-		ArrayList<String> list = new ArrayList<String>();
-		for (int i = 0; i < sCountryList.size(); i++) {
-			list.add(sCountryList.get(i).getName());
-		}
-		return list;
+	public void setCode(String code){
+		this.mCode = code;
 	}
+	
     public static boolean setCountries() {
     	
     	// Create a new HttpClient and Post Header
@@ -90,12 +96,14 @@ public class Country {
 			String id = "";
 			String name = "";
 			String prefix = "";
+			String code = "";
 			for (int i = 0; i < countryList.length(); i++) {
 				JSONObject country = countryList.getJSONObject(i);
 				id =country.getString("id");
 				name = country.getString("name");
 				prefix = country.getString("prefix");
-				Country myCountry = new Country(id, name, prefix);
+				code = country.getString("code"); // Change the name of country code from json 
+				Country myCountry = new Country(id, name, prefix,code);
 				sCountryList.add(myCountry);
 
 			}
