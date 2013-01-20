@@ -102,7 +102,7 @@ public class Country {
 				id =country.getString("id");
 				name = country.getString("name");
 				prefix = country.getString("prefix");
-				code = country.getString("code"); // Change the name of country code from json 
+				code = country.getString("code");  
 				Country myCountry = new Country(id, name, prefix,code);
 				sCountryList.add(myCountry);
 

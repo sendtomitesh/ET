@@ -50,7 +50,6 @@ public class Login extends Activity {
 		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		String countryCode = tm.getNetworkCountryIso();
 		countryCode = countryCode.toUpperCase(Locale.getDefault());
-		Toast.makeText(getApplicationContext(), countryCode, Toast.LENGTH_SHORT).show();
 		
 		ArrayAdapter<Country> adapter = new ArrayAdapter<Country>(this,
 				android.R.layout.simple_spinner_dropdown_item,
@@ -71,9 +70,7 @@ public class Login extends Activity {
 			public void onItemSelected(AdapterView<?> parentView,
 					View selectedItemView, int position, long id) {
 
-				//countrySpinner.setSelection(position);
 				prefix= Country.sCountryList.get(position).getPrefix();
-				//Toast.makeText(getApplicationContext(), "Prefix : " + prefix ,Toast.LENGTH_SHORT).show();
 
 			}
 

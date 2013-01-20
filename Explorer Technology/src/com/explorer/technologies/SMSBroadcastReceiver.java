@@ -8,8 +8,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -69,14 +71,40 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
 		}
 		
 	}
+	
+	private String getContactNameFromNumber(String phoneNumber,Context context)
+	{
+		String name = "";
+		//Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+		Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+		//return resolver.query(uri, new String[]{PhoneLookup.DISPLAY_NAME});
+		Cursor cursor = null;
+		try {
+
+			cursor = context.getContentResolver().query(uri,new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME},null,null,null);
+			 
+			 if (cursor.moveToFirst()) {
+				 name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+				 return name;
+			 }
+			 else{
+				 return phoneNumber;
+			 }
+			
+		} catch (Exception e) {
+			return phoneNumber;
+		}
+
+		
+	}
 	public void movetoDialog(Context context,String title,String message)
 	{
 		
 		Intent resultIntent = new Intent(context,SMSDialog.class);
 		resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		
+		String contactName = getContactNameFromNumber(title, appContext);
 		resultIntent.putExtra("notify", "notify");
-		resultIntent.putExtra("to", title);
+		resultIntent.putExtra("to", contactName);
 		resultIntent.putExtra("msg", message);
 		context.startActivity(resultIntent);
 		

@@ -103,16 +103,16 @@ public class Inbox {
         
         try {
             while (inboxCursor.moveToNext()) {
-                // This would allow you get several email addresses
-                // if the email addresses were stored in an array
-                id = inboxCursor.getString(0);
+
+            	id = inboxCursor.getString(0);
             	number = inboxCursor.getString(inboxCursor.getColumnIndex("address"));
             	message = inboxCursor.getString(inboxCursor.getColumnIndex("body"));
             	date = inboxCursor.getString(inboxCursor.getColumnIndex("date"));
-                //create object and add it to list.
+                
             	name = getContactNameFromNumber(number, context);
             	date =  convertToDate(date);
             	
+            	//create object and add it to list.
                 Inbox inbox = new Inbox(id,name, number, message, date);
                 sInboxList.add(inbox);
 
@@ -129,9 +129,7 @@ public class Inbox {
 	private static String getContactNameFromNumber(String phoneNumber,Context context)
 	{
 		String name = "";
-		//Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 		Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-		//return resolver.query(uri, new String[]{PhoneLookup.DISPLAY_NAME});
 		Cursor cursor = null;
 		try {
 
@@ -148,7 +146,6 @@ public class Inbox {
 		} catch (Exception e) {
 			return phoneNumber;
 		}
-
 		
 	}
 	
